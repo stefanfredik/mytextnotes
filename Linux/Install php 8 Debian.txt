@@ -1,0 +1,18 @@
+Install Php 8 On Debian :
+
+
+1. Add Surry Repository
+	sudo apt install -y lsb-release ca-certificates apt-transport-https software-properties-common
+
+
+2. Add Repository
+	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/sury-php.list
+
+
+3. Download Key
+wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
+
+
+4. Update
+
+

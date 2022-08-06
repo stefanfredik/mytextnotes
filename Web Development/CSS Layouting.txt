@@ -1,0 +1,7 @@
+Catatan CSS
+
+-  HTML memiliki dua jenis display mode :
+	- inline => hanya ditulis/ditampilkan dalam 1 baris		: tag a,span
+	- blok	 => dibuatkan baris baru				: div, dll.
+- element inline secara default tidak dapat mengatur lebar dan tinggi
+- untuk mengatur lebar dan tinggi element inline harus menggunakan properti css : display : inline-block

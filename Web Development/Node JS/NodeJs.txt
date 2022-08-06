@@ -1,0 +1,8 @@
+WEB SERVER 	:
+
+Membuat Wevb server menggunakan Hapi
+1. Intasll Hapi
+2. Install nodemon
+3. Install Eslint
+4. Setting Eslint
+5. Coding

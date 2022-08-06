@@ -1,0 +1,12 @@
+Catatan Vue JS
+
+
+- Vue memiliki sebuah file javascript
+- vue js dapat dipanggil menggunakan cdn atau file lokal
+- untuk memanggil vue js wajib membuat sebuah objek
+- unttuk memanggil sebuah variabel dalam vue js menggunakan '{{namvar}}'
+- dricetive : sebuah atribut yang yang selalu diawali dengan '-v' unutk menjalankan sebuah perintah atau ekspresi javascript di dalam atribut
+
+- Tag dalam vue js :
+	-- v-bind:value		//atribut untuk mengubah sebuah value input
+	-- v-model:value	//mengubah value secara 2 arah

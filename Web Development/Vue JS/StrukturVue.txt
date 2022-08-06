@@ -1,0 +1,28 @@
+Nama		: Vue JS
+
+
+Truktur Folder Vue JS:
+
+1. Src		=	Lokasi penyimpanan source
+	- assets	= menyimpan asset (gambar/file)
+	- components	= pecahan dari berbagai component views
+	- views		= bagian tampilan dari halaman layout
+	- layout	= membentuk sebuah halaman keseluruhan/ template
+	
+
+
+Struktur Yang Bagus : 
+	:: App-> Layout -> Views -> Components
+	
+
+Components : 
+Dalam componentsnya biasanya pecahan-pecahan file file html kecil yang nanti akan di tampiljan di halaman Views
+
+
+Views : 
+Viwes adalah halaman tunggal yang ada di dalam layout, views biasanya dirender pada bagian view-router pada halaman layout. Views terikat dengan layout.
+
+Layout/template :
+Layout biasanya adalah file template dari sebuah tampilan website.
+Layout adalah sebuah tampilan halaman yang memiliki template tersendiri dan tidak terikat dengan layout lainya. Setiap layout akan memiliki template tersendiri.
+

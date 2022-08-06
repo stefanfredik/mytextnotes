@@ -1,0 +1,26 @@
+Join Table : Vanila Mysql
+
+SELECT hari,jam,dk.nama_kelas,dm.nama_mapel,dg.nama FROM datajadwal dj
+INNER JOIN datakelas dk  ON dj.kelas = dk.id
+INNER JOIN datamapel dm ON dj.mapel = dm.id
+INNER JOIN dataguru dg  ON dj.guru = dg.id
+
+
+------------------------------------------------------------------------------------------------------------------
+Code Igniter : 
+
+$db      = db_connect();
+
+$builder = $db->table('datajadwal');
+
+$builder->select('datajadwal.id');
+// $builder->from('datajadwal');
+$builder->select('hari,jam,nama_kelas,nama_mapel,nama,');
+$builder->join('dataguru', 'dataguru.id = datajadwal.guru', 'inner');
+$builder->join('datakelas', 'datakelas.id = datajadwal.kelas', 'inner');
+$builder->join('datamapel', 'datamapel.id = datajadwal.mapel', 'inner');
+
+$query = $builder->get();
+$data = $query->getResultArray();
+        
+        
