@@ -12,25 +12,25 @@ GITHUB
 - Git Log	-> melihat history commit
 	git log
 - Mengebalikan repo ke kondisi commit tertentu
-	git checkout [commithash]
+	git checkout [commit hash]
 - Kembali ke commit tertentu dengan spesifik file
-	git checkout [commithash] -- [namafile] 
+	git checkout [commit hash] -- [namafile] 
 - Menambahkan GIT Remote :	
-	git remote add [namaorigin/bebas] [alamatgit]
+	git remote add [nama origin/bebas] [alamatgit]
 - Mengecek kondisi atau perubahan pada repo remote :
 	git fetch
 - Mengambil data dari remote :
 	git pull
 - Mengirim perubahan ke remote :
-	git push -u [namaorigin] [branch]
+	git push -u [nama origin] [branch]
 	git push
 - Git Fork 	: Mengopy repo orang laing ke dalam repo kita
 	git fork
 - Git Branch	: merupakan cabang sub bagian dari repo. ketika git pertama kali dibuat branch yang digunakan adalah main atau master.
 - Membuat brach	: 
-	git branch [namabranch]
+	git branch [nama branch]
 - Masuk dalam branch tertentu
-	git checkout [namabranch]
+	git checkout [nama branch]
 - Menggabungkan branch :
 	git branch merge
 	
