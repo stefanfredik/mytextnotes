@@ -35,3 +35,33 @@ Fix Permission Error When Change Directory (Forbidden You don't have permission 
 		     AllowOverride All
 		     Require all granted
 		 </Directory>
+		 
+
+
+Create Custome Virtual Server :
+- Create Dir	:
+	- sudo mkdir /var/www/your_domain
+- Assign User
+	- sudo chown -R $USER:$USER /var/www/your_domain
+- Create new config :
+	- sudo nano /etc/apache2/sites-available/your_domain.conf
+	
+	Documents :
+		<VirtualHost *:80>
+		    ServerAdmin webmaster@localhost
+		    ServerName your_domain
+		    ServerAlias www.your_domain
+		    DocumentRoot /var/www/your_domain
+		    ErrorLog ${APACHE_LOG_DIR}/error.log
+		    CustomLog ${APACHE_LOG_DIR}/access.log combined
+		</VirtualHost>
+- Enable Config	:
+	- sudo a2ensite your_domain.conf
+- Disable default Config :
+	- sudo a2dissite 000-default.conf
+- Enable Rewrite Mod : 
+	- sudo a2enmod rewrite
+- Test Config :
+	- sudo apache2ctl configtest
+- Restart Apache2 :
+	- sudo systemctl restart apache2
