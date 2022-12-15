@@ -45,3 +45,8 @@ Ketika di sisi remote terdapat perubahan atau ada commit baru, lalu di local jug
 		git commit -m [pesan]
 	- Push ulang
 		git push / git push -u [namaorigin] [namabrach]
+
+** Mengatasi fatal: refusing to merge unrelated histories 
+Hal tersebut terjadi ketika melakukan Pull dari remote dan  commit yang terdapat pada Repo Remote dan Local tidak sama. Cara mengatasi :
+	- git pull [namaremote] [namabranch] --allow-unrelated-histories
+
