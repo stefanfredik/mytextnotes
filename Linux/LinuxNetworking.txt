@@ -1,2 +1,0 @@
-- Change Priority Metric Gateway Routing Linux
-	- if metric [interface] [metric number] 
