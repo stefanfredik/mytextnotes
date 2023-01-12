@@ -1,4 +1,4 @@
-# INSTALL APACHE ON LINUX UBUNTU
+# Install Apache on Linux Ubuntu
 
 Install
 
@@ -48,8 +48,9 @@ sudo service apache2 restart
 
 Fix Permission Error When Change Directory (Forbidden You don't have permission to access / on this serve)
 
-Find and Edit :
-nano apache2.conf
+Find and Edit :&#x20;
+
+`nano apache2.conf`
 
 Before :
 
@@ -63,7 +64,7 @@ Before :
 
 After :
 
-```text
+```
 <Directory />
 	Options Indexes FollowSymLinks Includes ExecCGI
 	AllowOverride All

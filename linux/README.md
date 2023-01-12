@@ -1,5 +1,5 @@
 ---
-description: All About Linux
+description: All About Linux.
 ---
 
 # Linux
