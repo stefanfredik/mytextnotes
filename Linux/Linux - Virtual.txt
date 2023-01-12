@@ -1,9 +1,0 @@
-Install GNS 3 DI Kali Linux : 
-
-- Python 3.5
-- Python Qt
-- vpcs
-- docker
-- qemu
-- ubridge
-- kvm
