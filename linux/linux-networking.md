@@ -1,6 +1,6 @@
-# NETWORKING
+# Linux Networking
 
-Intall NetWork Tools
+## Intall NetWork Tools
 
 ```bash
 apt install net-tools
@@ -118,8 +118,7 @@ Check Firewall Status
 ufw status
 ```
 
-Hostname Check List - hostname -I
-Firewall Allow Traffic
+Hostname Check List - hostname -I Firewall Allow Traffic
 
 ```bash
 ufw allow [network service]

@@ -1,6 +1,8 @@
-# Instalasi DOCKER
+# DOCKER
 
-## Setup REPO
+## Docker Setup
+
+### Setup REPO
 
 Update Repo
 
@@ -39,7 +41,7 @@ Update Repo
 sudo apt update
 ```
 
-## Install DOCKER Engine
+### Install DOCKER Engine
 
 Update Repo dan KEY
 
@@ -54,7 +56,7 @@ Install Docker dan beberapa aplikasi yang dibutuhkan
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```
 
-## Install Docker Images from Docker Hub
+### Install Docker Images from Docker Hub
 
 ```bash
 docker pull [name images]

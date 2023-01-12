@@ -1,5 +1,5 @@
 ---
-description: All learning text notes.
+description: Text Notes
 ---
 
 # Text Notes
