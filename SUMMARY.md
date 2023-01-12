@@ -29,6 +29,7 @@
     * [VUE COMPOSITION API](<web/Vue JS/composition-api.md>)
   * [Vue JS](web/vue-js-1/README.md)
     * [Vue and tailwind](<web/Vue JS/vuetailwind.md>)
-* [Filsafat](filsafat.md)
+* [Filsafat](filsafat/README.md)
+  * [Page 1](filsafat/page-1.md)
 * [Dev Ops](dev-ops.md)
 * [Troubleshooting Logs](troubleshooting-logs.md)
