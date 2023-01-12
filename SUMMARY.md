@@ -30,6 +30,6 @@
   * [Vue JS](web/vue-js-1/README.md)
     * [Vue and tailwind](<web/Vue JS/vuetailwind.md>)
 * [Filsafat](filsafat/README.md)
-  * [Page 1](filsafat/page-1.md)
+  * [Socrates](filsafat/socrates.md)
 * [Dev Ops](dev-ops.md)
 * [Troubleshooting Logs](troubleshooting-logs.md)
