@@ -1,8 +1,4 @@
----
-description: All About Cisco Router Configuraion
----
-
-# Cisco Router
+# All About Cisco Router Configuraion
 
 ## IP Address
 
@@ -76,4 +72,3 @@ interface [interface name]
 no shutdown
 end
 ```
-
