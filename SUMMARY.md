@@ -18,6 +18,7 @@
   * [All About IP Address](networking/ip-address.md)
   * [ZTE Olt](networking/zte-olt.md)
 * [Uncategorized](uncategorized/README.md)
+  * [Office Visio Activcation](uncategorized/office-visio-activcation.md)
   * [github](uncategorized/github.md)
 * [Web Development](web-development/README.md)
   * [Vue JS](web-development/vue-js/README.md)
