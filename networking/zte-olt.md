@@ -4,5 +4,10 @@
 
 ### Show Config
 
-#### Show Info
+#### Show Bandwith Profile
 
+```bash
+sh gpon profile traffic
+```
+
+#### Show Tcon  Profile

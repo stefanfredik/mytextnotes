@@ -1,9 +1,12 @@
 # Table of contents
 
-* [Text Notes](README.md)
+* [Mikrotik](README.md)
+  * [Tips and Trick](readme/tips-and-trick.md)
+  * [App Priority](readme/app-priority.md)
 * [Ideas](ideas/README.md)
   * [Ideas](ideas/Ideas.md)
 * [Linux](linux/README.md)
+  * [GNS 3](linux/gns-3.md)
   * [Install Apache on Linux Ubuntu](linux/Apache.md)
   * [Bash Scripting](linux/bash.md)
   * [DOCKER](linux/docker.md)
@@ -34,3 +37,5 @@
 * [Dev Ops](dev-ops.md)
 * [Troubleshooting Logs](troubleshooting-logs.md)
 * [Bookmark](bookmark.md)
+* [Database](database/README.md)
+  * [Mysql](database/mysql.md)
