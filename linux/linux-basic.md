@@ -32,7 +32,7 @@ System user tidak memiliki directory home. Id system user biasanya 1-999.
 
 Tipe user ini tidak dapat digunakan oleh pengguna biasa. Sehingga kita tidak dapat login ke user tersebut.
 
-Contoh : _`www-data` _  digunakan oleh aplikasi Apache2.
+Contoh : _`www-data`_   digunakan oleh aplikasi Apache2.
 
 
 
