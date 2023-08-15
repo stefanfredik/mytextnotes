@@ -35,7 +35,7 @@
 * [Filsafat](filsafat/README.md)
   * [Socrates](filsafat/socrates.md)
 * [Dev Ops](dev-ops.md)
-* [Troubleshooting Logs](troubleshooting-logs/README.md)
+* [Troubleshooting Logs](troubleshooting-logs.md)
   * [Linux](troubleshooting-logs/linux.md)
 * [Bookmark](bookmark.md)
 * [Database](database/README.md)
