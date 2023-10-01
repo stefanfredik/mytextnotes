@@ -20,6 +20,7 @@
   * [GitHub](networking/github.md)
   * [All About IP Address](networking/ip-address.md)
   * [ZTE Olt](networking/zte-olt.md)
+  * [Mikrotik](networking/mikrotik.md)
 * [Uncategorized](uncategorized/README.md)
   * [Office Visio Activcation](uncategorized/office-visio-activcation.md)
   * [github](uncategorized/github.md)

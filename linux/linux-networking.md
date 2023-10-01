@@ -98,6 +98,15 @@ Change Priority Metric Gateway Routing Linux
 if metric [interface] [metric number]
 ```
 
+Add Routing Table
+
+```bash
+ip route add [ip network] via [ip gateway]
+
+#Example ::
+# ip route add 10.10.10.0/24 via 192.168.1.1
+```
+
 ### Firewall
 
 Check Firewall Server Status
