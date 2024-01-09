@@ -19,7 +19,7 @@
   * [Cisco Router](networking/cisco-router.md)
   * [GitHub](networking/github.md)
   * [All About IP Address](networking/ip-address.md)
-  * [ZTE Olt](networking/zte-olt.md)
+  * [ZTE C320 OLT](networking/zte-olt.md)
   * [Mikrotik](networking/mikrotik.md)
 * [Uncategorized](uncategorized/README.md)
   * [Office Visio Activcation](uncategorized/office-visio-activcation.md)

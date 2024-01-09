@@ -1,6 +1,10 @@
-# ZTE Olt
+---
+description: >-
+  Berisi catatan perintah-perintah yang sering digunakan pada OLT ZTE C320 dalam
+  melakukan pengecekan dan kongfigurasi jaringan.
+---
 
-\#ZTE OLT
+# ZTE C320 OLT
 
 ### Show Config
 
@@ -47,8 +51,6 @@ sho gpon remote-onu ip-host gpon-onu_1/4/1:2
 ```bash
 sho gpon remote-onu interface eth gpon-onu_[port]
 ```
-
-
 
 
 
@@ -295,93 +297,122 @@ OL01(config)#pon-onu-mng gpon-onu_1/4/1:2
 OL01(gpon-onu-mng)#reboot
 ```
 
-27.\
-OLT-ZTE\_C320#config t\
-Enter configuration commands, one per line.  End with CTRL/Z.\
-OLT-ZTE\_C320(config)#pon-onu\
-OLT-ZTE\_C320(config)#pon-onu-mng gpon-onu\_1/4/1:2\
-OLT-ZTE\_C320(gpon-onu-mng)#restore factory
+#### Reset ONT
 
-28\. HOW TO LOCK / SHUTDOWN THIRD PORT ONT\
-OLT-ZTE\_C320#config t\
-Enter configuration commands, one per line.  End with CTRL/Z.\
-OLT-ZTE\_C320(config)#pon-onu\
-OLT-ZTE\_C320(config)#pon-onu-mng gpon-onu\_1/4/1:2\
-OLT-ZTE\_C320(gpon-onu-mng)#interface eth eth\_0/3 state lock
+```bash
+OLT-ZTE_C320#config t
+OLT-ZTE_C320(config)#pon-onu
+OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
+OLT-ZTE_C320(gpon-onu-mng)#restore factory
+```
 
-29\. HOW TO UNLOCK PORT ONT\
-OLT-ZTE\_C320#config t\
-Enter configuration commands, one per line.  End with CTRL/Z.\
-OLT-ZTE\_C320(config)#pon-onu\
-OLT-ZTE\_C320(config)#pon-onu-mng gpon-onu\_1/4/1:2\
-OLT-ZTE\_C320(gpon-onu-mng)#interface eth eth\_0/3 state unlock
+#### How to lock / shutdon  third party port ONT
 
-30\. HOW TO RELEASE RENEW ONT AS DHCP CLIENT\
+```bash
+OLT-ZTE_C320#config t
+Enter configuration commands, one per line.  End with CTRL/Z.
+OLT-ZTE_C320(config)#pon-onu
+OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
+OLT-ZTE_C320(gpon-onu-mng)#interface eth eth_0/3 state lock
+```
 
+#### Unlock Port ONT
 
-OLT-ZTE\_C320#config t\
-Enter configuration commands, one per line.  End with CTRL/Z.\
-OLT-ZTE\_C320(config)#pon-onu\
-OLT-ZTE\_C320(config)#pon-onu-mng gpon-onu\_1/4/1:2\
-OLT-ZTE\_C320(gpon-onu-mng)#ip-host 1 dhcp-enable false ping-response false traceroute-response false
+Lock
 
-OLT-ZTE\_C320(gpon-onu-mng)#ip-host 1 dhcp-enable true ping-response true traceroute-response true
+```bash
+OLT-ZTE_C320#config t
+OLT-ZTE_C320(config)#pon-onu
+OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
+OLT-ZTE_C320(gpon-onu-mng)#interface eth eth_0/3 state lock
+```
 
-31\. CHECKING RX LEVEL FOR OLT UPLINK\
+Unlock
 
+```bash
+OLT-ZTE_C320#config t
+Enter configuration commands, one per line.  End with CTRL/Z.
+OLT-ZTE_C320(config)#pon-onu
+OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
+OLT-ZTE_C320(gpon-onu-mng)#interface eth eth_0/3 state unlock
+```
+
+#### RELEASE RENEW ONT AS DHCP CLIENT
+
+```bash
+OLT-ZTE_C320#config t
+OLT-ZTE_C320(config)#pon-onu
+OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
+OLT-ZTE_C320(gpon-onu-mng)#ip-host 1 dhcp-enable false ping-response false traceroute-response false
+OLT-ZTE_C320(gpon-onu-mng)#ip-host 1 dhcp-enable true ping-response true traceroute-response true
+```
+
+#### CHECKING RX LEVEL FOR OLT UPLINK
 
 Make Sure , There is no CRC Counting at your Uplink Interface :p
 
-OLT-ZTE\_C320#sho int optical-module-info xgei\_1/21/1\
-Optical module information:xgei\_1/21/1\
-Basic-info:\
-Vendor-Name    : SOU          Vendor-Pn      : SPP1\
-Vendor-Sn      : D9               Version-Lev    : 10\
-Production-Date: 13                   Module-Type    : 10GBASE-LR\
-Wavelength     : 1310      (nm)           Connector      : LC\
-Diagnostic-info:\
-RxPower        : -10.1(dbm)          TxPower      : -1.7(dbm)\
-Bias-Current   : 25.724    (mA)           Laser-Rate   : 103(100Mb/s)\
-Temperature    : 24.184    (c)            Supply-Vol   : 3.324(v)\
-Alarm-thresh: –> Threshold\
-RxPower-Upper    : 3  (dbm)               RxPower-Lower    : -34(dbm)\
-TxPower-Upper    : 9  (dbm)               TxPower-Lower    : -14(dbm)\
-Bias-Upper       : 131(mA)                Bias-Lower       : 0  (mA)\
-Voltage-Upper    : 7  (v)                 Voltage-Lower    : 0  (v)\
-Temperature-Upper: 90 (c)                 Temperature-Lower: -45(c)\
-OLT-ZTE\_C320#
+```bash
+OLT-ZTE_C320#sho int optical-module-info xgei_1/21/1
+Optical module information:xgei_1/21/1
+Basic-info:
+Vendor-Name    : SOU          Vendor-Pn      : SPP1
+Vendor-Sn      : D9               Version-Lev    : 10
+Production-Date: 13                   Module-Type    : 10GBASE-LR
+Wavelength     : 1310      (nm)           Connector      : LC
+Diagnostic-info:
+RxPower        : -10.1(dbm)          TxPower      : -1.7(dbm)
+Bias-Current   : 25.724    (mA)           Laser-Rate   : 103(100Mb/s)
+Temperature    : 24.184    (c)            Supply-Vol   : 3.324(v)
+Alarm-thresh: –> Threshold
+RxPower-Upper    : 3  (dbm)               RxPower-Lower    : -34(dbm)
+TxPower-Upper    : 9  (dbm)               TxPower-Lower    : -14(dbm)
+Bias-Upper       : 131(mA)                Bias-Lower       : 0  (mA)
+Voltage-Upper    : 7  (v)                 Voltage-Lower    : 0  (v)
+Temperature-Upper: 90 (c)                 Temperature-Lower: -45(c)
+OLT-ZTE_C320#
+```
 
-31\. RESET SLOT\
-OLT-ZTE\_C320#reset-card slotno 12
+#### RESET SLOT
 
-32\. SWAP\
+```bash
+OLT-ZTE_C320#reset-card slotno 12
+```
 
+#### Swap
 
 Use This for First Level Handling when you get Anomaly Process.
 
 sometimes it can help you, but sometime isn’t.
 
-OLT-ZTE\_C320#swap
+```bash
+OLT-ZTE_C320#swap
+```
 
-33\. CHECKING VLAN SUMMARY\
+#### CHECKING VLAN SUMMARY
 
+```bash
+OLT-ZTE_C320#sho vlan sum 
+```
 
-`bash OLT-ZTE_C320#sho vlan sum` \
+\
 All created vlan num: 3\
 Details are following:\
-111, 222 , 333\
-OLT-ZTE\_C320#
+111, 222 , 333
 
-`OLT-ZTE_C320#sho vlan 111`
+```bash
+OLT-ZTE_C320#sho vlan 111
+```
 
-`vlanid          :111`\
-`name            :VLAN00111`\
-`description     :N/A`\
-`multicast-packet:flood-unknown`\
-`tpid:0x8100`\
-`port(untagged):`\
-`port(tagged):`\
-`gpon-onu_1/2/8:128:1`\
-`xgei_1/22/1`\
-`sg1`\
-`OLT-ZTE_C320#`
+```bash
+vlanid          :111
+name            :VLAN00111
+description     :N/A
+multicast-packet:flood-unknown
+tpid:0x8100
+port(untagged):
+port(tagged):
+gpon-onu_1/2/8:128:1
+xgei_1/22/1
+sg1
+OLT-ZTE_C320#
+```
