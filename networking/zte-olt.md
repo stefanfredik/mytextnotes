@@ -6,103 +6,90 @@ description: >-
 
 # ZTE C320 OLT
 
-### Show Config
+## Show Config
 
-#### Show Bandwith Profile
+### Show Bandwith Profile
 
 ```bash
 sh gpon profile traffic
 ```
 
-#### Show Tcon  Profile
+### Show Tcon  Profile
 
-
-
-#### Show **Utilisasi Bandwith Link ONT Real Time**
+### Show **Utilisasi Bandwith Link ONT Real Time**
 
 ```bash
 show interface gpon-onu_[port]
 ```
 
-
-
-#### Show **Mac Address Perangkat yang terkoneksi ke ONT**
+### Show **Mac Address Perangkat yang terkoneksi ke ONT**
 
 ```bash
 sho mac gpon onu gpon-onu_[port onu]
 ```
 
-
-
-#### Show Ont Version
+### Show Ont Version
 
 ```bash
 sho gpon remote-onu equip gpon-onu_[port]
 ```
 
-#### Show ONT IP
+### Show ONT IP
 
 ```bash
 sho gpon remote-onu ip-host gpon-onu_1/4/1:2
 ```
 
-#### Show Ont Port Status
+### Show Ont Port Status
 
 ```bash
 sho gpon remote-onu interface eth gpon-onu_[port]
 ```
 
-
-
-### ZTE C320 Config
-
-**Cek Detail Config di Interface ke arah ONT**
+### **Cek Detail Config di Interface ke arah ONT**
 
 ```bash
 show run interface gpon-onu_1/2/5:4
 ```
 
-#### **Cek Status Interface ONT**
+### **Cek Status Interface ONT**
 
 ```bash
 show gpon onu state gpon-olt_1/2/5
 ```
 
-
-
-**Cek Nilai Optik ONT**
+### **Cek Nilai Optik ONT**
 
 ```bash
 show pon power attenuation gpon-onu_1/2/5:4      
 
 ```
 
-**Cek Utilisasi Bandwith Link ONT Real Time**
+### **Cek Utilisasi Bandwith Link ONT Real Time**
 
 ```bash
 show interface gpon-onu_1/2/5:4
 ```
 
-**Cek ONT Uptime dan History**
+### **Cek ONT Uptime dan History**
 
 ```bash
 OLT-ZTE_C320#show gpon onu detail-info gpon-onu_1/2/5:5
 ```
 
-\
-**Cek Mac Address Perangkat yang terkoneksi ke ONT**
+### **Cek Mac Address Perangkat yang terkoneksi ke ONT**
 
 ```bash
 show mac gpon onu gpon-onu_1/2/5:5
 ```
 
-**Cek Status Port di ONT**
+### **Cek Status Port di ONT**
 
 ```bash
 show gpon remote-onu interface eth gpon-onu_1/2/5:5
 ```
 
-#### Reboot/Restart ONT
+### Reboot/Restart ONT
 
 ```bash
 config t
@@ -112,7 +99,7 @@ pon-onu-mng gpon-onu_1/2/5:5
 reboot
 ```
 
-**Shutdown Port 1 di ONT**
+### **Shutdown Port 1 di ONT**
 
 ```bash
 config t
@@ -121,7 +108,7 @@ pon-onu-mng gpon-onu_1/2/5:5
 interface eth eth_0/1 state lock
 ```
 
-**Cek Konfigurasi PON ONU**
+### **Cek Konfigurasi PON ONU**
 
 ```bash
 show onu running config gpon-onu_1/2/11:8
@@ -135,7 +122,7 @@ pon-onu-mng gpon-onu_1/2/11:8
   
 ```
 
-#### Check OLT Uptime
+### Check OLT Uptime
 
 ```bash
 show system-group
@@ -144,7 +131,7 @@ System Description: ZX Version V4.
 Started before: 47484 days, 5 hours, 25 minutes
 ```
 
-#### Check OLT Board
+### Check OLT Board
 
 ```bash
 GTGOE = 8 Port (O=Octal)
@@ -155,67 +142,61 @@ GTGH = 16 Port (H=Hexa
 sho card
 ```
 
-#### Check OLT Processor dan Memory
+### Check OLT Processor dan Memory
 
 ```bash
 show processor
 ```
 
-#### Check OLT Temperature
+### Check OLT Temperature
 
 ```bash
 show temperature
 ```
 
-#### CHECKING OLT PER SLOT
+### CHECKING OLT PER SLOT
 
 ```bash
 show card slotno 12
 ```
 
-#### Finding Ont by Serial Number
+### Finding Ont by Serial Number
 
 ```bash
 sho gpon onu by sn ABCDEFGHIJ
 ```
 
-#### Checking ONT status on OLT Port
+### Checking ONT status on OLT Port
 
 ```bash
 sho gpon onu sta gpon-olt_1/4/1 2
 ```
 
-
-
-CHECKING ONT UPTIME AND ONT HISTORY LOG
+### CHECKING ONT UPTIME AND ONT HISTORY LOG
 
 ```bash
 sho gpon onu detail-info gpon-onu_1/4/1:2
 ```
 
-#### Checking Ont Mac Address
+### Checking Ont Mac Address
 
 ```bash
 sho mac gpon onu gpon-onu_1/4/1:2
 ```
 
-
-
-#### Checking ONT Power
+### Checking ONT Power
 
 ```bash
 sho pon power attenuation gpon-onu_1/4/1:2
 ```
 
-
-
-#### Checking Ont Version
+### Checking Ont Version
 
 ```bash
 sho gpon remote-onu equip gpon-onu_1/4/1:2
 ```
 
-#### Checking Ont IP (Routing Mode)
+### Checking Ont IP (Routing Mode)
 
 ```bash
 sho gpon remote-onu equip gpon-onu_1/4/1:2
@@ -225,13 +206,15 @@ sho gpon remote-onu equip gpon-onu_1/4/1:2
 sho gpon remote-onu ip-host gpon-onu_1/4/1:2
 ```
 
-#### Checking ONT Port Status
+### Checking ONT Port Status
 
 ```bash
 sho gpon remote-onu interface eth gpon-onu_1/4/1:2
 ```
 
-#### Checking ONT Configuration
+### Checking ONT Configuration
+
+#### Config 1
 
 ```bash
 sho run int gpon-onu_1/4/1:2
@@ -259,7 +242,7 @@ switchport vlan 122  tag vport 3
 end
 ```
 
-Config 2
+#### Config 2
 
 ```bash
 sho onu run con gpon-onu_1/4/1:2
@@ -288,13 +271,15 @@ dhcp-ip ethuni eth_0/2 from-internet –> bridging mode
 dhcp-ip ethuni eth_0/3 from-internet –> bridging mode
 ```
 
+## Configuration
+
 #### Reboot ONT
 
 ```bash
 config t
-OL01(config)#pon-onu
-OL01(config)#pon-onu-mng gpon-onu_1/4/1:2
-OL01(gpon-onu-mng)#reboot
+OLT(config)#pon-onu
+OLT(config)#pon-onu-mng gpon-onu_1/4/1:2
+OLT(gpon-onu-mng)#reboot
 ```
 
 #### Reset ONT
@@ -310,7 +295,6 @@ OLT-ZTE_C320(gpon-onu-mng)#restore factory
 
 ```bash
 OLT-ZTE_C320#config t
-Enter configuration commands, one per line.  End with CTRL/Z.
 OLT-ZTE_C320(config)#pon-onu
 OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
 OLT-ZTE_C320(gpon-onu-mng)#interface eth eth_0/3 state lock
@@ -337,7 +321,7 @@ OLT-ZTE_C320(config)#pon-onu-mng gpon-onu_1/4/1:2
 OLT-ZTE_C320(gpon-onu-mng)#interface eth eth_0/3 state unlock
 ```
 
-#### RELEASE RENEW ONT AS DHCP CLIENT
+### RELEASE RENEW ONT AS DHCP CLIENT
 
 ```bash
 OLT-ZTE_C320#config t
@@ -347,7 +331,7 @@ OLT-ZTE_C320(gpon-onu-mng)#ip-host 1 dhcp-enable false ping-response false trace
 OLT-ZTE_C320(gpon-onu-mng)#ip-host 1 dhcp-enable true ping-response true traceroute-response true
 ```
 
-#### CHECKING RX LEVEL FOR OLT UPLINK
+### CHECKING RX LEVEL FOR OLT UPLINK
 
 Make Sure , There is no CRC Counting at your Uplink Interface :p
 
@@ -372,13 +356,13 @@ Temperature-Upper: 90 (c)                 Temperature-Lower: -45(c)
 OLT-ZTE_C320#
 ```
 
-#### RESET SLOT
+### RESET SLOT
 
 ```bash
 OLT-ZTE_C320#reset-card slotno 12
 ```
 
-#### Swap
+### Swap
 
 Use This for First Level Handling when you get Anomaly Process.
 
@@ -388,7 +372,7 @@ sometimes it can help you, but sometime isn’t.
 OLT-ZTE_C320#swap
 ```
 
-#### CHECKING VLAN SUMMARY
+### CHECKING VLAN SUMMARY
 
 ```bash
 OLT-ZTE_C320#sho vlan sum 
