@@ -96,3 +96,25 @@ Perintah stat memberikan informasi seperti ukuran file, izin akses, ID user dan 
 stat [namafile]
 ```
 
+
+
+### Swith LTS to Normal Mode
+
+Open File
+
+```bash
+sudo nano /etc/update-manager/release-upgrades
+
+#change 
+Prompt=lts
+
+#to
+Prompt=normal
+```
+
+Upgrade System
+
+```
+sudo do-release-upgrade -c
+sudo do-release-upgrade
+```

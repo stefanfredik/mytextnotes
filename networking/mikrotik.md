@@ -1,12 +1,16 @@
 ---
-description: All about Mikrotik
+description: >-
+  Berisi catatan-catatan yang biasa digunakan untuk kongfigurasi perangkat
+  mikrotik.
 ---
 
-# Mikrotik
+# 🎛 Mikrotik
 
-## Vlan
 
-* Ketika sudah di routing, tagged vlan akan tetap tembus walapun beda network.g
+
+## Vlan Bridge
+
+Ketika sudah di routing, tagged vlan akan tetap tembus walapun beda networkg
 
 ### Untagged / Access Vlan
 
@@ -18,7 +22,7 @@ Salah satu caranya adalah menggunakan bridge port. Ketika menggunakan bridge mak
 
 * Buat vlan baru dan tambahkan pada interface masuk/upstream
 * Buat bridge baru
-* Tambahkan port interface vlan dan interface yang mau di unttaged atau dikasih access
+* Tambahkan port interface vlan dan interface yang mau di unttaged atau dikasih access pada interface Bridge yang baru dibuat.
 
 #### Menggunakan  Bridge Filtering
 
