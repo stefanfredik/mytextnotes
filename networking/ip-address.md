@@ -1,18 +1,20 @@
-# All About IP Address
+---
+description: Berisi catatan catatan singkat yang berhubungan dengan IP Address.
+---
+
+# 🔢 All About IP Address
 
 ## IP Range
 
 ### Private
 
-Class A.
-It is for large networks and has 8 bits for the network and 24 for hosts.
+Class A. It is for large networks and has 8 bits for the network and 24 for hosts.
 
 ```
 10.0.0.0 -  10.255.255.255,
 ```
 
-Class B.
-It is used for medium networks and has 16 bits for the network and 16 for hosts.
+Class B. It is used for medium networks and has 16 bits for the network and 16 for hosts.
 
 ```
 
@@ -20,8 +22,7 @@ It is used for medium networks and has 16 bits for the network and 16 for hosts.
 
 ```
 
-Class C.
-It is for smaller networks and has 24 bits for the network and 8 for hosts.
+Class C. It is for smaller networks and has 24 bits for the network and 8 for hosts.
 
 ```
 

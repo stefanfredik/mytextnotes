@@ -1,17 +1,24 @@
 ---
 description: Bookmark Notes
+coverY: 0
 ---
 
 # Bookmark
 
 ## Networking
 
-#### [https://vyos.net/](https://vyos.net/get/nightly-builds/)
 
-Open Source Linux Network Opeac
+
+Open Source Linux Network Opea
+
+{% embed url="https://vyos.net" %}
 
 ## Programming
 
-#### [https://www.freecodecamp.org/](https://www.freecodecamp.org/)
+The best Free Online Course of Programming and IT Field.
 
-Online Platform to learn anything with programming and networking.
+{% embed url="http://freecodecamp.org" %}
+
+Kumpulan Cheat Sheet Bahasa Pemrograman
+
+{% embed url="http://overapi.com" %}
