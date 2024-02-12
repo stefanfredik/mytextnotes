@@ -22,3 +22,9 @@ The best Free Online Course of Programming and IT Field.
 Kumpulan Cheat Sheet Bahasa Pemrograman
 
 {% embed url="http://overapi.com" %}
+
+## Productifity
+
+Mind Mapping
+
+{% embed url="https://snapcraft.io/xmind" %}
