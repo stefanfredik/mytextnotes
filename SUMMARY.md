@@ -1,7 +1,6 @@
 # Table of contents
 
-* [Docker](README.md)
-* [Mikrotik](<README (1).md>)
+* [Mikrotik](README.md)
   * [Tips and Trick](readme/tips-and-trick.md)
   * [App Priority](readme/app-priority.md)
 * [Ideas](ideas/README.md)
@@ -33,7 +32,8 @@
   * [Aforisme](filsafat/aforisme.md)
   * [Socrates](filsafat/socrates.md)
   * [Pertanyaan Filosofis](filsafat/pertanyaan-filosofis.md)
-* [Dev Ops](dev-ops.md)
+* [Dev Ops](dev-ops/README.md)
+  * [Docker](dev-ops/docker.md)
 * [Troubleshooting Logs](troubleshooting-logs/README.md)
   * [Linux](troubleshooting-logs/linux.md)
 * [Bookmark](bookmark.md)
