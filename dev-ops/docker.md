@@ -148,6 +148,84 @@ docker container logs -f [containername/containerid]
 * Oleh karena itu, ketika kita ingin menggunakan aplikasinya kadang kita harus masuk ke dalam container itu sendiri.
 * Untuk masuk ke dalam container kita bisa menggunakan fitur Container Exec, dimana digunakan untuk mengeksekusi kode program yang terdapat  di dalam container.
 
+### Masuk Ke Container
+
+Untuk masuk container kita dapat mengeksuksi program bash script yang tedapat dalam container dengan menggunakan container exec. Perintah yang dapat digunakan adalah sebegai berikut :&#x20;
+
+```bash
+docker container exec -i -t [containername/containerid] /bin/bash
+
+#Example : 
+docker  container excec -i -t nginx /bin/bash
+```
+
+* `-i` :  adalah argument interaktif menjaga input tetap aktif
+* `-t` : adalah argument untuk alokasi pseudo-TTY (terminal akses)
+* `bin/bash` : contoh kode program yang terdapat dalam container
+
+### Container Port
+
+* Saat menjalankan container, container tersebut terisolasi di dalam docker.
+* Artinya system host (misal Laptop kita), tida dapat mengakses aplikasi yang ada di dalam container.
+* Biasanya, sebuah aplikasi berjalan pada port tertentu, misal saat kita menjalankan aplikasi redis, dia berjalan pada port 6379, kita bisa melihat port apa yang digunakan ketika melihat semua daftar kontainer.
+
+### Cotainer Port Forwarding
+
+* Docker memiliki kemampuan untuk melakukan port fordwarding, yaitu menerukan sebuah port yang terdapat di system host nya ke dalam docker container.
+* Cara ini cocok jika kita ingin mengakses port yang terdapat dalam kontainer ke luar melalui system hostnya.&#x20;
+
+### Container Envinrontment Variable
+
+* Saat membuat aplikasi, menggunakan environtment variable adalah sesuatu teknik agar kongfigurasi aplikasi bisa diubah secara dinamis.
+* Dengan menggunakan environtment variabel, kita bisa mengubah-ubah kongfigurasi aplikasi, tanpa harus mengubah code aplikasinya lagi.
+* Docker container memiliki parameter yang bisa kita gunakan untuk mengirim variabel aplikasi yang terdapat pada container.
+
+### Menambah Environment Variabel
+
+* Untuk menambah environment variable dapat menggunakan perintah berikut :&#x20;
+
+{% code overflow="wrap" %}
+```bash
+docker container create --name [containername] --env KEY="value" --env KEY2="value" [image]:[tag]
+
+#Example : 
+docker container create --name mongodb --publish 27017:27017 --env MONGO_INITDB_ROOT_USERNAME="fred" --env MONGO_INITDB_ROOT_PASSWORD=fred mongo:latest
+```
+{% endcode %}
+
+### Container Stats
+
+* Saat menjalankan beberapa container, di system host penggunaan resources seperti CPU dan Memory hanya terlihat digunakan oleh docker saja.
+* Kadang kita ingin  melihat detail dari penggunaan resource untuk tiap container nya.
+* Untungnya docker memiliki kemampuan untuk melihat penggunaan resources dari tiap container  yang sedang berjalan.
+* Kita bisa gunakan perintah :&#x20;
+
+```bash
+docker container stats
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #### Docker Registry
 
 Merupakan tempat penyimpanan image. Dengan menggunakan docker registry kita bisa menyimpan docker image yang telah kita buat dan dapat digunakan kembali secara berulanng selama kita terhubung dengan registry.
