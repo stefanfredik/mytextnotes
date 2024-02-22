@@ -204,15 +204,67 @@ docker container create --name mongodb --publish 27017:27017 --env MONGO_INITDB_
 docker container stats
 ```
 
+### Container Resources Limit
+
+* Saat membuat  container, secara default dia akan menggunakan semua CPU dan Memory yang diberikan ke Docker (Mac dan Windows )&#x20;
+* Jika terjadi kesalahan, misal container terlalu banyak memakan CPU dan Memory maka bisa berdampak terhadap performa container lain, atau bahkan ke system host.
+* Oleh karena itu, ada baiknya ketika kita membuat container, kita memberikan resources limit terhadap containernya.
+
+#### Memory
+
+* Saat kita membuat container, kita bisa menentukan jumlah memory yang bisa digunakan oleh container ini, dengan menggunakan perintah `--memory` diikuti dengan angka memory yang diperbolehkan untuk digunakan.
+* Kita bisa menambahkan ukuran dalam bentuk b (bytes), k (kilo), m (mega), atau g ( giga  bytes), misal 100m artinya 100 mega bytes.
+
+#### CPU
+
+* Selain mengatur memory kita juga bisa mengatur CPU dengan menggunakan parameter `--cpus`
+* Kita bisa set CPU menggunakan koma. Misalnya 1.5 artinya di hanya menggunakan 1.5 core.
+
+Berikut adalah perintah yang bisa digunakan untuk melimit resource pada container :&#x20;
+
+{% code overflow="wrap" %}
+```bash
+docker container create --name [containername]  --memory [memory] --cpus [cpucore] [image]:[tag]
+
+
+#Example : 
+docker container create --name smallnginx --publish 8080:80 --memory 100m --cpus 0.5 nginx:latest
+```
+{% endcode %}
 
 
 
+### Bind Mounts
+
+* Bind Mounts merupakan kemampuan melakukan mounting (sharing) file atau folder yang terdapat di system host ke container  yang terdapat di docker.
+* Fitur ini sangat berguna ketika kita ingin mengirim kongfigurasi dari luar container atau menyimpan data yang dibuat di aplikasi  di dalam container ke dalam folder di system host.
+* Jika file atau folder tidak ada di system host, secara otomatis akan dibuatkan oleh Docker.
+* Untuk melakukan mouting, kita bisa menggunakan paramater `--mount` ketika kita membuat container
+* Isi dari parameter `--mount` memiliki aturan sendiri
+
+### Paramater Mount
+
+| Paramater   | Keterangan                                                                         |
+| ----------- | ---------------------------------------------------------------------------------- |
+| type        | Tipe mount, **bind** dan **volume**                                                |
+| source      | Lokasi file atau folder si system host                                             |
+| destination | Lokasi file atau folder di container                                               |
+| readonly    | Jika ada, maka file atau folder hanya bisa dibaca di container, tidak bisa ditulis |
 
 
 
+### Melakukan Mouting
 
+* Untuk melakukan mouting, kita bisa menggunakan perintah berikut :&#x20;
 
+{% code overflow="wrap" %}
+```bash
+docker container create --name [conntainername] --mount "type=bind,source=folder,destination=folder,readonly" [image]:[tag]
 
+#Example : 
+docker contianer create --name mongodata --mount "type=bind,source=/home/ts/mongo-data,destination=/data/db" --publish 27018:27017 --env MONGO_INITDB_ROOT_USERNAME="fred" --env MONGO_INITDB_ROOT_PASSWORD=fred mongo:latest 
+```
+{% endcode %}
 
 
 
