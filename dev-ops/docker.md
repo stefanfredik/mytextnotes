@@ -284,6 +284,199 @@ Merupakan tempat penyimpanan image. Dengan menggunakan docker registry kita bisa
 
 
 
+### Continer Port
+
+* Saat menjalankan container, container tersebut terisolasi di dalam Docker.
+* Artinya sistem Host ( misal Laptop kita ), tidak bisa mengakses aplikasi yang ada di dalam container secara langsung, salah satu caranya adalah harus menggunakan COntainer Exec untuk masuk ke dalam container.
+* Biasanya sebuah aplikasi berjalan pada port tertetntu, misal saatt kita menjalankan aplikasi Redis, dia berjalan pada port 6379, kita bisa melihat port apa yang digunakan ketika melihat semua daftar container.
+
+### Port Forwarding
+
+* Docker memiliki kemampuan untuk melakukan port forwarding, yaitu meneruskan sebuah port yang terdapat di sistem host nya ke dalam docker container.
+* Cara ini cocok jika kita ingin mengekspos port yang terdapat di container ke luar melalui system hostnya.
+
+#### Melakukan Port Fordwarding
+
+* Untuk melakukan port forwarding, kita bisa menggunakan perintah berikut ketika membuat containernya.
+
+```bash
+docker container create --name [containername/containerid] --publish [porthost]:[portcontainer] [image]:[tag]
+
+#Example
+docker container create --name nginx --publish 8080:8080 nginx:latest
+```
+
+* Jika kita ingin melakukan port forwarding lebih dari satu, kita bisa tambahkan dua kali parameter `--publish`
+* `--publish` juga dapat disingkat menjadi `-p`
+* Service port aplikasi yang ada di container akan di panggil atau diakses dari host dengan menggunakan port yang bisa kita set.&#x20;
+* Port host boleh sama dengan port yang ada di container selama port tersebut belum aktif atau belum digunakan oleh host.
+
+### Container Environment Variable
+
+* Saat membuat apliklasi, menggunakan Envinronment Variable adalah salah satu teknik agar kongfigurasi aplikasi bisa diubah secara dinamis.
+* Dengan menggunakan environtment variable, kita bisa mengubah-ubah kongfigurasi aplikasi tanpa harus mengubah kode aplikasinya lagi.
+* Docker container memiliki parameter yang bisa kita gunakan untuk mengirim environ ment variable ke aplikasi yang terdapat di dalam container.
+
+###
+
+### Menambah Environment Variable
+
+* Untuk menambah environtment variabel, kita bisa menggunakan perintah --env atau -e
+
+{% code overflow="wrap" %}
+```bash
+docker container create --name [namacontainer] --env KEY="value" --env KEY2="value" [image]:[tag]
+
+#Example
+
+docker container create --name nginx --env environmet="development"
+
+#Example
+docker container create --name mongodb --publish 27017:27017 --env MONGO_INITDB_ROOT_USERNAME=fred --env MONGO_INITDB_ROOT_PASSWORD=eko mongo:latest
+```
+{% endcode %}
+
+### Container Stats
+
+* Saat menjalankan beberapa container, di sistem host penggunaan resource seperti CPU dan Memory hanya terlihat digunakan oleh docker saja.
+* Kadang kita ingin melihat detail dari penggunaan resources untuk tiap containernya.
+* Untungnya docker memiliki kemampuan untuk melihat penggunaan resource dari tiap container yang sedang berjalan.
+* Kita bisa menggunakan perintah
+
+```bash
+docker container stats
+```
+
+### Container Resource Limit
+
+* Saat membuat container, secara default dia akan menggunakan semua CPU dan memory yang diberikan ke Docker (Mac dan WIndows), dan akan menggunakan semua CPU dan memory yang tersedia di system host (Linux)
+* Jika terjadi kesalahan, misal container terlalu banyak memakan CPU dan memory maka bisa berdampak terhadap performa container lain atau bahkan ke system operasi host.
+* Oleh karena itu, ada baiknya ketika kita membuat container, kita memberikan resources limit terhadap containernya.
+
+### Memory
+
+* saat membuat container, kita bisa menentukan jumlah memory yang bisa digunakan oleh container ini, dengan menggunakan perintah `--memory` diikuti dengan angka memory yang diperbolehkan untuk digunakan.
+* Kita bisa menambhkan ukuran dalam bentuk b(bytes), k (kilo bytes), m (mega bytes), tau g( giga bytes), contoh 100m srtinya 100 megabytes
+
+### Container CPU
+
+* Selain mengatur memory, kita juga bisa menentukan berapa jumlah CPU yang bisa digunakan oleh container dengan parameter --cpus
+* Jika misal kita set dengan nilai 1.5, artinya container bisa menggunakan satu dan setengah CPU core.
+
+#### Contoh&#x20;
+
+Nginx
+
+{% code overflow="wrap" %}
+```bash
+docker container create --name smallnginx --publish 8080:80 --memory 100m --cpus 0.5 nginx:latest
+```
+{% endcode %}
+
+### Bind Mounts
+
+* Bind Mounts merupakan kemampuan melakukan mounting (sharing) file atau folder yang terdapat di system host ke container yang terdapat di docker
+* Fitur ini sangat berguna ketika misal kita ingin mengirim konfigurasi dari luar container atau misal menyimpan data yang dibuat di aplikasi di dalam container kedalam folder di system host.
+* Jika file dan folder tidak ada di system host, secara otomatis akan dibuatkan oleh Docker
+* Untuk melakukan mounting, kita bisa menggunakan parameter --mount ketika membuat container
+* Isi parameter --mount memiliki aturan sendiri
+
+### Parameter Mount
+
+
+
+<table><thead><tr><th width="149">Parameter</th><th>Keterangan</th></tr></thead><tbody><tr><td>type</td><td>Tipe mount, bind atau volume</td></tr><tr><td>source</td><td>Lokasi file atau folder di system host</td></tr><tr><td>destination</td><td>Lokasi file atau folder di container</td></tr><tr><td>readonly</td><td>Jika ada, maka file atau folder hanya bisa dibaca di container, tidak bisa ditulis.</td></tr></tbody></table>
+
+### Melakukan Mounting
+
+* Untuk melakukan mounting, kita bisa menggunakan perintah berikut :&#x20;
+
+{% code title="" overflow="wrap" fullWidth="false" %}
+```bash
+docker container create --name [containername] --mount "type=bind,source=[folder],destination=[folder],readonly" [image]:[tag]
+
+#example
+docker container create --name 
+```
+{% endcode %}
+
+## Docker Volume
+
+* Fitur Bind Mounts sudah ada sejak Docker versi awal, di versi terbaru direkomendasikan menggunakan Docker Volume.
+* Docker Volume mirip dengan Bind Mounts, bedanya adalah terdapat mangamenet Volume dimana kita bisa membuat volume, melihat daftar Volume dan menghapus Volume.
+* Volume sendiri bisa dianggap storage yang digunakan untuk menyimpan data, bedanya dengan Bind Mounts pada bind mounts data disimpan pada sistem host, sedangkan pada Volume data di manage oleh Docker.
+
+### Melihat Docker Volume
+
+* Saat kita membuat container, dimanakah data di dalam container itu disimpan, secara default semua container disimpan di dalam volume.
+* Jika kita coba melihat docker volume, kita akan lihat bahwa ada banyak volume yang suddah terbuat walapun kita belum pernah membuatnya sama sekali.
+* Kita bisa gunakan perintah berikut untuk melihat daftar volume.
+
+```bash
+docker volume ls
+```
+
+### Membuat Volume
+
+* Untuk membuat volume, kita bisa menggunakan perintah :&#x20;
+
+```bash
+docker volume create [namavolume]
+
+#Example : 
+docker volume create mongovolume
+```
+
+### Menghapus Volume
+
+* Volume yang tidak digunakan oleh container bisa kita hapus, tapi jika volume digunakan oleh container, maka tidak bisa kita hapus sampai containernya dihapus.
+* Untuk menghapus volume, kita bisa gunakan perintah  berikut :&#x20;
+
+```bash
+docker volume rm [namavolume]
+
+#Example : 
+docker volume rm mongovolume
+```
+
+### Container Volume
+
+* Volume yang sudah kita buat, bisa kita gunakan di container.
+* Keuntungan menggunakan volume adalah, jika container kita hapus, data akan tetap aman di volume.
+* Cara menggunakan volume di container sama dengan menggunakan bind mount, kita bisa menggunakan parameter --mount, namun dengan menggunakan type volume dan source nama volume.
+* Berikut adalah perintah untuk membuat container volume&#x20;
+
+{% code overflow="wrap" %}
+```bash
+docker container create --name [containername] --mount "type=volume,source=[namavolume],destination=/data/db" [images]:[tags]
+
+#example :
+docker container create --name mongodb --mount "type=volume,source=mongodata,destination=/data/db" --publish 27019:27019 --env MONGO_ROOT_USERNAME=fred --env MONGO_INITDB_ROOT_PASSWORD=fred mongo:latest
+```
+{% endcode %}
+
+### Backup Volume
+
+* Sayangnya sampai saat ini, tidak ada cara otomatis untuk melakukan backup volume yang sudah kita buat
+* Namun kita bisa memanfaatkan container untuk melakukan backup data yang ada di dalam volume ke dalam archive seperti zip atau tar.gz
+
+### Tahapan Melakukan Backup
+
+* Matikan container yang menggunakan volume yang ingin kita backup
+* Buat container baru dengan dua mount, volume yang ingin kita backu dan bind mount folder dari sistem host.
+* Lakukan backup mengguanakn container dengancara mengarchive isi volume dan simpan di bind folder
+* Isi file backup sekarang ada di folder di system host
+* Delete container yang kita gunakan untuk melakukan backup
+* Contoh Script Backup
+
+{% code overflow="wrap" %}
+```bash
+dokcer container create --name nginxbackup --mount "type=bind,source=/home/fred/backup,destination=/backup" --mount "type=volume,source=mongodata,destination=/data" nginx:latest
+```
+{% endcode %}
+
+##
+
 ## Menginstal Docker
 
 * Docker bisa di install di semua system operasi
