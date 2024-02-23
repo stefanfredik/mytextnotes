@@ -1,5 +1,6 @@
 ---
 description: Berisi tutorial, tips dan kongfigurasi Docker.
+coverY: 0
 ---
 
 # Docker
@@ -52,9 +53,75 @@ Berikut beberapa istilah pada docker :&#x20;
 
 <figure><img src="https://lh7-us.googleusercontent.com/y6jGcuv3x9YdS4O5qJWBNZFis2f6jIkU4CP6ACwb4ru51LvRXyaOSfwU7FqDqJNFSyAwuY4v6pD5UjuNy92piSCr_hLYq0xwQCTRSRUzukocoBzY6_y1Tq0Zk_DhlEceLF_dTal8-MPWMYWom2gb5h3e-w=s2048" alt=""><figcaption></figcaption></figure>
 
-## Docker Images
+## Menginstal Docker
 
-Mirip seperti installer apliakasi. Di dalam docker image terdapat aplikasi, depedency dan congfigrasi terkait aplikasi tersebut. Sebelum kita menjalankan aplikasi docker kita harus memastikan bahwa image sudah ada dalam ocker agar kita bisa menginstal apliasi tersebut .  Docker image bisa kita download di https://hub.docker.com
+* Docker bisa di install di semua system operasi
+* Untuk menginstall di Windows dan Mac, kita bisa menggunakan docker Desktop.
+* Untuk linux bisa langsung menginstal dari repository masing-masing distro Linux
+
+### Mengecek Docker
+
+Untuk mengecek docker apakah sudah terinstal di system operasi dapat menggunakan perintah berikut :&#x20;
+
+```bash
+docker version
+```
+
+## Dokcer Registry
+
+* Docker registry adalah tempat kita menyimpan docker image
+* Dengan menggunakan docker registry, kita bisa menyimpan image yang kita buat dan bisa digunakan di docker daemon dimanapun selama bisa terkoneksi ke docker registry.
+
+### Diagram
+
+<figure><img src="https://lh7-us.googleusercontent.com/y6jGcuv3x9YdS4O5qJWBNZFis2f6jIkU4CP6ACwb4ru51LvRXyaOSfwU7FqDqJNFSyAwuY4v6pD5UjuNy92piSCr_hLYq0xwQCTRSRUzukocoBzY6_y1Tq0Zk_DhlEceLF_dTal8-MPWMYWom2gb5h3e-w=s2048" alt=""><figcaption></figcaption></figure>
+
+### Contoh Docker Registry
+
+* Docker Hub : [https://hub.docker.com/](https://hub.docker.com/)&#x20;
+* Digital Ocean Container Registry : [https://www.digitalocean.com/products/container-registry/](https://www.digitalocean.com/products/container-registry/)&#x20;
+* Google Cloud Container Registry : [https://cloud.google.com/container-registry](https://cloud.google.com/container-registry)&#x20;
+* Amazon Elastic Container Registry : [https://aws.amazon.com/id/ecr/](https://aws.amazon.com/id/ecr/)&#x20;
+* Azure Container Registry : [https://azure.microsoft.com/en-us/services/container-registry/](https://azure.microsoft.com/en-us/services/container-registry/)&#x20;
+
+
+
+## Docker Image
+
+* Docker image mirip seperti instaler aplikasi, dimana di dalam docker image terdapat apalikasi dan depedency dari aplikasi.
+* Sebelum kita menjalankan aplikasi docker, kita perlu memastikan memiliki docker image dari aplikasi tersebut.
+
+### Melihat Docker Image
+
+Untuk menlihat docker image yang sudah ada dalam docker dapat menggunakan perintah berikut :&#x20;
+
+```bash
+docker image ls
+```
+
+### Donwload Docker Image
+
+* Untuk mendownload docker image dari docker registry kita bisa menggunakan perintah :&#x20;
+
+```bash
+docker image pull [namaimage]:[tag]
+
+#Example : 
+docker image pull nginx:latest
+```
+
+* Kita juga dapat mendownload docker image langsung dari http://hub.docker.com
+
+### Menghapus Dokcer Image
+
+Untuk menghapus docker image yang sudah didownload dapat menggunkan perintah berikut :&#x20;
+
+```bash
+docker image rm [namaimage]:[tag]
+
+#Example :
+docker image rm nginx:latest
+```
 
 ## Docker Container
 
@@ -475,118 +542,230 @@ dokcer container create --name nginxbackup --mount "type=bind,source=/home/fred/
 ```
 {% endcode %}
 
-##
 
-## Menginstal Docker
 
-* Docker bisa di install di semua system operasi
-* Untuk menginstall di Windows dan Mac, kita bisa menggunakan docker Desktop.
-* Untuk linux bisa langsung menginstal dari repository masing-masing distro Linux
+### Menjalankan Container Secara Langsung
 
-## Mengecek Docker
+* Melakukan backup secara manual agak sedikti ribet karena kita harus start container terlebih dahulu, setelah backup hapus containernya lagi.
+* Kita bisa menggunakan perintah run untuk menjalankan perintah di container dan digunakan parameter --rm untuk melakukan otomatis remove container setelah perintahnya selesai berjalan.
+* Berikut contoh code untuk melakukan backup dengan container run :&#x20;
 
-Untuk mengecek docker apakah sudah terinstal di system operasi dapat menggunakan perintah berikut :&#x20;
+{% code overflow="wrap" %}
+```bash
+docker container run --rm --name ubuntu --mount "type=bind,source=/home/fred/backup,destination=/backup" --mount "type=volume,source=mongodata,destination=/data" ubuntu:latest tar cvf /"backup/backup.tar.gz /data
+```
+{% endcode %}
+
+### Restore Volume
+
+* Setelah melakukan backup volume ke dalam file archive, kita bisa menyimpan file archive backup tersebut ke tempat yang lebih aman, misal ke cloud storage.
+* Sekarang kita akan coba melakukan restore data backup ke volume baru, untuk memastikan data backup yang kita lakukan tidak corrupt.
+
+### Tahapan Melakukan Restore
+
+* Buat volume baru unuk lokasi restore data backup
+* Buat container baru dua mount, volume baru untuk restore backup dan bind mount folder dari system host yang berisi file backup.
+* Isi file backup sekarang sudah di restore ke volume
+* Delete container yang kita  gunakan untuk melakukan restore
+* Volume baru yang berisi data backup siap digunakan oleh caontainer baru.
+* Berikut contoh kode untuk melakukan restore backup :&#x20;
+
+{% code overflow="wrap" %}
+```bash
+docker volume create mongodatabackup
+
+docker container run --rm --name ubuntu --mount "type=bind,source=/home/fred/backup,destination=/backup" --mount "type=volume,source=mongodatabackup,destination=/data" ubuntu:latest bash -c "cd /data && tar xvf /backup/backup.tar.gz --strip 1"
+
+```
+{% endcode %}
+
+## Docker Network
+
+### Dokcer Network
+
+* Saat kita mebuat container di docker, secara default container akan saling terisolasi stau sama lain, jadi jika kita mencoba memanggil antar container,bsia dipastikan bahwa kita tidak akan bisa melakukannya.
+* Docker memiliki fitur Network yang bisa digunakan untuk membuat jaringan di dalam Docker&#x20;
+* Dengan menggunakan Network, kita bisa mengkoneksikan container dengan container lain dalam satu network yang sama.
+* Jika beberapa container terdapat pada satu network yang sama, maka secara otomatis container tersebut bisa saling berkomunikasi.
+
+### Network Driver
+
+* Saat kitamembuat Network di docker, kita perlu menentukan driver yang ingi kita gunakan, ada banyak driver yang bisa kita gunakan, tapi kadang ada syarat sebuah driver network bisa kita gunakan.
+* Bridge, yaitu driver yang digunakan untuk mebuat network secara virtual yang memungkinan container yang terkoneksi di bridge network yang sama saling berkomunikasi.
+* Host, yaitu driver yang digunakan untuk membuat network yang sama dengan sistem host. Host hanya jalan di Docker Linux, tidak bisa digunakan di mac atau windows.
+* none, yaiut driver untuk membuat network yang tidak bisa berkomunikasi
+
+### Melihat Network
+
+untuk melihat network di docker, kita bisa gunakan perintah :&#x20;
 
 ```bash
-docker version
+docker network ls
 ```
 
-## Dokcer Registry
+### Membuat Network
 
-* Docker registry adalah tempat kita menyimpan docker image
-* Dengan menggunakan docker registry, kita bisa menyimpan image yang kita buat dan bisa digunakan di docker daemon dimanapun selama bisa terkoneksi ke docker registry.
-
-### Diagram
-
-<figure><img src="https://lh7-us.googleusercontent.com/y6jGcuv3x9YdS4O5qJWBNZFis2f6jIkU4CP6ACwb4ru51LvRXyaOSfwU7FqDqJNFSyAwuY4v6pD5UjuNy92piSCr_hLYq0xwQCTRSRUzukocoBzY6_y1Tq0Zk_DhlEceLF_dTal8-MPWMYWom2gb5h3e-w=s2048" alt=""><figcaption></figcaption></figure>
-
-### Contoh Docker Registry
-
-* Docker Hub : [https://hub.docker.com/](https://hub.docker.com/)&#x20;
-* Digital Ocean Container Registry : [https://www.digitalocean.com/products/container-registry/](https://www.digitalocean.com/products/container-registry/)&#x20;
-* Google Cloud Container Registry : [https://cloud.google.com/container-registry](https://cloud.google.com/container-registry)&#x20;
-* Amazon Elastic Container Registry : [https://aws.amazon.com/id/ecr/](https://aws.amazon.com/id/ecr/)&#x20;
-* Azure Container Registry : [https://azure.microsoft.com/en-us/services/container-registry/](https://azure.microsoft.com/en-us/services/container-registry/)&#x20;
-
-## Docker Image
-
-* Docker image mirip seperti instaler aplikasi, dimana di dalam docker image terdapat apalikasi dan depedency dari aplikasi.
-* Sebelum kita menjalankan aplikasi docker, kita perlu memastikan memiliki docker image dari aplikasi tersebut.
-
-### Melihat Docker Image
-
-Untuk menlihat docker image yang sudah ada dalam docker dapat menggunakan perintah berikut :&#x20;
+* Untuk membuat network baru, kita bisa gunakan perintah :&#x20;
 
 ```bash
-docker image ls
-```
-
-### Donwload Docker Image
-
-* Untuk mendownload docker image dari docker registry kita bisa menggunakan perintah :&#x20;
-
-```bash
-docker image pull [namaimage]:[tag]
+docker network create --driver [drivername] [networkname]
 
 #Example : 
-docker image pull nginx:latest
+
+docker network create --driver bridge network1
 ```
 
-* Kita juga dapat mendownload docker image langsung dari http://hub.docker.com
+### Menghapus Network
 
-### Menghapus Dokcer Image
-
-Untuk menghapus docker image yang sudah didownload dapat menggunkan perintah berikut :&#x20;
+* Untuk menghapus network, kita bisa gunakan perintah  :&#x20;
 
 ```bash
-docker image rm [namaimage]:[tag]
+docker container rm [networkname]
 
 #Example :
-docker image rm nginx:latest
+docker container rm network1
 ```
 
-## Perintah
+* Network tidak bisa dihapus jika sudah digunakan oleh container. Kita harus menghapus containernya terlebih dahulu dari network.
 
-### Check Images
+### Membuat Container dengan Nework
 
-Mengecek images  yang sudah terinstall pada docker.
+* Untuk menambahkan container ke network, kita bisa menambahkan perintah --network ketika membuat container.
+* Berikut contoh code untuk menambahkan network :&#x20;
+
+{% code overflow="wrap" %}
+```bash
+docker container create --name [containername] --network [networkname] [image]:[tag]
+```
+{% endcode %}
+
+Example :&#x20;
+
+{% code overflow="wrap" %}
+```bash
+docker network create mongonetwork
+
+docker container create --name mongodb --network mongonetwork --env MONGO_INITDB_ROOT_USERNAME=fred --env MONGO_INITDB_ROOT_PASSWORD=fred mongo:latest
+
+docker container create --name mongodbexpress --network mongonetwork --publish 8081:8081 --env ME_CONFIG_MONGODB_URL="mongodb://fred:fred@mongodb:2701/" mongo-express:latest
+
+docker container start mongodb
+
+docker container start mongodbexpress
+
+```
+{% endcode %}
+
+### Menghapus Container dari Network
+
+* Jika diperlukan, kita juga bisa menghapus container dari network dengan perintah :&#x20;
 
 ```bash
-docker images all
+docker network disconnect [networkname]
 ```
 
-### Pull/ Download Docker Image
+### Menghapus Container dari Network
 
-Docker image bisa kita download dari http://hub.docker.com
-
-
+* Jika diperlukan, kita juga bisa menghapus container dari network dengan perintah :&#x20;
 
 ```bash
-docker pull [nama images]:[tag]
-
-#ex : 
-docker pull nginx:latest
+docker container disconnect [networkname] [containername]
 ```
 
-Beberapa tag yang digunakan saat mendownload docker image
-
-`latest` untuk mendowload versi terbaru
-
-`[major].[minor].[patch]` atau versi :  digunakan untuk mendowload versi tertentu. Ex : 2.1.3
-
-`stable`  : untuk mendownload versi stabil yang terbaru
-
-`beta` : untuk mendownload versi beta yang terbaru
-
-`rc`  : untuk mendowload versi relaease candidate yang terbaru.
-
-### Hapus Docker Image
-
-Jika tindak ingin menggunakan image yang sudah ada, bisa kita hapus menggunakan perintah berikut :&#x20;
+### Menghapus Container dari Network
 
 ```bash
-docker image rm [nama image]:[tag]
+docker network disconnect mongonetwork mongodb
+```
 
-#ex
-docker image rm nginx:latest
+### Menambahkan Container ke Network
+
+* Jika containernya sudah terlanjut dibuat, kita juga bisa menambahkan container yang sudah dibuat ke netwrok dengan menggunakan perintah berikut :&#x20;
+
+```bash
+docker network connect [networkname] [containername]
+```
+
+Example :&#x20;
+
+```bash
+docker network connect mongonetwork mongodb
+```
+
+## Inspect
+
+* Setelah kita mendownload image, atau membuat network, volume dan container. Kadang kita ingin melihat detail dari tiap hal tersebut.
+* Misal kita ingni melihat detail dari image, perintah apa yang digunakan oleh image tersebut? Environtment variabel apa yang digunakan? Atau port apa yang digunakan?
+* Misal kita juga ingin melihat detail container, Volume apa yang digunakan? Envinroment variabel apa yang digunakan ? Port forwarding apa yang digunakan? dan lain-lain.
+* Docker memiliki fitur yang bernama inspect, yang bisa digunakan di image, container, volume dan network.
+* Dengan fitur ini, kita bisa melihat detail dari tiap yang ada di Docker.
+
+### Menggunakan Inspect
+
+* Untuk melihat detail dari image, gunakan perintah berikut :&#x20;
+
+```bash
+docker image inspect [imagename]
+```
+
+* Untuk melihat detail dari container
+
+```bash
+docker container inspect [containername]
+```
+
+* Untuk melihat detail volume :&#x20;
+
+```bash
+docker volume inspect [volumename]
+```
+
+* Untuk melihat detail dari network, gunakan :&#x20;
+
+```bash
+docker network inspect [networkname]
+```
+
+* Contoh code menggunakan ispect :&#x20;
+
+```bash
+docker container inspect redist:latest
+```
+
+## Prune
+
+* Saat kita menggunakan Docker, kadang kalanya kita ingin membersihkan hal-hal yang sudah tidak digunakan lagi di Docker, misal container yang sudah di stop, image yang tidak digunakan oleh container, atau volume yang tidak digunakan oleh container.
+* Fitur untuk membersihkan secara otomatis di Docker bernama prune.
+* Hampi di semua perintah di docker mendukung prune.
+
+### Perintah Prune
+
+* Perintah untuk menghapus semua container yang sudah stop :&#x20;
+
+```bash
+docker container prune
+```
+
+* Perintah untuk menghapus semua image yang tidak digunakan container :&#x20;
+
+```bash
+docker image prune
+```
+
+* Perintah untuk menghapus semua network yang tiidak digunakan oleh container :&#x20;
+
+```bash
+docker network prune
+```
+
+* Perintah untuk menghapus volume yang tidak digunakan container :&#x20;
+
+```bash
+docker volume prune
+```
+
+* Atau kita bisa menggunakan satu perintah untuk menghapus container,network, dan image yang sudah tidak digunakan menggunakan perintah :&#x20;
+
+```bash
+docker system prune
 ```
