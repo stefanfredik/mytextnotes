@@ -1,13 +1,15 @@
 ---
-description: Berisi tutorial, tips dan kongfigurasi Docker.
+description: Berisi tutorial dan pengenalan dasar-dasar docker.
+cover: >-
+  https://images.unsplash.com/photo-1560732488-6b0df240254a?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw2fHxzZXJ2ZXJ8ZW58MHx8fHwxNzA4NjYyNTY4fDA&ixlib=rb-4.0.3&q=85
 coverY: 0
 ---
 
-# Docker
+# ⛴️ Docker Dasar
 
 ## Pengenalan Container
 
-Docker adalah sebuah container manager yang populer saat ini. Container merupakan virtualisasi yang membungkus aplikasi untuk berjalan di atas sebuah system operasi namun aplikasi tersebut tidak terintegrasi atau terkait langsung dengan system operasi utama.&#x20;
+Docker adalah platform terbuka untuk mengembangkan, mengirimkan, dan menjalankan aplikasi. Docker memungkinkan Anda memisahkan aplikasi Anda dari infrastruktur Anda sehingga Anda dapat mengirimkan perangkat lunak dengan lebih cepat. Dengan Docker, Anda dapat mengelola infrastruktur Anda dengan cara yang sama Anda mengelola aplikasi Anda. Dengan menggunakan kontainer Docker, Anda dapat secara signifikan meningkatkan kecepatan dan efisiensi proses pengembangan.
 
 Container berbeda dengan Virtual Mesin. Virtual machine menjalakan beberapa system operasi dan aplikasi berjalan didalamnya. Sedangkan Container menjalan hanya satu system operasi dan aplikasi berjalan diatas satu system operasi tersebut namun secara terpisah, seolah-olah aplikasi berjalan di system operasi yang berbeda.
 
@@ -112,7 +114,7 @@ docker image pull nginx:latest
 
 * Kita juga dapat mendownload docker image langsung dari http://hub.docker.com
 
-### Menghapus Dokcer Image
+### Menghapus Docker Image
 
 Untuk menghapus docker image yang sudah didownload dapat menggunkan perintah berikut :&#x20;
 
@@ -332,22 +334,6 @@ docker container create --name [conntainername] --mount "type=bind,source=folder
 docker contianer create --name mongodata --mount "type=bind,source=/home/ts/mongo-data,destination=/data/db" --publish 27018:27017 --env MONGO_INITDB_ROOT_USERNAME="fred" --env MONGO_INITDB_ROOT_PASSWORD=fred mongo:latest 
 ```
 {% endcode %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-#### Docker Registry
-
-Merupakan tempat penyimpanan image. Dengan menggunakan docker registry kita bisa menyimpan docker image yang telah kita buat dan dapat digunakan kembali secara berulanng selama kita terhubung dengan registry.
 
 
 
