@@ -822,3 +822,45 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 ```
 
 Sebagai catatan, jika kita menggunakan DHCP client, ketika kita assign ip address baru dari DHCP Server makan maka IP yang kita settign akan ditimpa oleh IP DNS Server dari DHCP Server.
+
+### Memetakan IP address menggunakan Domain Name (DNS)
+
+Sebuah file di dalam system yang bernama hosts juga bisa menerjemahkan IP address  menjadi domain name. File hosts terdapat pada lokasi /etc/hosts, dan merupakan bagian dari  DNS, kita bisa menggunakannya untuk memetakan ip dengan nama domain. Atau dengan kata lain, kita bisa menentukan ip address mana yang akan diakses oleh browser ketika memasukan domain name seperti www.microsoft.com, tanpa  ditentukan oleh DNS Server.
+
+Dalam dunia hacking, hal in sangat berguna dalam melakukan pembajakan sebuah koneksi TCP pada jaringan local ke sebuah web server yang bebahaya menggunakan tools seperti dnsspoof.
+
+Dari  terminal, kita bisa menggunakan perintah berikut :&#x20;
+
+```bash
+leafpad /etc/hosts
+```
+
+Maka kita akan melihat daftar yang berisi ip dan domain name.
+
+Secara default, host file hanya berisi ip yang memetakan localhost yaitu 127.0.0.1 dan system hostname . Contoh kali yang mengarah ke localhost juga dengan ip 127.0.0.1. Artinya ketika kita mengakses kali maka akan diarahkan langsung ke ip localhost (127.0.0.1).
+
+Sebagai contoh kita bisa menambahkan script berikut  :&#x20;
+
+```bash
+192.168.1.1 google.com
+```
+
+Pada scrpt diatas kita membuat ketika seseorang mengakses google.com maka akan diarahkan ke alamat ip 192.168.1.1
+
+Sebagai informasi ip dan domain name harus dipisah menggunakan tab bukan spasi.
+
+### Catatan
+
+Sebagai seorang hacker dbutuhkan kemampuan Linux Networking dasar untuk menghubungkan, menganalisa dan memanage jaringan. Dalam prosesnya, skill tersebut menjadi lebih dan lebih berguna untuk melakukan pengumpulan informasi (reconnaissance), penyamaran (spoofing) dan terhubung ke system target.
+
+### Latihan&#x20;
+
+Sebelum lanjut ke materi berikutnya, kita bisa menggunakan latihan berikut untuk menguji pemahaman dari materi sebelumnya :&#x20;
+
+* Mencari informasi yang terdapat pada interface jaringan yang digunakan.
+* Ganti IP address pada interface eth0 menjadi 192.168.1.1
+* Ganti mac address pada eth0
+* Mengecek semua informasi wireless device yang tersedia pada perangkat
+* Reset pengaturan IP address agar menggunakan protokol DHCP
+* Menemukan nameserver dan email server pada website favorite
+* Menambahkan DNS Google pada file /etc/resolv.conf
