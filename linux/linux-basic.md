@@ -864,3 +864,26 @@ Sebelum lanjut ke materi berikutnya, kita bisa menggunakan latihan berikut untuk
 * Reset pengaturan IP address agar menggunakan protokol DHCP
 * Menemukan nameserver dan email server pada website favorite
 * Menambahkan DNS Google pada file /etc/resolv.conf
+
+
+
+
+
+## Mengelolah Ijin File dan Folder
+
+Tidak semua user di dalam system operasi memiliki ijin akses yang sama pada file dan folder. Seperti system operasi profesional lainya,linux memiliki cara untuk mengamankan file dan folder yang terdapat pada OS. System keamanan pada Linux mengijinkan system administrator atau root user atau user pemilik file tertentu untuk mengamankan file mereka dari akses yang tidak dijinkan atau mengatur user tertentu untk melakukan ijin akses baca,tulis dan eksekusi file tertentu. Pada file dan folder tertentu, kita bisa secara spesifik menentukan hak akses pada pemilik file, grup tertentu dan semua user.&#x20;
+
+Ini adalah kebutuhan di dalam sebuah multi user, sistem operasi enterprise-level. Alternativenya sedikit kacau.
+
+Di bagian ini, kita akan belajar cara mengecek dan merubah ijin akses pada file dan direktori untuk sebuah user, bagaimana cara mengatur ijin atau hak akses default  pada file dan folder, dan bagaimana mengatur hak akses khusus. Dan pada bagian akhir kita akan melihat bagaimana hacker memahami hak akses yang mungkin akan membantu mereka mengeksploitasi sebuah system.
+
+### Beberapa Tipe User
+
+Seperti yang kita ketahui di dalam linux, root user sangat powerfull. Root user pada dasarnya bisa melakukan apapun di dalam system. Sedangkan user lainya yang terdapat pada system memiliki akses dan kapabilitas yang terbatas, tidak sama seperti  yang dimiliki oleh user root.&#x20;
+
+Pada user-user tersebut, biasanya tergabung dalam sebuah group sehingga bisa membagikan&#x20;
+
+
+
+
+
