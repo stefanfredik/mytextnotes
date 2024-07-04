@@ -4,7 +4,11 @@ description: >-
   melakukan pengecekan dan kongfigurasi jaringan.
 ---
 
-# 🖥 ZTE C320 OLT
+# 🖥️ ZTE C320 OLT
+
+Untuk panduan lengkapnya bisa di download di ebook berikut.&#x20;
+
+{% file src="../.gitbook/assets/ZTE C320 OLT Manual Book.pdf" %}
 
 ## Show Config
 
