@@ -630,12 +630,53 @@ pon-onu-mng gpon-onu_INTERFACE_ONU
   security-mng 999 state enable ingress-type lan protocol ftp telnet ssh snmp tr069
 ```
 
-### Ganti GPON Serial Number
+### Ganti ONT
+
+Sebelum melakukan proses ganti ont, kita harus mengetahui data port ONT yang akan diganti terlebih dahulu. Dalam contoh berikut saya akan menggunakan port ONT : `gpon-onu_1/1/1:10`
+
+**Mendapatkan Serial Number ONT Baru**
+
+Untuk mendapatkan serial number ONT yang baru dapat menggunakan dua cara :&#x20;
+
+* Dengan melihat serial number langsung pada ONT atau BOX ONT
+* Mendapatkan serial number dari OLT dengan syarat ONT sudah terhubung pada Kabel Fiber Optic.
+
+Untuk mengecek serial number ONT baru yang sudah terhubung dengan kabel FO dapat menggunakan perintah berikut :&#x20;
 
 ```bash
-GPON00-D-KL(config)#inte
-GPON00-D-KL(config)#interface gp
-GPON00-D-KL(config)#interface gpon-on
-GPON00-D-KL(config)#interface gpon-onu_0/10/4:1
-GPON00-D-KL(config-if)#registration-method sn  ZTEGXxXxX
+sh gpon onu uncfg 
+```
+
+Jika terdapat ONT baru yang belum diregistrasi maka akan tampil hasil seperti berikut :&#x20;
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Tinggal kita copy serial number tersebut. Jika terdapat lebih dari 1 ONT maka kita cocokan dengan port OLT nya agar tidak salah.
+
+
+
+* Setelah mendapatkan serial number maka bisa kita lanjut ke langkah configurasi
+* Masuk Mode Config :&#x20;
+
+```bash
+configure terminal
+```
+
+* Masuk ke port ONT dengan perintah berikut&#x20;
+
+```bash
+interface gpon-onu_1/1/1:10
+```
+
+* Ganti serial number dengan menggunakan serial number yang baru :&#x20;
+
+```bash
+registration-method sn ZTE1234567890
+```
+
+* Kembali ke menu awal dan simpan configurasi
+
+```bash
+end
+write
 ```
