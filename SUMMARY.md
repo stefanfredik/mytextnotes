@@ -1,6 +1,7 @@
 # Table of contents
 
-* [Mikrotik](README.md)
+* [Dashboard](README.md)
+* [Mikrotik](<README (1).md>)
   * [Tips and Trick](readme/tips-and-trick.md)
   * [App Priority](readme/app-priority.md)
 * [Ideas](ideas/README.md)
