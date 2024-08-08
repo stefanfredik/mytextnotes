@@ -1,5 +1,6 @@
 ---
 description: Bookmark Notes
+icon: bookmark
 coverY: 0
 ---
 

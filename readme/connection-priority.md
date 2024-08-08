@@ -1,6 +1,14 @@
-# App Priority
+---
+description: >-
+  Dengan menggunakan Connection Priority kita dapat memprioritaskan koneksi pada
+  aplikasi atau situs web tertentu.
+---
+
+# Connection Priority
 
 ### Zoom Priority
+
+Pada contoh saat ini kita akan menggunakan aplikasi zoom. Kita akan memprioritaskan koneksi zoom dari pada koneksi lainya.
 
 #### Pengumpulan IP dan Port Aplikasi
 

@@ -1,12 +1,16 @@
 ---
-description: Proses instalasi GNS 3
+description: >-
+  GNS 3 merupakan sebuah aplikasi Open Source yang digunakan untuk melakukan
+  simulasi jaringan secara virtual. GNS 3 dapat menjalankan berbagai macam
+  perangkat jaringan dan os jaringan secara virtual.
+icon: diagram-project
 ---
 
 # GNS 3
 
 ## Instalasi
 
-#### Add Repo
+### Add Repo
 
 Add and update repo,
 
@@ -16,7 +20,7 @@ sudo apt update
 sudo apt install gns3-gui gns3-server
 ```
 
-#### Install Docker
+### Install Docker
 
 Remove Old Docker
 
@@ -24,13 +28,13 @@ Remove Old Docker
 sudo apt remove docker docker-engine docker.io
 ```
 
-Install New Docker
+### Install New Docker
 
 ```bash
 sudo apt-get install apt-transport-https ca-certificates curl \ software-properties-common
 ```
 
-#### Import Docker Key
+### Import Docker Key
 
 Gpg Key
 
@@ -44,7 +48,7 @@ sudo add-apt-repository \
    $(lsb_release -cs) stable"
 ```
 
-#### Install Docker CE
+### Install Docker CE
 
 ```bash
 sudo apt update
@@ -68,13 +72,13 @@ sudo usermod -aG [groupname] [username]
 
 ```
 
-#### Install Network Virtual
+### Install  Virtual Bridge Network
 
 ```bash
 sudo apt-get install bridge-utils
 ```
 
-#### Install Libvirt
+### Install Libvirt
 
 Libvirt merupakan library yang  dibutuhkan untuk menjalankan virtual network pada gns3 sepert NAT atau Bridge network pada GNS 3.
 
@@ -89,9 +93,9 @@ Modifikasi User Group Untuk Libvirt
 sudo adduser $USER libvirt
 ```
 
-Config Virsh
+### Config Virsh
 
-Ini berguna untuk menangaktifkan virtual netowork adapter dan dapat berjalan otomatis
+Ini berguna untuk mengaktifkan virtual netowork adapter dan dapat berjalan otomatis
 
 Cek Status Network Virtual Adapter
 

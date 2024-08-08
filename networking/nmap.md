@@ -6,7 +6,7 @@ description: Nmap Notes
 
 ## Pengenalan
 
-Nmap adalah tools yang digunakan untuk kebutuhan jaringan. Seorang network administrator biasanya sangat membutuhkan nmap sebegai tool untuk melakukan pekerjaanya.
+Nmap adalah tools yang digunakan untuk kebutuhan jaringan. Seorang network administrator biasanya sangat membutuhkan nmap sebagai tool dalam melakukan pekerjaanya.
 
 Secara umum nmap digunakan untuk melakukan scan jaringan, seperti scanning port, network, host dan mencari informasi terkait perangkat jaringan seperti hostname, mac, dan system operasi pada perangkat yang terhubung ke jaringan.
 

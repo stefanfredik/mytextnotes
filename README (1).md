@@ -1,6 +1,7 @@
 ---
 description: Text Notes
+icon: ethernet
 ---
 
-# Text Notes
+# Mikrotik
 
