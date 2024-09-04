@@ -17,6 +17,7 @@
 * [Mikrotik](<README (1).md>)
   * [Tips and Trick](readme/tips-and-trick.md)
   * [Connection Priority](readme/connection-priority.md)
+  * [Glosarium](readme/glosarium.md)
 * [Networking](networking/README.md)
   * [Cisco Router](networking/cisco-router.md)
   * [🔢 All About IP Address](networking/ip-address.md)
