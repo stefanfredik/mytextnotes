@@ -1,6 +1,65 @@
+---
+description: >-
+  Berikut adalah cara memisahkan traffic seusai kebutuhan pada mikrotik dan
+  mebatasi limitasi bandwith setiap traffic yang sudah dipisahkan.
+---
+
 # Pisah Traffic
 
-## Shortcut
+## Via Winbox
+
+### Address List
+
+IP - Firewall - Address List
+
+Tambah address List
+
+* Name : IP Local
+*   Address :&#x20;
+
+    * 192.168.0.0/16
+    * 10.10.0.0/16
+
+
+
+### Menangkap IP Content menggunakan RAW
+
+IP - FIrewall - RAW
+
+#### Content
+
+Untuk list kontent bisa dilihat pada linnk berikut :&#x20;
+
+{% content-ref url="content.md" %}
+[content.md](content.md)
+{% endcontent-ref %}
+
+***
+
+**Tab General**
+
+* Chain : prerouting
+
+**Tab Advanced**
+
+* Source Address List : IP-Local
+* Destination Address List : (negasi) !IP-Local
+* Content : googlevideo.com
+
+**Tab Action**
+
+* Action : add destination to address list
+* Timeout : 00:10:00&#x20;
+
+***
+
+Ulangi langkah di atas satu-satu  dengan mengganti content sesuai content yang ada list.&#x20;
+
+
+
+
+
+## Shortcut - Via Script
 
 Untuk mempersingkat setingan bisa menggunakan script berikut
 
@@ -8,10 +67,10 @@ Untuk mempersingkat setingan bisa menggunakan script berikut
 
 Menambahkan IP  List Local
 
-```
+```bash
 /ip firewall address-list
-add address=192.168.0.0/16 list=private-lokal
-add address=10.10.0.0/16 list=private-lokal
+add address=192.168.0.0/16 list=IP-Local
+add address=10.10.0.0/16 list=IP-Local
 ```
 
 ### Raw
@@ -22,17 +81,17 @@ Menambah IP List menggunakan Raw firewall&#x20;
 
 ```bash
 /ip firewall raw
-add action=add-dst-to-address-list address-list=YOUTUBE address-list-timeout=\
+add action=add-dst-to-address-list address-list=IP-Youtube address-list-timeout=\
     10m chain=prerouting content=googlevideo.com dst-address-list=\
-    !private-lokal src-address-list=private-lokal
+    !IP-Local src-address-list=IP-Local
     
-add action=add-dst-to-address-list address-list=YOUTUBE address-list-timeout=\
-    10m chain=prerouting content=ytimg.com dst-address-list=!private-lokal \
-    src-address-list=private-lokal
+add action=add-dst-to-address-list address-list=IP-Youtube address-list-timeout=\
+    10m chain=prerouting content=ytimg.com dst-address-list=!IP-Local \
+    src-address-list=IP-Local
     
-add action=add-dst-to-address-list address-list=YOUTUBE address-list-timeout=\
-    10m chain=prerouting content=youtube.com dst-address-list=!private-lokal \
-    src-address-list=private-lokal
+add action=add-dst-to-address-list address-list=IP-Youtube address-list-timeout=\
+    10m chain=prerouting content=youtube.com dst-address-list=!IP-Local \
+    src-address-list=IP-Local
 ```
 
 #### Tiktok
@@ -57,47 +116,47 @@ bytedance.com
 /ip firewall raw
 add comment=IP-Tiktok action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .tiktok.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .tiktok.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .tiktokv.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .tiktokv.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .tiktokcdn.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .tiktokcdn.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .byteoversea.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .byteoversea.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .ibyteimg.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .ibyteimg.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .ibytedtos.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .ibytedtos.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .ttwstatic.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .ttwstatic.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .ttlivecdn.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .ttlivecdn.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .tiktokcdn-us.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .tiktokcdn-us.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    .tiktokcdn-in.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    .tiktokcdn-in.com dst-address-list=!IP-Local src-address-list=IP-Local
     
 add action=add-dst-to-address-list address-list=IP-Tiktok \
     address-list-timeout=1h chain=prerouting content=\
-    bytedance.com dst-address-list=!IP-Lokal src-address-list=IP-Lokal
+    bytedance.com dst-address-list=!IP-Local src-address-list=IP-Local
 ```
 
 ### Mangle
@@ -109,44 +168,38 @@ add action=add-dst-to-address-list address-list=IP-Tiktok \
 add action=mark-connection chain=prerouting comment=GAME dst-port="!0-1023,119\
     4,1723,1935,2083,3478,5050-5061,6666,8777,8000-8081,35915,39397" \
     new-connection-mark=GAME passthrough=yes protocol=tcp src-address-list=\
-    private-lokal
+    IP-Local
     
 add action=mark-connection chain=prerouting dst-port=!0-1023,1701,5060,5061 \
     new-connection-mark=GAME passthrough=yes protocol=udp src-address-list=\
-    private-lokal
+    IP-Local
     
 add action=mark-packet chain=prerouting connection-mark=GAME new-packet-mark=\
     "GAME PAKET" passthrough=yes
     
-
 ```
 
 #### Youtube
 
 ```bash
 add action=mark-connection chain=prerouting comment=youtube dst-address-list=\
-    YOUTUBE new-connection-mark=YOUTUBE passthrough=yes protocol=!icmp \
-    src-address-list=private-lokal
+    IP-Youtube new-connection-mark=Youtube-conn passthrough=yes protocol=!icmp \
+    src-address-list=IP-Local
     
-add action=mark-packet chain=prerouting connection-mark=YOUTUBE \
-    new-packet-mark="YOUTUBE PAKET" passthrough=yes
-    
-add action=mark-connection chain=prerouting comment=umum connection-mark=\
-    no-mark new-connection-mark=UMUM passthrough=yes
-    
-add action=mark-packet chain=prerouting connection-mark=UMUM new-packet-mark=\
-    "UMUM PAKET" passthrough=yes
+add action=mark-packet chain=prerouting connection-mark=Youtube-conn \
+    new-packet-mark="Youtube-Packet" passthrough=yes
+
 ```
 
 #### Tiktok
 
 ```bash
 add action=mark-connection chain=prerouting comment=youtube dst-address-list=\
-    YOUTUBE new-connection-mark=TIKTOK passthrough=yes protocol=!icmp \
-    src-address-list=private-lokal
+    IP-Tiktok new-connection-mark=Tiktok-conn passthrough=yes protocol=!icmp \
+    src-address-list=IP-Local
     
-add action=mark-packet chain=prerouting connection-mark=YOUTUBE \
-    new-packet-mark="TIKTOK PAKET" passthrough=yes
+add action=mark-packet chain=prerouting connection-mark=Tiktok-conn \
+    new-packet-mark="Tiktok-packet" passthrough=yes
 
 ```
 
@@ -154,31 +207,32 @@ add action=mark-packet chain=prerouting connection-mark=YOUTUBE \
 
 ```bash
 add action=mark-connection chain=prerouting comment=umum connection-mark=\
-    no-mark new-connection-mark=UMUM passthrough=yes
+    no-mark new-connection-mark=Common-conn passthrough=yes
     
-add action=mark-packet chain=prerouting connection-mark=UMUM new-packet-mark=\
-    "UMUM PAKET" passthrough=yes
+add action=mark-packet chain=prerouting connection-mark=Common-conn new-packet-mark=\
+    "Common-packet" passthrough=yes
 ```
 
 ### Simple Queue
 
-
-
 ```bash
 #Global
-/queue simple add name=GLOBAL target=192.168.0.0/16,10.10.0.0/16
+/queue simple add name=Global target=192.168.0.0/16,10.10.0.0/16
 
 #Game
-add name=GAME packet-marks="GAME PAKET" parent=GLOBAL target=\
+add name=Game packet-marks="Game-packet" parent=Global target=\
     192.168.0.0/16
-    
-add name=YOUTUBE packet-marks="YOUTUBE PAKET" parent=GLOBAL target=\
+
+#Youtube
+add name=Youtube packet-marks="Youtube-packet" parent=Global target=\
     192.168.0.0/16
-    
-add name=YOUTUBE packet-marks="TIKTOK PAKET" parent=GLOBAL target=\
+
+#Tiktok    
+add name=Tiktok packet-marks="Tiktok-packet" parent=Global target=\
     192.168.0.0/16
-    
-add name=UMUM packet-marks="UMUM PAKET" parent=GLOBAL target=\
+
+#Umum    
+add name=Common packet-marks="Common-packet" parent=Global target=\
     192.168.0.0/16
 ```
 
