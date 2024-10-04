@@ -161,6 +161,139 @@ Dengan rule ini, komputer dengan IP **192.168.1.50** tidak dapat mengakses inter
 
 
 
+### Perbedaan dan Fungsi Menu pada Tab Firewall Mikrotik
+
+Pada **MikroTik**, tab **Firewall** memiliki beberapa fitur penting yang dapat digunakan untuk mengatur lalu lintas jaringan, keamanan, dan performa, seperti **Filter Rules**, **NAT**, **Mangle**, **Raw**, dan **Layer 7 Protocol**. Mari kita bahas masing-masing secara detail:
+
+#### 1. **Filter Rules**
+
+Filter Rules digunakan untuk **mengizinkan** atau **memblokir** paket berdasarkan kriteria tertentu. Ini adalah inti dari **firewall** di MikroTik yang memungkinkan Anda mengontrol lalu lintas jaringan yang masuk, keluar, atau melewati router.
+
+**Kapan digunakan?**
+
+* Saat ingin mengontrol akses ke jaringan atau perangkat tertentu.
+* Saat ingin memblokir akses dari atau ke IP tertentu.
+* Melindungi jaringan dari serangan (misalnya, brute force, DoS, dll).
+* Mengatur kebijakan keamanan berdasarkan protokol dan port.
+
+**Contoh Penggunaan:**
+
+Misalkan Anda ingin **memblokir akses SSH** ke router dari internet untuk meningkatkan keamanan.
+
+1. **Chain**: Input (karena paket masuk ke router).
+2. **Protocol**: TCP.
+3. **Dst. Port**: 22 (port SSH).
+4. **In. Interface**: Ether1 (interface yang terhubung ke internet).
+5. **Action**: Drop (untuk memblokir).
+
+Dengan rule ini, akses SSH dari internet ke router akan diblokir.
+
+#### 2. **NAT (Network Address Translation)**
+
+**NAT** digunakan untuk menerjemahkan alamat IP dan port dari paket-paket yang melewati router. MikroTik mendukung **Source NAT (src-nat)** dan **Destination NAT (dst-nat)**.
+
+* **Src-NAT**: Biasanya digunakan untuk menerjemahkan alamat IP private menjadi alamat IP public, yang sering digunakan dalam proses **masquerading**.
+* **Dst-NAT**: Digunakan untuk menerjemahkan IP publik ke IP private, sering digunakan untuk melakukan port forwarding.
+
+**Kapan digunakan?**
+
+* Ketika router berfungsi sebagai gateway antara jaringan internal dan internet.
+* Ketika Anda ingin mempublikasikan server lokal di internet dengan **port forwarding**.
+* Saat melakukan load balancing atau failover antar beberapa gateway.
+
+**Contoh Penggunaan:**
+
+Jika Anda memiliki server web lokal di jaringan dengan IP **192.168.1.100** dan ingin mengaksesnya melalui IP publik, gunakan **dst-nat** untuk mem-forward port.
+
+1. **Chain**: dstnat.
+2. **Protocol**: TCP.
+3. **Dst. Port**: 80 (HTTP).
+4. **In. Interface**: Ether1 (interface dari internet).
+5. **Action**: dst-nat.
+6. **To Addresses**: 192.168.1.100.
+7. **To Ports**: 80.
+
+Dengan rule ini, setiap permintaan HTTP yang masuk ke IP publik router akan diteruskan ke server web di **192.168.1.100**.
+
+#### 3. **Mangle**
+
+Mangle digunakan untuk **menandai paket** (packet marking), **connection marking**, atau **routing marking**. Ini tidak secara langsung memblokir atau mengizinkan paket, tetapi digunakan dalam **QoS (Quality of Service)**, **traffic shaping**, atau pengaturan kebijakan routing.
+
+**Kapan digunakan?**
+
+* Saat ingin menerapkan **QoS** untuk mengatur prioritas bandwidth.
+* Saat menerapkan **Policy Based Routing** (routing berdasarkan kebijakan tertentu).
+* Ketika mengatur **load balancing** antar beberapa gateway internet.
+
+**Contoh Penggunaan:**
+
+Jika Anda ingin menandai semua paket yang berasal dari subnet **192.168.1.0/24** untuk prioritas bandwidth lebih tinggi:
+
+1. **Chain**: prerouting (untuk menangkap paket sebelum routing).
+2. **Src. Address**: 192.168.1.0/24.
+3. **Action**: mark-packet.
+4. **New Packet Mark**: high-priority.
+
+Setelah menandai paket, Anda bisa membuat **Queue** untuk membatasi atau memberikan prioritas bandwidth berdasarkan packet mark.
+
+#### 4. **Raw**
+
+Raw adalah jenis firewall rule yang bekerja pada paket sebelum diproses oleh **Connection Tracking**. Ini sangat efisien untuk menangani paket yang tidak perlu dilacak, seperti memblokir **serangan DoS**.
+
+**Kapan digunakan?**
+
+* Saat ingin memblokir paket sebelum connection tracking untuk mengurangi beban CPU.
+* Saat memblokir paket broadcast atau multicast yang tidak diinginkan.
+* Untuk memblokir traffic berbahaya sebelum diproses lebih lanjut.
+
+**Contoh Penggunaan:**
+
+Untuk memblokir **ICMP (ping) flood** yang bisa membebani router:
+
+1. **Chain**: prerouting.
+2. **Protocol**: ICMP.
+3. **Action**: drop.
+
+Dengan rule ini, semua paket ICMP yang masuk akan dibuang sebelum masuk ke connection tracking.
+
+#### 5. **Layer 7 Protocol (L7 Protocol)**
+
+Layer 7 Protocol adalah **Deep Packet Inspection (DPI)** yang memungkinkan router mengenali pola tertentu di dalam payload paket, seperti URL atau konten aplikasi. Ini berguna untuk memblokir atau mengizinkan aplikasi atau layanan tertentu (misalnya Facebook, YouTube, dll).
+
+**Kapan digunakan?**
+
+* Saat ingin memblokir akses ke aplikasi tertentu atau situs web berdasarkan pola URL.
+* Saat ingin menerapkan **bandwidth management** untuk layanan seperti video streaming.
+* Saat mengatur kebijakan berdasarkan protokol layer 7.
+
+**Contoh Penggunaan:**
+
+Misalkan Anda ingin memblokir akses ke **Facebook** menggunakan L7 Protocol:
+
+1. Buat **Regular Expression** untuk mengenali pola akses Facebook:
+   * Pattern:  `^.+facebook\.com.*$`
+2. **Chain**: forward.
+3. **Layer 7 Protocol**: pilih **Facebook** (yang sebelumnya telah ditambahkan di **L7 Protocols**).
+4. **Action**: drop.
+
+Dengan rule ini, akses ke **facebook.com** akan diblokir.
+
+***
+
+#### Ringkasan:
+
+| Komponen    | Fungsi                                      | Kapan digunakan                                        | Contoh Penggunaan                                |
+| ----------- | ------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------ |
+| **Filter**  | Mengontrol akses berdasarkan kriteria       | Memblokir/mengizinkan akses ke perangkat atau jaringan | Memblokir SSH dari internet ke router            |
+| **NAT**     | Menerjemahkan alamat IP dan port            | Gateway antara jaringan internal dan internet          | Port forwarding untuk server web lokal           |
+| **Mangle**  | Menandai paket untuk QoS atau routing       | QoS, Policy Based Routing, load balancing              | Menandai paket dari subnet tertentu untuk QoS    |
+| **Raw**     | Memblokir paket sebelum connection tracking | Serangan DoS, memblokir broadcast/multicast            | Memblokir ICMP flood sebelum connection tracking |
+| **Layer 7** | Menggunakan Deep Packet Inspection (DPI)    | Memblokir layanan tertentu berdasarkan pola payload    | Memblokir akses ke Facebook                      |
+
+Masing-masing fitur ini memiliki peran yang berbeda namun saling melengkapi dalam mengelola, mengontrol, dan mengamankan jaringan yang dikelola dengan router MikroTik.
+
+
+
 ## Traffic Flow Mikrotik
 
 <figure><img src="../.gitbook/assets/MikroTik_PacketFlow_Routing24.jpg" alt=""><figcaption></figcaption></figure>
