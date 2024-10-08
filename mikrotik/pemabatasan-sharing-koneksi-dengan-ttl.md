@@ -20,19 +20,28 @@ Pada studi kasus kali ini, kita akan menerapkan pada koneksi ROS pelanggan denga
 * Kita akan membatasi sharing koneksi dengan mengubah atau membatasi jumlah TTL pada interface Wlan1 karena interface tersebut yang menuju client.
 * Jumlah TTL yang keluar dari interface WLAN 1 akan di set menjadi nilai 1 sehingga ketika pelanggan menambahkan router, semua client yang terhubung ke router tersebut tidak dapat terhubung ke internet.
 
+### Sebelum Pembatasan
+
+Sebelum melakukan pembatasan, semua perangkat client yang terhubung dengan router ke 2 masih bisa mengakses internet.
+
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+### Setelah ganti TTL
+
+Setelah melakukan pembatasan TTL, client yang terhubung ke Router 2 tidak dapat mengakses internet.
+
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
 ## Config
 
 * Masuk ke IP - Firewall - Mangle
-*   Tambah mangle baru dengan setingan sebagai berikut :&#x20;
-
-    * Chain : postrouting
-    * Out Interface : Wlan1
-    * Action : Change TTL
-    * TTL Action : Change
-    * New TTL : 1
-    * Pastrough : no
-
-
+* Tambah mangle baru dengan setingan sebagai berikut :&#x20;
+  * Chain : **postrouting**
+  * Out Interface : **Wlan1**
+  * Action : **Change TTL**
+  * TTL Action : **Change**
+  * New TTL : **1**
+  * Pastrough : **no**
 
 ## Script
 

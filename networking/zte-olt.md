@@ -649,7 +649,7 @@ sh gpon onu uncfg
 
 Jika terdapat ONT baru yang belum diregistrasi maka akan tampil hasil seperti berikut :&#x20;
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 Tinggal kita copy serial number tersebut. Jika terdapat lebih dari 1 ONT maka kita cocokan dengan port OLT nya agar tidak salah.
 

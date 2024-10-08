@@ -2,6 +2,7 @@
 description: >-
   Berikut adalah cara memisahkan traffic seusai kebutuhan pada mikrotik dan
   mebatasi limitasi bandwith setiap traffic yang sudah dipisahkan.
+icon: bezier-curve
 ---
 
 # Pisah Traffic
@@ -30,8 +31,8 @@ IP - FIrewall - RAW
 
 Untuk list content bisa dilihat pada link berikut :&#x20;
 
-{% content-ref url="content.md" %}
-[content.md](content.md)
+{% content-ref url="content-list.md" %}
+[content-list.md](content-list.md)
 {% endcontent-ref %}
 
 ***

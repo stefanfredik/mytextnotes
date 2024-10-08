@@ -8,27 +8,33 @@ description: Berisi catatan catatan singkat yang berhubungan dengan IP Address.
 
 ### Private
 
-Class A. It is for large networks and has 8 bits for the network and 24 for hosts.
+IP private (alamat IP yang tidak bisa diakses langsung dari internet) didefinisikan dalam beberapa blok alamat IP sesuai dengan standar yang ditentukan oleh **RFC 1918**. Berikut adalah daftar range IP private berdasarkan CIDR:
 
-```
-10.0.0.0 -  10.255.255.255,
-```
+#### 1. Kelas A&#x20;
 
-Class B. It is used for medium networks and has 16 bits for the network and 16 for hosts.
+* #### CIDR: `10.0.0.0/8`
+* **Range IP**: `10.0.0.0 - 10.255.255.255`
+* **Jumlah IP**: 16.777.216 IP
 
-```
+#### 2. Kelas B&#x20;
 
-172.16.0.0 -  172.31.255.255
+* #### CIDR: `172.16.0.0/12`
+* **Range IP**: `172.16.0.0 - 172.31.255.255`
+* **Jumlah IP**: 1.048.576 IP
 
-```
+#### 3. Kelas C
 
-Class C. It is for smaller networks and has 24 bits for the network and 8 for hosts.
+* #### CIDR: `192.168.0.0/16`
+* **Range IP**: `192.168.0.0 - 192.168.255.255`
+* **Jumlah IP**: 65.536 IP
 
-```
+#### Detail IP Private:
 
-192.168.0.0 - 192.168.255.255
+* **10.0.0.0/8**: Seluruh subnet mulai dari 10.0.0.0 hingga 10.255.255.255.
+* **172.16.0.0/12**: Seluruh subnet mulai dari 172.16.0.0 hingga 172.31.255.255.
+* **192.168.0.0/16**: Seluruh subnet mulai dari 192.168.0.0 hingga 192.168.255.255.
 
-```
+
 
 ### IP Public
 
