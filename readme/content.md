@@ -19,3 +19,14 @@ description: Kumpulan Content
 .tiktokcdn-in.com
 bytedance.com
 ```
+
+## Youtube
+
+```
+.youtube.com
+.googlevideo.com
+.ytimg.com
+youtu.be 
+yt3.ggpht.com
+youtubei.googleapis.com
+```

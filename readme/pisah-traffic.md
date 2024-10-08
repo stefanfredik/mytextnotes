@@ -28,7 +28,7 @@ IP - FIrewall - RAW
 
 #### Content
 
-Untuk list kontent bisa dilihat pada linnk berikut :&#x20;
+Untuk list content bisa dilihat pada link berikut :&#x20;
 
 {% content-ref url="content.md" %}
 [content.md](content.md)
@@ -182,18 +182,20 @@ add action=mark-packet chain=prerouting connection-mark=GAME new-packet-mark=\
 #### Youtube
 
 ```bash
+/ip firewall mangle
 add action=mark-connection chain=prerouting comment=youtube dst-address-list=\
     IP-Youtube new-connection-mark=Youtube-conn passthrough=yes protocol=!icmp \
     src-address-list=IP-Local
     
 add action=mark-packet chain=prerouting connection-mark=Youtube-conn \
-    new-packet-mark="Youtube-Packet" passthrough=yes
+    new-packet-mark="Youtube-packet" passthrough=yes
 
 ```
 
 #### Tiktok
 
 ```bash
+/ip firewall mangle
 add action=mark-connection chain=prerouting comment=youtube dst-address-list=\
     IP-Tiktok new-connection-mark=Tiktok-conn passthrough=yes protocol=!icmp \
     src-address-list=IP-Local
@@ -206,6 +208,7 @@ add action=mark-packet chain=prerouting connection-mark=Tiktok-conn \
 #### Umum
 
 ```bash
+/ip firewall mangle
 add action=mark-connection chain=prerouting comment=umum connection-mark=\
     no-mark new-connection-mark=Common-conn passthrough=yes
     
@@ -217,21 +220,26 @@ add action=mark-packet chain=prerouting connection-mark=Common-conn new-packet-m
 
 ```bash
 #Global
-/queue simple add name=Global target=192.168.0.0/16,10.10.0.0/16
+/queue simple 
+    add name=Global target=192.168.0.0/16,10.10.0.0/16
 
 #Game
+/queue simple 
 add name=Game packet-marks="Game-packet" parent=Global target=\
     192.168.0.0/16
 
 #Youtube
+/queue simple 
 add name=Youtube packet-marks="Youtube-packet" parent=Global target=\
     192.168.0.0/16
 
 #Tiktok    
+/queue simple 
 add name=Tiktok packet-marks="Tiktok-packet" parent=Global target=\
     192.168.0.0/16
 
 #Umum    
+/queue simple 
 add name=Common packet-marks="Common-packet" parent=Global target=\
     192.168.0.0/16
 ```
