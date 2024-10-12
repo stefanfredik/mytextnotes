@@ -31,6 +31,7 @@
   * [Nmap](networking/nmap.md)
   * [Jaringan Komputer](networking/jaringan-komputer.md)
   * [OLT](networking/olt.md)
+  * [Vlan](networking/vlan.md)
 * [Web Development](web-development/README.md)
   * [Vue JS](web-development/vue-js/README.md)
     * [Vue and tailwind](web-development/vue-js/vue-and-tailwind.md)
