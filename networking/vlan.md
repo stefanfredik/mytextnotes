@@ -685,3 +685,28 @@ Dalam konfigurasi ini, VLAN 10 akan ditandai sebagai **tagged** pada **ether1** 
 #### Kesimpulan
 
 **Bridge** pada Mikrotik sangat berguna untuk menyatukan beberapa interface menjadi satu domain Layer 2. Dengan fitur-fitur seperti **VLAN filtering**, **STP/RSTP**, dan **hardware offload**, Bridge memungkinkan pengaturan jaringan yang fleksibel dan efisien. Namun, dalam skenario dengan banyak traffic, penggunaan **hardware switch** lebih disarankan untuk meminimalkan beban pada CPU.
+
+### Bridge VLAN table
+
+**Latar Belakang**\
+Sebelum menjelaskan secara mendalam tentang bridge VLAN filtering, ada beberapa konsep dasar yang perlu dipahami terkait bridge VLAN filtering.
+
+**Tagged/Untagged** - Di menu `/interface bridge vlan`, kamu bisa menentukan entri yang berisi port tagged dan untagged. Umumnya, port tagged digunakan sebagai trunk, sedangkan port untagged digunakan sebagai access port. Saat port ditandai sebagai tagged, bridge akan selalu menambahkan tag VLAN pada paket yang keluar melalui port tersebut (egress). Jika port ditandai sebagai untagged, bridge akan menghapus tag VLAN dari paket egress.
+
+**VLAN-ids** - Di menu `/interface bridge vlan`, kamu bisa menentukan VLAN mana yang diizinkan pada port tertentu. VLAN ID dicek pada port egress. Jika paket mengandung VLAN ID yang tidak ada di tabel VLAN bridge untuk port egress tersebut, paket akan dibuang sebelum dikirim.
+
+**PVID** - Port VLAN ID digunakan untuk access port agar menandai semua lalu lintas yang masuk (ingress) dengan VLAN ID tertentu. Entri dinamis ditambahkan di tabel VLAN bridge untuk setiap PVID yang digunakan, dan port otomatis ditambahkan sebagai untagged port.
+
+**Ingress filtering** - Secara default, VLAN yang tidak ada di tabel VLAN bridge akan dibuang sebelum dikirim (egress), tetapi properti ini memungkinkan kamu untuk membuang paket saat diterima (ingress).
+
+**Akses manajemen** - Bridge dirancang untuk meneruskan paket antar port bridge, sehingga perangkat lain akan mengira hanya ada kabel yang menghubungkannya. Dengan bridge VLAN filtering, kamu bisa membatasi paket mana yang dapat mengakses perangkat dengan bridge yang dikonfigurasi. Cara yang umum dilakukan adalah hanya memperbolehkan akses menggunakan VLAN ID yang sangat spesifik. Ini menambah lapisan keamanan saat mengakses perangkat melalui bridge port, dan sering disebut sebagai management port. Pada perangkat yang mendukung VLAN Filtering dengan hardware offloading, ini juga terkait dengan port CPU dari bridge.
+
+**Port CPU** - Setiap perangkat dengan switch chip memiliki port khusus bernama CPU port yang digunakan untuk berkomunikasi dengan CPU perangkat. Pada perangkat yang mendukung VLAN filtering dengan hardware offloading, port ini adalah interface bridge itu sendiri. Port ini umumnya digunakan untuk akses manajemen, tetapi bisa juga digunakan untuk tujuan lain, seperti routing antar VLAN, menandai paket, dan menerapkan antrian.
+
+**Tipe frame** - Kamu bisa memfilter paket apakah memiliki tag VLAN atau tidak. Ini berguna untuk menambah lapisan keamanan pada bridge port.
+
+**EtherType** - Secara default, bridge yang aware terhadap VLAN akan memfilter VLAN dengan memeriksa C-TAG (0x8100). Semua tag VLAN lain dianggap sebagai paket tanpa tag (untagged). EtherType yang dipilih akan digunakan untuk filtering VLAN dan tagging/untagging VLAN.
+
+**VLAN Tunneling** - Jika EtherType pada paket tidak cocok dengan EtherType yang dikonfigurasi untuk bridge, maka paket yang masuk (ingress) dianggap sebagai paket untagged. Ini memungkinkan pengiriman VLAN dalam VLAN lain yang berbeda, serta memungkinkan pengalihan lalu lintas tertentu melalui perangkat lain di jaringan.
+
+**Tag stacking** - Jika sebuah paket memiliki tag VLAN yang cocok dengan EtherType, maka paket tersebut dianggap sebagai paket tagged. Namun, kamu bisa menambahkan tag VLAN lain meskipun paket sudah memiliki tag. Dengan mengatur `tag-stacking=yes` pada bridge port, kamu akan menambahkan tag VLAN lain dengan nilai PVID di atas tag yang ada pada semua paket ingress.
