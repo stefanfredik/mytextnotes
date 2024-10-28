@@ -2,8 +2,6 @@
 
 ## Install  Open WRT di Raspi
 
-Untuk mengaktifkan web server di OpenWRT pada Raspberry Pi, kamu bisa mengikuti langkah-langkah berikut:
-
 #### 1. **Instalasi OpenWRT di Raspberry Pi**
 
 Pastikan OpenWRT sudah diinstal pada Raspberry Pi kamu. Jika belum, kamu bisa mengunduh image OpenWRT yang sesuai dengan model Raspberry Pi dari [situs resmi OpenWRT](https://openwrt.org/toh/raspberry\_pi\_foundation/raspberry\_pi).
@@ -186,33 +184,9 @@ uci commit
 /etc/init.d/network restart
 ```
 
-### Setting Firewall
-
 
 
 ## Blokir  Via Firewall
-
-### Blokir using IP
-
-Untuk membuat blokir terjadwal pada interface wireless di OpenWRT, kamu bisa menggunakan perintah berikut untuk mematikan Wi-Fi pada waktu tertentu:
-
-```bash
-uci add firewall rule
-uci set firewall.@rule[-1].name='Blokir_Wireless_Terjadwal'
-uci set firewall.@rule[-1].src='lan'
-uci set firewall.@rule[-1].dest='wan'
-uci set firewall.@rule[-1].src_mac='<MAC_Tertentu>'       # Ganti dengan MAC address perangkat yang ingin diblokir
-uci set firewall.@rule[-1].target='REJECT'
-uci set firewall.@rule[-1].start_time='22:00'             # Waktu mulai blokir (format HH:MM)
-uci set firewall.@rule[-1].stop_time='06:00'              # Waktu berhenti blokir
-uci set firewall.@rule[-1].weekdays='Mon Tue Wed Thu Fri' # Hari-hari blokir
-uci commit firewall
-/etc/init.d/firewall restart
-```
-
-#### Penjelasan Singkat:
-
-* **Blokir akses perangkat tertentu di Wi-Fi** berdasarkan MAC address pada jadwal tertentu.
 
 ### Blokir using Mac
 
@@ -742,3 +716,336 @@ firstboot && reboot now
 * **reboot now**: Merestart perangkat segera setelah reset selesai.
 
 Setelah perintah ini dijalankan, OpenWRT akan kembali ke pengaturan default, dan semua konfigurasi yang telah dibuat sebelumnya akan dihapus.
+
+
+
+## DNS Redirect
+
+Untuk mengalihkan semua permintaan DNS melalui firewall di OpenWRT, Anda bisa menggunakan aturan firewall berbasis NAT untuk menangkap dan mengarahkan ulang permintaan DNS (biasanya pada port 53) ke server DNS lokal atau server DNS khusus yang Anda tentukan.
+
+Berikut adalah langkah-langkah untuk mengalihkan semua permintaan DNS dari klien di jaringan ke server DNS tertentu (misalnya, `192.168.1.1`):
+
+#### 1. **Menambahkan Aturan Redirect DNS pada Firewall**
+
+Jalankan perintah `uci` untuk membuat aturan redirect DNS:
+
+```bash
+uci add firewall redirect
+uci set firewall.@redirect[-1].name='Redirect-DNS'
+uci set firewall.@redirect[-1].src='lan'  # Zona sumber
+uci set firewall.@redirect[-1].src_dport='53'  # Port DNS (53)
+uci set firewall.@redirect[-1].proto='tcp udp'  # Protokol TCP dan UDP
+uci set firewall.@redirect[-1].target='DNAT'  # Target NAT
+uci set firewall.@redirect[-1].dest_ip='192.168.1.1'  # IP DNS tujuan
+uci set firewall.@redirect[-1].dest_port='53'  # Port tujuan (53)
+```
+
+Dengan aturan ini, semua permintaan DNS dari perangkat di zona `lan` akan diarahkan ke server DNS `192.168.1.1`.
+
+#### 2. **Menerapkan dan Restart Firewall**
+
+Setelah mengatur redirect DNS, terapkan perubahan dan restart firewall:
+
+```bash
+uci commit firewall
+/etc/init.d/firewall restart
+```
+
+#### Contoh Lengkap
+
+Sebagai contoh kita akan membuat LOW DNS.
+
+DNS Jinom - Homenet
+
+* Type : Low
+* IP : 103.122.65.37
+* Port : 531
+
+Jika Anda ingin mengarahkan semua permintaan DNS klien jaringan ke server DNS `8.8.8.8` (Google DNS), gunakan konfigurasi berikut:
+
+```bash
+uci add firewall redirect
+uci set firewall.@redirect[-1].name='Low DNS'
+uci set firewall.@redirect[-1].src='lan'
+uci set firewall.@redirect[-1].src_dport='53'
+uci set firewall.@redirect[-1].proto='tcp udp'
+uci set firewall.@redirect[-1].target='DNAT'
+uci set firewall.@redirect[-1].dest_ip='103.122.65.37'
+uci set firewall.@redirect[-1].dest_port='531'
+uci commit firewall
+/etc/init.d/firewall restart
+```
+
+#### Catatan
+
+* Pastikan perangkat klien menggunakan DNS di jaringan LAN Anda agar aturan ini berfungsi.
+* Pengalihan DNS ini membantu memastikan semua perangkat tetap menggunakan server DNS yang Anda tentukan, mengabaikan konfigurasi DNS manual pada perangkat.
+
+### Advanced Setting
+
+Untuk memblokir situs terlarang di OpenWRT menggunakan pengalihan DNS (`DNS Redirect`) dan mencegah end-user mengganti server DNS, Anda dapat melakukan beberapa konfigurasi berikut:
+
+1.  **Mengatur DNS Redirect ke DNS yang Dipilih**
+
+    Kita dapat menggunakan DNS server tertentu (misalnya, OpenDNS) yang memiliki fitur pemblokiran situs berdasarkan kategori, atau menggunakan server DNS internal untuk memblokir situs tertentu. Langkah-langkahnya adalah sebagai berikut:
+
+    ```bash
+    uci set dhcp.@dnsmasq[0].server='208.67.222.123'  # Masukkan IP DNS server
+    uci set dhcp.@dnsmasq[0].noresolv='1'  # Abaikan resolusi DNS lainnya
+    uci commit dhcp
+    /etc/init.d/dnsmasq restart
+    ```
+
+    **Contoh:** `208.67.222.123` adalah server OpenDNS FamilyShield yang memblokir situs dewasa.
+2.  **Mengalihkan Semua Permintaan DNS ke DNS Internal melalui Firewall**
+
+    Agar pengguna tidak bisa menggunakan DNS selain yang telah diatur, buat aturan firewall yang mengarahkan semua lalu lintas DNS ke DNS server yang dipilih.
+
+    ```bash
+    uci add firewall redirect
+    uci set firewall.@redirect[-1].name='Force-DNS'
+    uci set firewall.@redirect[-1].src='lan'
+    uci set firewall.@redirect[-1].src_dport='53'
+    uci set firewall.@redirect[-1].proto='tcp udp'
+    uci set firewall.@redirect[-1].target='DNAT'
+    uci set firewall.@redirect[-1].dest_ip='208.67.222.123'  # Server DNS pilihan
+    uci set firewall.@redirect[-1].dest_port='53'
+    uci commit firewall
+    /etc/init.d/firewall restart
+    ```
+
+    Dengan aturan ini, semua lalu lintas DNS dari perangkat yang terhubung di jaringan akan diarahkan ke server DNS `208.67.222.123` (contoh ini menggunakan OpenDNS FamilyShield).
+3.  **Memblokir Langsung Situs Tertentu dengan `dnsmasq`**
+
+    Jika Anda ingin memblokir situs tertentu tanpa mengandalkan server DNS eksternal, Anda bisa memblokirnya langsung dengan `dnsmasq` di OpenWRT:
+
+    *   Tambahkan entri blokir di `/etc/hosts` untuk situs yang ingin diblokir.
+
+        ```bash
+        echo "127.0.0.1 situs-terlarang.com" >> /etc/hosts
+        ```
+    *   Atau, konfigurasi di `/etc/dnsmasq.conf` atau melalui UCI untuk domain tertentu:
+
+        ```bash
+        uci add_list dhcp.@dnsmasq[0].address='/situs-terlarang.com/127.0.0.1'
+        uci commit dhcp
+        /etc/init.d/dnsmasq restart
+        ```
+
+        Setiap permintaan ke `situs-terlarang.com` akan diarahkan ke `127.0.0.1` sehingga situs tidak dapat diakses.
+4.  **Cegah Akses DNS ke Internet Langsung (Non-DNS Server Pilihan)**
+
+    Untuk memastikan perangkat tidak bisa menggunakan DNS langsung ke internet, buat aturan firewall untuk memblokir semua lalu lintas DNS selain yang telah dialihkan:
+
+    ```bash
+    uci add firewall rule
+    uci set firewall.@rule[-1].name='Block-External-DNS'
+    uci set firewall.@rule[-1].src='lan'
+    uci set firewall.@rule[-1].dest='wan'
+    uci set firewall.@rule[-1].dest_port='53'
+    uci set firewall.@rule[-1].proto='tcp udp'
+    uci set firewall.@rule[-1].target='REJECT'
+    uci commit firewall
+    /etc/init.d/firewall restart
+    ```
+
+    Aturan ini akan mencegah lalu lintas DNS langsung ke internet, memaksa semua perangkat untuk menggunakan pengalihan DNS yang telah diset sebelumnya.
+
+Dengan konfigurasi ini, OpenWRT akan mengarahkan semua permintaan DNS melalui server DNS yang Anda tetapkan, serta mencegah pengguna akhir untuk mengganti DNS mereka secara manual untuk melewati filter.
+
+## Vlan
+
+Untuk melakukan konfigurasi VLAN di OpenWRT, Anda dapat mengatur VLAN melalui antarmuka `Switch` di file konfigurasi `/etc/config/network`. Pada router OpenWRT yang mendukung fitur VLAN, biasanya ada bagian `switch` yang memungkinkan Anda mengatur port dan ID VLAN.
+
+Berikut adalah langkah-langkah dasar untuk mengatur VLAN di OpenWRT:
+
+#### 1. **Edit Konfigurasi Network**
+
+Buka file konfigurasi `/etc/config/network` untuk mengedit pengaturan VLAN.
+
+```bash
+vi /etc/config/network
+```
+
+#### 2. **Menambahkan Switch VLAN**
+
+Tambahkan atau sesuaikan bagian `switch_vlan` di file konfigurasi. Misalnya, konfigurasi berikut membuat dua VLAN:
+
+* **VLAN 10** untuk jaringan LAN.
+* **VLAN 20** untuk jaringan Guest.
+
+```plaintext
+config switch 'switch0'
+    option name 'switch0'
+    option reset '1'
+    option enable_vlan '1'
+
+config switch_vlan
+    option device 'switch0'
+    option vlan '10'
+    option ports '1 2 3 4 6t'  # Port 1-4 untuk VLAN 10, port 6 sebagai tagged
+
+config switch_vlan
+    option device 'switch0'
+    option vlan '20'
+    option ports '0 6t'  # Port 0 untuk VLAN 20, port 6 sebagai tagged
+```
+
+Pada contoh ini:
+
+* **`switch0`** adalah nama switch pada router.
+* **`ports`** menentukan port yang terhubung ke VLAN tertentu.
+* **`6t`** berarti port 6 diatur sebagai tagged. Biasanya ini adalah port yang terhubung ke CPU atau perangkat yang mendukung VLAN.
+
+#### 3. **Menambahkan Interface untuk VLAN**
+
+Sekarang, tambahkan interface baru untuk setiap VLAN agar bisa digunakan oleh jaringan.
+
+```plaintext
+config interface 'lan'
+    option type 'bridge'
+    option proto 'static'
+    option ipaddr '192.168.10.1'
+    option netmask '255.255.255.0'
+    option ifname 'eth0.10'  # VLAN 10 pada interface eth0
+
+config interface 'guest'
+    option type 'bridge'
+    option proto 'static'
+    option ipaddr '192.168.20.1'
+    option netmask '255.255.255.0'
+    option ifname 'eth0.20'  # VLAN 20 pada interface eth0
+```
+
+* **`eth0.10`** merujuk pada interface `eth0` dengan VLAN ID 10.
+* **`eth0.20`** merujuk pada interface `eth0` dengan VLAN ID 20.
+
+#### 4. **Simpan Konfigurasi dan Restart Network**
+
+Setelah selesai mengedit file konfigurasi, simpan perubahan dan restart layanan jaringan untuk menerapkan pengaturan.
+
+```bash
+/etc/init.d/network restart
+```
+
+#### Contoh Lengkap Konfigurasi
+
+```plaintext
+config switch 'switch0'
+    option name 'switch0'
+    option reset '1'
+    option enable_vlan '1'
+
+config switch_vlan
+    option device 'switch0'
+    option vlan '10'
+    option ports '1 2 3 4 6t'
+
+config switch_vlan
+    option device 'switch0'
+    option vlan '20'
+    option ports '0 6t'
+
+config interface 'lan'
+    option type 'bridge'
+    option proto 'static'
+    option ipaddr '192.168.10.1'
+    option netmask '255.255.255.0'
+    option ifname 'eth0.10'
+
+config interface 'guest'
+    option type 'bridge'
+    option proto 'static'
+    option ipaddr '192.168.20.1'
+    option netmask '255.255.255.0'
+    option ifname 'eth0.20'
+```
+
+Dengan pengaturan di atas, Anda akan memiliki dua VLAN di OpenWRT:
+
+* VLAN 10 sebagai jaringan `LAN` dengan subnet `192.168.10.0/24`
+* VLAN 20 sebagai jaringan `Guest` dengan subnet `192.168.20.0/24`
+
+
+
+## Wireless Config
+
+### Enable dual band mode
+
+Untuk mengatur OpenWRT agar bekerja dalam dua mode sekaligus, yaitu 5GHz dan 2.4GHz, pastikan bahwa perangkat Anda mendukung dual-band WiFi. Langkah-langkah berikut dapat digunakan untuk mengonfigurasi kedua band secara bersamaan:
+
+1.  **Buka Konfigurasi Wireless di OpenWRT**
+
+    Akses file konfigurasi WiFi di OpenWRT:
+
+    ```bash
+    vi /etc/config/wireless
+    ```
+2.  **Konfigurasi untuk Band 2.4GHz**
+
+    Tambahkan atau sesuaikan bagian `wifi-device` dan `wifi-iface` untuk jaringan 2.4GHz seperti berikut:
+
+    ```plaintext
+    config wifi-device 'radio0'
+        option type 'mac80211'
+        option hwmode '11g'  # Mode untuk 2.4GHz
+        option path 'platform/xxxxxx'  # Ganti dengan path perangkat Anda
+        option channel '6'  # Pilih saluran untuk 2.4GHz
+        option htmode 'HT20'
+        option disabled '0'
+
+    config wifi-iface 'default_radio0'
+        option device 'radio0'
+        option network 'lan'
+        option mode 'ap'
+        option ssid 'OpenWrt-2.4GHz'
+        option encryption 'psk2'
+        option key 'password24ghz'
+    ```
+
+    **Penjelasan:**
+
+    * **`radio0`** adalah interface untuk jaringan 2.4GHz.
+    * **`htmode 'HT20'`** digunakan untuk koneksi 2.4GHz.
+    * **`ssid`** adalah nama jaringan untuk band 2.4GHz (ubah sesuai kebutuhan).
+    * **`encryption`** mengatur enkripsi dan **`key`** untuk password WiFi.
+3.  **Konfigurasi untuk Band 5GHz**
+
+    Sekarang tambahkan bagian lain untuk jaringan 5GHz:
+
+    ```plaintext
+    config wifi-device 'radio1'
+        option type 'mac80211'
+        option hwmode '11a'  # Mode untuk 5GHz
+        option path 'platform/yyyyyy'  # Ganti dengan path perangkat Anda
+        option channel '36'  # Pilih saluran untuk 5GHz
+        option htmode 'VHT80'
+        option disabled '0'
+
+    config wifi-iface 'default_radio1'
+        option device 'radio1'
+        option network 'lan'
+        option mode 'ap'
+        option ssid 'OpenWrt-5GHz'
+        option encryption 'psk2'
+        option key 'password5ghz'
+    ```
+
+    **Penjelasan:**
+
+    * **`radio1`** adalah interface untuk jaringan 5GHz.
+    * **`htmode 'VHT80'`** digunakan untuk kecepatan lebih tinggi di jaringan 5GHz.
+    * **`ssid`** adalah nama jaringan untuk band 5GHz.
+    * **`encryption`** dan **`key`** untuk mengatur keamanan.
+4.  **Simpan dan Restart Wireless**
+
+    Simpan konfigurasi dan restart layanan jaringan untuk menerapkan perubahan:
+
+    ```bash
+    /etc/init.d/network restart
+    ```
+5.  **Verifikasi Jaringan**
+
+    Pastikan bahwa kedua jaringan, 2.4GHz dan 5GHz, muncul pada perangkat Anda dengan SSID yang telah ditetapkan, dan bahwa keduanya dapat diakses dengan baik.
+
+Dengan konfigurasi ini, OpenWRT akan menyediakan jaringan WiFi di kedua band, memungkinkan perangkat terhubung ke salah satu sesuai dukungan masing-masing.
