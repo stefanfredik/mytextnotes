@@ -609,7 +609,18 @@ Perintah di OpenWRT disusun dalam format `action` dan `parameter` sesuai kebutuh
 
 Berikut adalah langkah-langkah untuk melakukan pengaturan sesuai kriteria yang diberikan pada OpenWRT di Raspberry Pi dengan interface **eth0** untuk WAN dan **phy0-ap0** untuk akses point:
 
-#### 1. **Konfigurasi Interface eth0 sebagai WAN dengan DHCP Client**
+#### Ubah interface WAN dan LAN
+
+Pada default config OpenWRT, terdapaat 2 buah interface yaitu interface Wan dan Lan. Interface Wan mengarahk ke internet dan interface Lan mengarah ke Lan/Local. Namun pada kedua interface tersebut interface Wan ke tag ke eth1 dan interface Lan di tag pada tag eth0. Kita akan mengubah sedikit pengaturan agar Wan pada eth0 dan Lan pada eth1.
+
+```bash
+uci set network.@device[0].ports="eth1" #mengubah port br-lan
+uci set network.wan.device="eth0"
+uci commit network
+/etc/init.d/network restart
+```
+
+#### **Konfigurasi Interface eth0 sebagai WAN dengan DHCP Client**
 
 Gunakan perintah berikut untuk mengatur interface **eth0** sebagai WAN yang mendapatkan IP melalui DHCP.
 
@@ -629,7 +640,7 @@ Konfigurasi ini mengatur interface **phy0-ap0** sebagai akses point dengan IP st
 uci set network.lan=interface
 uci set network.lan.ifname='phy0-ap0'
 uci set network.lan.proto='static'
-uci set network.lan.ipaddr='192.168.100.1'
+uci set network.lan.ipaddr='192.168.1.1'
 uci set network.lan.netmask='255.255.255.0'
 uci commit network
 
