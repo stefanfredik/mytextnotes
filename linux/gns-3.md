@@ -1,9 +1,9 @@
 ---
+icon: diagram-project
 description: >-
   GNS 3 merupakan sebuah aplikasi Open Source yang digunakan untuk melakukan
   simulasi jaringan secara virtual. GNS 3 dapat menjalankan berbagai macam
   perangkat jaringan dan os jaringan secara virtual.
-icon: diagram-project
 ---
 
 # GNS 3
@@ -109,3 +109,38 @@ Jika masih disable atau nonaktif. Silahkan aktifkan dengan perintah berikut :&#x
 virsh net-start default
 virsh net-autostart default
 ```
+
+## Uninstall
+
+To cleanly uninstall GNS3 on Linux (Xubuntu), follow these steps:
+
+1.  **Remove GNS3 using `apt`**: Open a terminal and run the following command to uninstall GNS3:
+
+    ```bash
+    sudo apt-get remove --purge gns3 gns3-server gns3-gui
+    ```
+2.  **Remove Dependencies**: If you want to remove any unused dependencies that were installed with GNS3, run:
+
+    ```bash
+    sudo apt-get autoremove
+    ```
+3.  **Delete Configuration Files and Directories**: GNS3 may leave behind configuration files or directories. To remove them, use the following commands:
+
+    ```bash
+    rm -rf ~/.gns3
+    rm -rf ~/.config/gns3
+    rm -rf /etc/gns3
+    ```
+4.  **Optional: Remove Docker (if installed with GNS3)**: If you installed Docker through GNS3 and wish to remove it as well, run:
+
+    ```bash
+    sudo apt-get purge docker-ce docker-ce-cli containerd.io
+    sudo apt-get autoremove --purge
+    ```
+5.  **Clear Any Remaining Dependencies**: Run the following command to clean up any residual package files:
+
+    ```bash
+    sudo apt-get clean
+    ```
+
+After completing these steps, GNS3 should be completely uninstalled from your system.
