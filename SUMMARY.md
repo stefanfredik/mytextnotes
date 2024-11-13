@@ -47,6 +47,7 @@
 * [Troubleshooting Logs](troubleshooting-logs/README.md)
   * [Linux](troubleshooting-logs/linux.md)
   * [Docker](troubleshooting-logs/docker.md)
+  * [GNS 3](troubleshooting-logs/gns-3.md)
 * [Database](database/README.md)
   * [Mysql](database/mysql.md)
 * [Script](script/README.md)
