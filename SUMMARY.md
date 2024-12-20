@@ -58,4 +58,5 @@
     * [GitHub](script/uncategorized/github-1.md)
   * [Javascript](script/javascript.md)
 * [GO Language](go-language/README.md)
+  * [Modul](go-language/modul.md)
   * [Basic](go-language/basic.md)

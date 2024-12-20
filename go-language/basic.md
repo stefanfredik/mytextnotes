@@ -1263,7 +1263,7 @@ Go memiliki tiga mekanisme penting untuk mengelola alur program terkait **cleanu
 
 ***
 
-#### **1. `defer`**
+### **`Defer`**
 
 **Fungsi:**
 
@@ -1341,7 +1341,7 @@ func main() {
 
 ***
 
-#### **2. `panic`**
+### **`Panic`**
 
 **Fungsi:**
 
@@ -1383,7 +1383,7 @@ panic: Tidak bisa membagi dengan nol!
 **Contoh: `panic` dengan `defer`**
 
 ```go
-goCopy codepackage main
+package main
 
 import "fmt"
 
@@ -1396,7 +1396,7 @@ func main() {
 **Output:**
 
 ```go
-goCopy codeIni akan tetap dicetak meskipun panic terjadi.
+Ini akan tetap dicetak meskipun panic terjadi.
 panic: Terjadi kesalahan serius!
 ```
 
@@ -1406,7 +1406,7 @@ panic: Terjadi kesalahan serius!
 
 ***
 
-#### **3. `recover`**
+### **`Recover`**
 
 **Fungsi:**
 
@@ -1418,7 +1418,7 @@ panic: Terjadi kesalahan serius!
 **Contoh: Menangkap `panic` dengan `recover`**
 
 ```go
-goCopy codepackage main
+package main
 
 import "fmt"
 
