@@ -37,3 +37,13 @@ sudo usermod -d /path/to/new/home -m username
 ```
 
 Parameter `-m` memastikan bahwa konten dari direktori home lama dipindahkan ke lokasi yang baru.
+
+### Delete User
+
+Untuk menghapus pengguna dari sistem, Anda dapat menggunakan perintah `deluser` atau `userdel`. Berikut adalah cara penggunaannya dengan `userdel`:
+
+```bash
+sudo userdel -r username
+```
+
+Parameter `-r` akan menghapus direktori home dan file spool pengguna. Gunakan dengan hati-hati agar tidak menghapus data yang penting secara tidak sengaja.
