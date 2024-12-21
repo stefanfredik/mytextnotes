@@ -3,7 +3,7 @@
 * [Dashboard](README.md)
 * [Bookmark](bookmark.md)
 * [Ideas](ideas/README.md)
-  * [Ideas](ideas/ideas.md)
+  * [Apps](ideas/ideas.md)
 * [Linux](linux/README.md)
   * [GNS 3](linux/gns-3.md)
   * [Install Apache on Linux Ubuntu](linux/apache.md)
