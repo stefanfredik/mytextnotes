@@ -2593,5 +2593,201 @@ func main() {
 
 Struct di Go adalah alat yang sangat kuat untuk menciptakan tipe data kustom. Jika Anda butuh bantuan lebih lanjut atau contoh tambahan, silakan tanyakan! 😊
 
+**Konsep Object-Oriented Programming (OOP) di Golang** berbeda dari bahasa seperti Java atau Python karena Go **tidak memiliki class**. Namun, Go mendukung paradigma OOP melalui **struct, method, interface**, dan komposisi. Berikut adalah penjelasan lengkapnya:
+
+***
+
+## **Konsep Dasar OOP di Golang**
+
+1. **Struct (Mirip dengan Class)**
+   * Dalam Go, **struct** digunakan untuk mendefinisikan tipe data kompleks yang bisa menyimpan properti (field).
+   * Struct adalah cara Go untuk mewakili **object**.
+2. **Method**
+   * Method adalah fungsi yang terkait dengan suatu struct.
+   * Ini digunakan untuk mendefinisikan **perilaku** dari suatu struct (mirip dengan metode dalam class).
+3. **Encapsulation (Penyembunyian Data)**
+   * Encapsulation dilakukan dengan cara membuat field atau method bersifat **private** (dimulai dengan huruf kecil) atau **public** (dimulai dengan huruf besar).
+   * Private field/method hanya bisa diakses dari dalam package yang sama.
+4. **Inheritance (Pewarisan)**
+   * Go **tidak mendukung inheritance langsung**, tetapi mendukung **komposisi** (menyematkan struct dalam struct lain) untuk mencapai perilaku serupa.
+5. **Polymorphism (Polimorfisme)**
+   * Polymorphism dalam Go dicapai menggunakan **interface**.
+   * Interface adalah kontrak yang mendefinisikan kumpulan method yang harus diimplementasikan oleh struct tertentu.
+
+***
+
+#### **Penjelasan dengan Contoh**
+
+**1. Membuat Struct (Representasi Object)**
+
+```go
+package main
+
+import "fmt"
+
+// Struct untuk representasi object
+type Person struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    // Membuat instance dari struct
+    person := Person{Name: "John", Age: 30}
+    fmt.Println("Nama:", person.Name)
+    fmt.Println("Umur:", person.Age)
+}
+```
+
+**2. Menambahkan Method pada Struct**
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+// Method terkait dengan struct Person
+func (p Person) Greet() {
+    fmt.Println("Halo, nama saya", p.Name)
+}
+
+func main() {
+    person := Person{Name: "Alice", Age: 25}
+    person.Greet() // Output: Halo, nama saya Alice
+}
+```
+
+**3. Encapsulation (Membuat Field Private)**
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+    name string // private field
+    age  int    // private field
+}
+
+// Method untuk mengatur nama (setter)
+func (p *Person) SetName(name string) {
+    p.name = name
+}
+
+// Method untuk mendapatkan nama (getter)
+func (p Person) GetName() string {
+    return p.name
+}
+
+func main() {
+    person := &Person{}
+    person.SetName("Bob")
+    fmt.Println("Nama:", person.GetName()) // Output: Nama: Bob
+}
+```
+
+**4. Komposisi (Pengganti Inheritance)**
+
+```go
+package main
+
+import "fmt"
+
+// Struct untuk representasi kendaraan
+type Vehicle struct {
+    Brand string
+    Model string
+}
+
+// Struct untuk representasi mobil yang menyematkan Vehicle
+type Car struct {
+    Vehicle
+    NumberOfDoors int
+}
+
+func main() {
+    car := Car{
+        Vehicle:      Vehicle{Brand: "Toyota", Model: "Corolla"},
+        NumberOfDoors: 4,
+    }
+    fmt.Println("Merek Mobil:", car.Brand)  // Mengakses field dari Vehicle
+    fmt.Println("Model Mobil:", car.Model) // Mengakses field dari Vehicle
+    fmt.Println("Jumlah Pintu:", car.NumberOfDoors)
+}
+```
+
+**5. Polymorphism dengan Interface**
+
+```go
+package main
+
+import "fmt"
+
+// Interface untuk mendefinisikan kontrak
+type Shape interface {
+    Area() float64
+    Perimeter() float64
+}
+
+// Struct untuk lingkaran
+type Circle struct {
+    Radius float64
+}
+
+// Implementasi method Area dan Perimeter untuk Circle
+func (c Circle) Area() float64 {
+    return 3.14 * c.Radius * c.Radius
+}
+
+func (c Circle) Perimeter() float64 {
+    return 2 * 3.14 * c.Radius
+}
+
+// Struct untuk persegi panjang
+type Rectangle struct {
+    Width  float64
+    Height float64
+}
+
+// Implementasi method Area dan Perimeter untuk Rectangle
+func (r Rectangle) Area() float64 {
+    return r.Width * r.Height
+}
+
+func (r Rectangle) Perimeter() float64 {
+    return 2 * (r.Width + r.Height)
+}
+
+func main() {
+    // Polymorphism: Memiliki array Shape
+    shapes := []Shape{
+        Circle{Radius: 5},
+        Rectangle{Width: 3, Height: 4},
+    }
+
+    for _, shape := range shapes {
+        fmt.Println("Area:", shape.Area())
+        fmt.Println("Perimeter:", shape.Perimeter())
+    }
+}
+```
+
+***
+
+#### **Kesimpulan**
+
+1. **Struct** berfungsi sebagai pengganti class dalam Go.
+2. **Method** memungkinkan kita menambahkan perilaku (behavior) ke struct.
+3. **Encapsulation** dicapai dengan aturan akses public/private berdasarkan huruf besar/kecil.
+4. **Komposisi** digunakan sebagai alternatif inheritance.
+5. **Polymorphism** diterapkan menggunakan interface, memungkinkan berbagai tipe struct memiliki perilaku seragam.
+
+Dengan pendekatan sederhana ini, Go mampu mengimplementasikan prinsip OOP secara efisien tanpa kompleksitas seperti yang ditemukan dalam bahasa lain.
+
 
 
