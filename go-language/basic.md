@@ -2789,9 +2789,176 @@ func main() {
 
 Dengan pendekatan sederhana ini, Go mampu mengimplementasikan prinsip OOP secara efisien tanpa kompleksitas seperti yang ditemukan dalam bahasa lain.
 
+## Go Routines
 
+**Goroutines** adalah salah satu fitur paling kuat di **Go (Golang)** yang memungkinkan Anda menjalankan fungsi secara **concurrent** atau **paralel** dengan cara yang sangat ringan dan efisien. Goroutines adalah unit eksekusi yang lebih ringan daripada thread dalam banyak bahasa pemrograman lainnya, dan Go memiliki model concurrency yang sangat sederhana namun kuat.
 
-## Go Routine
+#### **Apa itu Goroutine?**
+
+* Sebuah **goroutine** adalah fungsi atau metode yang dieksekusi secara **asynchronous** (secara bersamaan) dengan fungsi atau metode lainnya.
+* Goroutines dikelola oleh **Go runtime** (bukan oleh sistem operasi), sehingga membuat goroutines sangat ringan dalam penggunaan memori dan mudah untuk dikelola.
+* Goroutines diciptakan dengan kata kunci `go`, diikuti dengan pemanggilan fungsi yang ingin dijalankan secara concurrent.
+* Setiap goroutine berjalan di dalam thread sistem operasi, tetapi Go runtime akan memanage beberapa goroutine dalam satu thread untuk mengoptimalkan penggunaan sumber daya.
+
+***
+
+#### **Mekanisme Kerja Goroutines**
+
+* Ketika Anda membuat sebuah goroutine, Go runtime akan **menjadwalkan** eksekusinya ke dalam sebuah thread sesuai dengan ketersediaan sumber daya.
+* Goroutines akan berbagi memori, tetapi jika ada banyak goroutine yang bekerja bersama, Anda perlu menggunakan **channel** untuk berkomunikasi dan menghindari masalah _race condition_.
+
+***
+
+#### **Contoh Sederhana Goroutine**
+
+Berikut adalah contoh kode yang menunjukkan penggunaan goroutine untuk menjalankan dua fungsi secara bersamaan:
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Fungsi untuk menjalankan sebagai goroutine
+func printNumbers() {
+	for i := 1; i <= 5; i++ {
+		fmt.Println(i)
+		time.Sleep(time.Second) // Simulasi proses yang memakan waktu
+	}
+}
+
+// Fungsi utama
+func main() {
+	// Menjalankan printNumbers sebagai goroutine
+	go printNumbers()
+
+	// Fungsi utama tetap berjalan sementara goroutine berjalan
+	// Menunggu goroutine selesai (dengan cara sederhana menggunakan time.Sleep)
+	time.Sleep(6 * time.Second)
+	fmt.Println("Main function done!")
+}
+```
+
+**Penjelasan:**
+
+1. `go printNumbers()` memulai goroutine baru yang menjalankan fungsi `printNumbers`.
+2. Fungsi `main` terus berjalan sementara `printNumbers` berjalan di goroutine terpisah.
+3. `time.Sleep(6 * time.Second)` memastikan program tidak selesai sebelum goroutine selesai.
+4. **Output** akan mencetak angka dari 1 hingga 5 dan kemudian mencetak "Main function done!".
+
+***
+
+#### **Menggunakan Channel untuk Berkomunikasi Antar Goroutine**
+
+Untuk mengelola komunikasi antar goroutine, Go menyediakan **channel**. Channel memungkinkan goroutine untuk mengirim dan menerima data dengan cara yang aman.
+
+**Contoh Menggunakan Channel:**
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Fungsi yang akan dijalankan dalam goroutine
+func greet(name string, ch chan string) {
+	time.Sleep(2 * time.Second) // Simulasi delay
+	ch <- "Hello, " + name // Kirim pesan ke channel
+}
+
+func main() {
+	// Membuat channel untuk komunikasi
+	ch := make(chan string)
+
+	// Menjalankan goroutine
+	go greet("Alice", ch)
+
+	// Menunggu dan menerima pesan dari channel
+	message := <-ch
+
+	// Menampilkan pesan
+	fmt.Println(message) // Output: Hello, Alice
+}
+```
+
+**Penjelasan:**
+
+1. Fungsi `greet` dijalankan dalam sebuah goroutine dengan `go greet("Alice", ch)`.
+2. Fungsi `greet` mengirimkan pesan ke channel `ch` setelah tidur selama 2 detik.
+3. Di fungsi `main`, program menerima pesan dari channel dengan `<-ch` dan mencetaknya.
+4. Tanpa channel, program mungkin akan berhenti sebelum goroutine selesai mengirim pesan, menyebabkan pesan tidak tercetak.
+
+***
+
+#### **Goroutines dan Sync**
+
+Kadang-kadang kita perlu memastikan beberapa goroutine selesai sebelum program utama berakhir. Untuk itu, Go menyediakan paket **`sync`** dengan tipe **`WaitGroup`** untuk sinkronisasi.
+
+**Contoh Penggunaan WaitGroup:**
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+// Fungsi yang akan dijalankan dalam goroutine
+func task(id int, wg *sync.WaitGroup) {
+	defer wg.Done() // Mengindikasikan bahwa goroutine telah selesai
+	fmt.Printf("Task %d mulai\n", id)
+	time.Sleep(2 * time.Second) // Simulasi pekerjaan yang memakan waktu
+	fmt.Printf("Task %d selesai\n", id)
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	// Menjalankan beberapa goroutine
+	for i := 1; i <= 3; i++ {
+		wg.Add(1) // Menambah hitungan goroutine yang harus diselesaikan
+		go task(i, &wg)
+	}
+
+	// Menunggu semua goroutine selesai
+	wg.Wait()
+	fmt.Println("Semua tugas selesai!")
+}
+```
+
+**Penjelasan:**
+
+1. `wg.Add(1)` menambah jumlah goroutine yang harus diselesaikan.
+2. `defer wg.Done()` digunakan dalam goroutine untuk memberitahukan bahwa goroutine tersebut telah selesai.
+3. `wg.Wait()` menunggu sampai semua goroutine selesai sebelum melanjutkan ke kode berikutnya.
+4. Program utama akan menunggu semua goroutine selesai menjalankan tugasnya sebelum mencetak "Semua tugas selesai!".
+
+***
+
+#### **Keunggulan Goroutines**
+
+1. **Ringan**: Goroutines jauh lebih ringan dibandingkan thread di bahasa pemrograman lain, karena dikelola oleh runtime Go.
+2. **Efisien**: Go runtime mengelola scheduling goroutines secara efisien, memungkinkan ribuan bahkan juta-an goroutines berjalan bersamaan.
+3. **Mudah digunakan**: Dengan kata kunci `go`, kita dapat menjalankan fungsi dalam goroutine tanpa perlu konfigurasi atau pengaturan thread manual.
+4. **Komunikasi Aman**: Dengan menggunakan **channel**, goroutines dapat berkomunikasi dengan cara yang aman dan terkoordinasi.
+
+***
+
+#### **Kesimpulan**
+
+* **Goroutines** memungkinkan eksekusi fungsi secara concurrent dalam Go dengan cara yang sederhana dan efisien.
+* **Channel** digunakan untuk berkomunikasi antar goroutine, menghindari masalah _race condition_.
+* **Sync** dengan `WaitGroup` memungkinkan kita untuk menunggu sampai semua goroutine selesai bekerja.
+
+Dengan memanfaatkan goroutines dan channel, Go mempermudah pengelolaan concurrency yang efisien dan scalable.
+
+## Context
 
 **`context`** adalah paket bawaan di Go (`context` package) yang digunakan untuk mengelola **deadlines**, **cancelation signals**, dan **other request-scoped values** pada goroutines. Ini sangat berguna saat Anda bekerja dengan aplikasi yang melibatkan banyak goroutines atau proses asynchronous, seperti server web atau sistem terdistribusi.
 
