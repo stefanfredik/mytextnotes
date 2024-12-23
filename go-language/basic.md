@@ -2791,3 +2791,194 @@ Dengan pendekatan sederhana ini, Go mampu mengimplementasikan prinsip OOP secara
 
 
 
+## Go Routine
+
+**`context`** adalah paket bawaan di Go (`context` package) yang digunakan untuk mengelola **deadlines**, **cancelation signals**, dan **other request-scoped values** pada goroutines. Ini sangat berguna saat Anda bekerja dengan aplikasi yang melibatkan banyak goroutines atau proses asynchronous, seperti server web atau sistem terdistribusi.
+
+***
+
+#### **Tujuan Utama `context`**
+
+1. **Penghentian Goroutine yang Tepat Waktu**\
+   Menghindari goroutines berjalan lebih lama dari yang diperlukan dengan memberikan sinyal untuk berhenti.
+2. **Propagasi Deadline atau Timeout**\
+   Mengatur batas waktu untuk operasi tertentu (misalnya, jika permintaan API tidak selesai dalam 2 detik, batalkan permintaan).
+3. **Menyimpan Nilai yang Relevan dengan Request**\
+   Membagikan data antar fungsi dalam satu konteks, seperti informasi pengguna atau ID permintaan.
+
+***
+
+#### **Jenis Context**
+
+Ada dua fungsi utama yang digunakan untuk membuat context:
+
+1. **`context.Background()`**
+   * Context awal atau dasar yang tidak memiliki nilai, batas waktu, atau sinyal pembatalan.
+   * Biasanya digunakan sebagai root context.
+2. **`context.TODO()`**
+   * Context placeholder yang digunakan saat Anda belum yakin context mana yang harus digunakan.
+   * Digunakan untuk debugging atau selama pengembangan.
+
+Dari root context ini, kita dapat membuat context yang lebih spesifik dengan fitur tambahan, seperti:
+
+**1. `WithCancel`**
+
+* Membuat context yang bisa dibatalkan menggunakan fungsi `cancel()`.
+* Cocok digunakan untuk membatalkan operasi goroutine ketika tidak diperlukan lagi.
+
+**2. `WithTimeout`**
+
+* Membuat context dengan batas waktu (timeout). Setelah waktu habis, context secara otomatis dibatalkan.
+
+**3. `WithDeadline`**
+
+* Mirip dengan `WithTimeout`, tetapi memungkinkan Anda menentukan titik waktu tertentu untuk pembatalan.
+
+**4. `WithValue`**
+
+* Menyematkan nilai ke context, yang bisa diambil oleh fungsi lain yang menerima context tersebut.
+
+***
+
+#### **Contoh Penggunaan Context**
+
+**1. Context dengan `WithCancel`**
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func doSomething(ctx context.Context) {
+	select {
+	case <-time.After(5 * time.Second): // Simulasi pekerjaan
+		fmt.Println("Task selesai")
+	case <-ctx.Done(): // Tangkap sinyal pembatalan
+		fmt.Println("Task dibatalkan:", ctx.Err())
+	}
+}
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	go doSomething(ctx)
+
+	time.Sleep(2 * time.Second) // Simulasi proses lain
+	cancel()                    // Kirim sinyal pembatalan
+	time.Sleep(1 * time.Second) // Tunggu goroutine selesai
+}
+```
+
+**Penjelasan:**
+
+* `context.WithCancel()` menghasilkan context baru (`ctx`) dan fungsi pembatalan (`cancel`).
+* Ketika `cancel()` dipanggil, goroutine `doSomething` akan berhenti karena mendeteksi sinyal pembatalan dari `ctx.Done()`.
+
+***
+
+**2. Context dengan `WithTimeout`**
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func doSomething(ctx context.Context) {
+	select {
+	case <-time.After(5 * time.Second): // Simulasi pekerjaan
+		fmt.Println("Task selesai")
+	case <-ctx.Done(): // Tangkap sinyal pembatalan
+		fmt.Println("Task dibatalkan:", ctx.Err())
+	}
+}
+
+func main() {
+	// Context dengan timeout 3 detik
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel() // Pastikan cancel dipanggil untuk membersihkan resources
+
+	go doSomething(ctx)
+
+	time.Sleep(4 * time.Second) // Tunggu sampai task selesai
+}
+```
+
+**Penjelasan:**
+
+* Setelah 3 detik, context akan secara otomatis dibatalkan, dan goroutine `doSomething` akan berhenti dengan error `context deadline exceeded`.
+
+***
+
+**3. Context dengan `WithValue`**
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+)
+
+func printUser(ctx context.Context) {
+	if user := ctx.Value("user"); user != nil {
+		fmt.Println("User:", user)
+	} else {
+		fmt.Println("No user found")
+	}
+}
+
+func main() {
+	// Membuat context dengan nilai
+	ctx := context.WithValue(context.Background(), "user", "Alice")
+
+	// Menggunakan context dalam fungsi
+	printUser(ctx)
+}
+```
+
+**Penjelasan:**
+
+* `WithValue` menyisipkan data ke dalam context (`"user": "Alice"`).
+* Nilai ini dapat diambil menggunakan `ctx.Value()`.
+
+***
+
+#### **Kapan Menggunakan Context**
+
+1.  **Server HTTP**:\
+    Untuk membatalkan permintaan ketika klien sudah tidak lagi menunggu respons.
+
+    ```go
+    func handler(w http.ResponseWriter, r *http.Request) {
+        ctx := r.Context()
+        select {
+        case <-time.After(5 * time.Second):
+            fmt.Fprintln(w, "Request selesai")
+        case <-ctx.Done():
+            fmt.Fprintln(w, "Request dibatalkan:", ctx.Err())
+        }
+    }
+    ```
+2. **Operasi Paralel atau Goroutine**:\
+   Untuk memastikan goroutines dihentikan ketika tidak lagi diperlukan.
+3. **Propagasi Deadline/Timeout**:\
+   Misalnya, jika sebuah operasi memanggil API eksternal, Anda dapat mengatur batas waktu sehingga permintaan dibatalkan jika API tidak merespons tepat waktu.
+
+***
+
+#### **Kesimpulan**
+
+1. **Context** adalah alat penting untuk mengelola goroutines di Go, terutama untuk membatalkan goroutines atau memberikan batas waktu operasi.
+2. Dengan kombinasi `WithCancel`, `WithTimeout`, dan `WithValue`, Anda dapat membuat aplikasi yang lebih aman, efisien, dan mudah di-maintain.
+3. Selalu **gunakan context dengan hati-hati**, terutama dalam operasi paralel, untuk menghindari kebocoran goroutines.
+
+
+
