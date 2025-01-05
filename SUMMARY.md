@@ -14,6 +14,7 @@
   * [Virtual](linux/linux-virtual.md)
   * [Shortcut](linux/shortcut.md)
   * [Linux Basic](linux/linux-basic.md)
+  * [Upgrade Linux LTS](linux/upgrade-linux-lts.md)
 * [Mikrotik](mikrotik/README.md)
   * [Tips and Trick](mikrotik/tips-and-trick.md)
   * [Connection Priority](mikrotik/connection-priority.md)
