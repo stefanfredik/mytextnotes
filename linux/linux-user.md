@@ -47,3 +47,9 @@ sudo userdel -r username
 ```
 
 Parameter `-r` akan menghapus direktori home dan file spool pengguna. Gunakan dengan hati-hati agar tidak menghapus data yang penting secara tidak sengaja.
+
+### Melihat Seluruh User dalam Linux
+
+```bash
+cut -d: -f1 /etc/passwd
+```
