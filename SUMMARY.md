@@ -62,3 +62,5 @@
   * [Modul](go-language/modul.md)
   * [Basic](go-language/basic.md)
 * [Self Development](self-development.md)
+* [Virtual Manager](virtual-manager/README.md)
+  * [Proxmox](virtual-manager/proxmox.md)
