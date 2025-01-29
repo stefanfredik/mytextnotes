@@ -47,6 +47,7 @@
 * [Dev Ops](dev-ops/README.md)
   * [⛴️ Docker Dasar](dev-ops/docker-dasar.md)
   * [Docker Script](dev-ops/docker-script.md)
+  * [Modul](dev-ops/modul.md)
 * [Troubleshooting Logs](troubleshooting-logs/README.md)
   * [Linux](troubleshooting-logs/linux.md)
   * [Docker](troubleshooting-logs/docker.md)
