@@ -112,3 +112,91 @@ Buka `phpinfo()` untuk memastikan perubahan sudah diterapkan:
     http://localhost/info.php
     ```
 4. Cari `upload_max_filesize` dan `post_max_size` untuk memastikan nilainya sudah berubah.
+
+## Akses Database
+
+Agar database MariaDB bisa diakses dari luar localhost, ikuti langkah-langkah berikut:
+
+#### 1. **Edit Konfigurasi MariaDB**
+
+Buka file konfigurasi MariaDB (`my.cnf` atau `mysqld.cnf`), biasanya terletak di:
+
+* **Debian/Ubuntu:** `/etc/mysql/mariadb.conf.d/50-server.cnf`
+* **CentOS/RHEL:** `/etc/my.cnf.d/server.cnf`
+* **Windows:** `C:\Program Files\MariaDB 10.x\data\my.ini`
+
+Cari baris berikut:
+
+```ini
+bind-address = 127.0.0.1
+```
+
+Ubah menjadi:
+
+```ini
+bind-address = 0.0.0.0
+```
+
+Atau jika tidak ada, tambahkan di bagian `[mysqld]`.
+
+#### 2. **Beri Akses ke User MariaDB**
+
+Masuk ke MariaDB:
+
+```sh
+mysql -u root -p
+```
+
+Buat atau ubah user agar bisa diakses dari luar, misalnya untuk user `myuser`:
+
+```sql
+GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+```
+
+> **Note:** `'%'` berarti bisa diakses dari mana saja. Anda bisa menggantinya dengan IP tertentu untuk keamanan, misalnya `'192.168.1.100'`.
+
+#### 3. **Cek Firewall**
+
+Jika menggunakan **UFW (Ubuntu/Debian)**, izinkan akses ke port MariaDB (default: 3306):
+
+```sh
+sudo ufw allow 3306/tcp
+sudo ufw reload
+```
+
+Jika menggunakan **firewalld (CentOS/RHEL)**:
+
+```sh
+sudo firewall-cmd --add-service=mysql --permanent
+sudo firewall-cmd --reload
+```
+
+#### 4. **Restart MariaDB**
+
+Setelah mengubah konfigurasi, restart MariaDB agar perubahan diterapkan:
+
+```sh
+sudo systemctl restart mariadb  # Untuk Linux
+net stop MariaDB && net start MariaDB  # Untuk Windows (Command Prompt sebagai Administrator)
+```
+
+#### 5. **Coba Koneksi dari Remote**
+
+Dari komputer lain, coba koneksi menggunakan:
+
+```sh
+mysql -h IP_SERVER -u myuser -p
+```
+
+Atau dengan aplikasi seperti **DBeaver, MySQL Workbench, atau HeidiSQL**.
+
+***
+
+Jika masih tidak bisa:
+
+* Pastikan MariaDB berjalan (`sudo systemctl status mariadb`).
+* Cek apakah ada firewall eksternal (misalnya di cloud provider).
+* Gunakan `netstat -tulnp | grep 3306` untuk memastikan MariaDB mendengarkan koneksi di semua antarmuka (`0.0.0.0:3306`).
+
+Coba langkah-langkah ini dan beri tahu jika masih ada kendala! 🚀
