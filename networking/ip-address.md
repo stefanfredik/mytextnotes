@@ -55,3 +55,15 @@ IP private (alamat IP yang tidak bisa diakses langsung dari internet) didefinisi
 203.0.114.0-223.255.255.255
 
 ```
+
+## Ip Address Trouble Shoot
+
+Ip address yang digunakan untuk melakukan traceroute untuk kebutuhan troubleshoot.
+
+Beberapa IP publik yang sering digunakan untuk melakukan traceroute adalah:
+
+1. **Google Public DNS**: 8.8.8.8
+2. **Cloudflare DNS**: 1.1.1.1
+3. **OpenDNS**: 208.67.222.222 dan 208.67.220.220
+4. **Facebook**: 31.13.71.36
+5. **Netflix**: 13.226.52.184
