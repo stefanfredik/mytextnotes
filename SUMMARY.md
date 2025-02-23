@@ -41,6 +41,8 @@
   * [Vue JS](web-development/vue-js/README.md)
     * [Vue and tailwind](web-development/vue-js/vue-and-tailwind.md)
     * [VUE COMPOSITION API](web-development/vue-js/vue-composition-api.md)
+  * [Project](web-development/project/README.md)
+    * [Arisan](web-development/project/arisan.md)
 * [Filsafat](filsafat/README.md)
   * [Aforisme](filsafat/aforisme.md)
   * [Socrates](filsafat/socrates.md)
