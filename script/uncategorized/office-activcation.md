@@ -1,4 +1,6 @@
-# Office Visio Activcation
+# Office Activcation
+
+## Office 2019
 
 #### First method: Activate Visio 2019 with the help of the Command Prompt
 
@@ -14,7 +16,7 @@ Default location where Visio 2019 is installed:
 
 **Step 2**. With the use of **cd** command you can change your path to the one where Visio 2019 files are located.
 
-cd "%ProgramFiles%\Microsoft Office\Office16"
+\`\`d "%ProgramFiles%\Microsoft Office\Office16"
 
 <figure><img src="https://activateforfree.com/wp-content/uploads/2020/08/command-line-office16-folder.png" alt=""><figcaption></figcaption></figure>
 
@@ -24,11 +26,11 @@ Before proceeding with the activation it's necessary to convert the version from
 
 Please copy and execute these commands one by one.
 
-```bash
-cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL_KMS_Client_AE-ppd.xrm-ms"
-cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL_KMS_Client_AE-ul.xrm-ms"
-cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL_KMS_Client_AE-ul-oob.xrm-ms"
-```
+cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL\_KMS\_Client\_AE-ppd.xrm-ms"
+
+cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL\_KMS\_Client\_AE-ul.xrm-ms"
+
+cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL\_KMS\_Client\_AE-ul-oob.xrm-ms"
 
 <figure><img src="https://activateforfree.com/wp-content/uploads/2020/08/installing-office-2019-license.png" alt=""><figcaption></figcaption></figure>
 
@@ -36,9 +38,7 @@ cscript ospp.vbs /inslic:"..\root\Licenses16\VisioPro2019VL_KMS_Client_AE-ul-oob
 
 Type this into the console:
 
-```bash
 cscript ospp.vbs /inpkey:9BGNQ-K37YR-RQHF2-38RQ3-7VCBB
-```
 
 <figure><img src="https://activateforfree.com/wp-content/uploads/2020/08/office-product-key-install.png" alt=""><figcaption></figcaption></figure>
 
@@ -46,9 +46,7 @@ cscript ospp.vbs /inpkey:9BGNQ-K37YR-RQHF2-38RQ3-7VCBB
 
 You can set the host to **kms8.msguides.com** using this command. Alternatively you can configure **kms.digiboy.ir**
 
-```bash
 cscript ospp.vbs /sethst:kms8.msguides.com
-```
 
 **Step 6**. We can proceed with the activation of Visio 2019
 
