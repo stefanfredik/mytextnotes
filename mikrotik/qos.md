@@ -4,9 +4,7 @@ description: Mikrotik QOS
 
 # Qos
 
-Saya akan menjelaskan secara detail tentang metode Burst dalam Simple Queue di Mikrotik. Burst adalah fitur yang memungkinkan pengguna untuk mendapatkan kecepatan internet lebih tinggi dari batas normal (Max-Limit) untuk waktu tertentu, tergantung pada konfigurasi yang ditentukan. Fitur ini sangat berguna untuk memberikan pengalaman lebih baik kepada pengguna tanpa harus menaikkan batas bandwidth secara permanen.
-
-***
+## Queue
 
 Apa itu Burst di Mikrotik?Burst adalah mekanisme di Simple Queue yang memberikan "kecepatan tambahan" di atas Max-Limit untuk durasi tertentu. Misalnya, jika pengguna dibatasi pada kecepatan 2 Mbps, dengan Burst mereka bisa mendapatkan hingga 4 Mbps untuk waktu tertentu (misalnya 10 detik), tergantung pada penggunaan sebelumnya dan pengaturan lainnya. Setelah waktu Burst habis, kecepatan kembali ke Max-Limit.Fitur ini biasanya digunakan untuk:
 
@@ -122,7 +120,3 @@ Tips Mengoptimalkan Burst
 2. Batasi Burst Time: 10-30 detik biasanya cukup untuk kebutuhan umum.
 3. Monitor Penggunaan: Gunakan Queue Statistics untuk melihat seberapa sering Burst aktif.
 4. Kombinasikan dengan PCQ: Jika banyak pengguna, gunakan PCQ untuk membagi bandwidth, lalu tambahkan Burst per pengguna.
-
-***
-
-KesimpulanBurst di Simple Queue Mikrotik adalah fitur cerdas untuk memberikan kecepatan tambahan sementara dengan kontrol yang sederhana namun efektif. Dengan mengatur Burst Limit, Threshold, dan Time secara tepat, Anda bisa meningkatkan kepuasan pengguna tanpa mengorbankan stabilitas jaringan. Jika Anda ingin mencoba konfigurasi spesifik atau ada pertanyaan lebih lanjut, silakan beri tahu saya!

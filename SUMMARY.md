@@ -20,7 +20,6 @@
   * [Connection Priority](mikrotik/connection-priority.md)
   * [Glosarium](mikrotik/glosarium.md)
   * [Tiktok Priority](mikrotik/tiktok-priority.md)
-  * [Page](mikrotik/page.md)
   * [Pisah Traffic](mikrotik/pisah-traffic.md)
   * [Content List](mikrotik/content-list.md)
   * [Pemabatasan Sharing Koneksi dengan TTL](mikrotik/pemabatasan-sharing-koneksi-dengan-ttl.md)
