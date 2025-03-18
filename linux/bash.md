@@ -36,8 +36,7 @@ Create Function :
  }
 ```
 
-Akses Function
-Pada bash fungsi dapat return value dan non return.
+Akses Function Pada bash fungsi dapat return value dan non return.
 
 ```bash
  hay(){
