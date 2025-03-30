@@ -14,6 +14,8 @@ Semoga isi nya bisa membantu dan menginspirasi yah guys, thanks.
 
 
 
+<figure><img src=".gitbook/assets/Logo 2.png" alt=""><figcaption></figcaption></figure>
+
 Best Regards,
 
 ### **Kopi Flores**
