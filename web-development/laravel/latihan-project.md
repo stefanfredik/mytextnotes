@@ -1919,5 +1919,145 @@ public function rules(): array
         $rules['sku'] .= '|unique:products,sku,' . $product->id;
     } else {
         $rules['name'] .= '|unique:products,name';
-        $rules['sku'] .= '
+        $rules['sku'] .= '|unique:products,sku';
+    }
+    
+    // Add HTML purifier for text fields to prevent XSS
+$this->sanitizeHtmlInput();
+
+return $rules;
+}
+
+// Method to sanitize HTML input and prevent XSS attacks
+protected function sanitizeHtmlInput()
+{
+    $inputs = $this->only(['name', 'description']);
+    
+    foreach ($inputs as $field => $value) {
+        if ($value) {
+            // Remove potentially dangerous tags and attributes
+            $clean = strip_tags($value, '<p><br><strong><em><ul><li><ol>');
+            $this->merge([$field => $clean]);
+        }
+    }
+}
+```
+
+Aktifkan HTTPS di file `.env` (untuk production):
+
+```
+FORCE_HTTPS=true
+```
+
+Dan tambahkan middleware untuk memaksa HTTPS di `app/Providers/AppServiceProvider.php`:
+
+```php
+public function boot()
+{
+    if(config('app.env') === 'production' && config('app.force_https', false)) {
+        \URL::forceScheme('https');
+    }
+}
+```
+
+Tambahkan config untuk force HTTPS di `config/app.php`:
+
+```php
+'force_https' => env('FORCE_HTTPS', false),
+```
+
+Pastikan semua form di aplikasi menggunakan token CSRF, contoh:
+
+```php
+<form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
+    @csrf
+    <!-- Form fields -->
+</form>
+```
+
+Tambahkan headers keamanan di file `.htaccess`:
+
+```
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Content-Security-Policy "default-src 'self'"
+</IfModule>
+```
+
+Atau dengan middleware di `app/Http/Middleware/SecurityHeaders.php`:
+
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class SecurityHeaders
+{
+    public function handle(Request $request, Closure $next)
+    {
+        $response = $next($request);
+        
+        $response->headers->set('X-XSS-Protection', '1; mode=block');
+        $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
+        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        
+        return $response;
+    }
+}
+```
+
+Daftarkan middleware tersebut di `app/Http/Kernel.php`:
+
+```php
+protected $middlewareGroups = [
+    'web' => [
+        // Other middleware
+        \App\Http\Middleware\SecurityHeaders::class,
+    ],
+];
+```
+
+Terakhir, tambahkan validasi untuk file upload yang aman:
+
+```php
+// Di ProductRequest
+'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+```
+
+Buat juga fungsi untuk sanitasi nama file saat upload:
+
+```php
+// Di ProductController
+protected function sanitizeFileName($filename)
+{
+    // Remove any path info to avoid writing outside the upload directory
+    $filename = basename($filename);
+    
+    // Replace any non-alphanumeric characters except for "." and "-"
+    $filename = preg_replace('/[^a-zA-Z0-9\-\.]/', '_', $filename);
+    
+    // Add random string to prevent overwriting
+    $name = pathinfo($filename, PATHINFO_FILENAME);
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    
+    return $name . '_' . time() . '_' . random_int(1000, 9999) . '.' . $extension;
+}
+```
+
+Gunakan fungsi tersebut saat menyimpan file upload:
+
+```php
+if ($request->hasFile('image')) {
+    $file = $request->file('image');
+    $fileName = $this->sanitizeFileName($file->getClientOriginalName());
+    $path = $file->storeAs('products', $fileName, 'public');
+    $product->image = $path;
+}
 ```
