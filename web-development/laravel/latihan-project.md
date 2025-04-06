@@ -489,6 +489,168 @@ php artisan make:controller ProductController --model=Product --resource
 
 Edit `app/Http/Controllers/ProductController.php` dengan pendekatan yang sama.
 
+
+
+#### ProfileController
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
+class ProfileController extends Controller
+{
+    /**
+     * Display the user's profile.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function show()
+    {
+        $user = Auth::user();
+        return view('profile.show', compact('user'));
+    }
+
+    /**
+     * Show the form for editing the user's profile.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
+
+    /**
+     * Update the user's profile information.
+     *
+     * @param  \App\Http\Requests\ProfileUpdateRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(ProfileUpdateRequest $request)
+    {
+        $user = Auth::user();
+        
+        $data = $request->validated();
+        
+        // Handle avatar upload if provided
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            
+            $file = $request->file('avatar');
+            $fileName = $this->sanitizeFileName($file->getClientOriginalName());
+            $path = $file->storeAs('avatars', $fileName, 'public');
+            $data['avatar'] = $path;
+        }
+        
+        $user->update($data);
+        
+        return redirect()->route('profile.show')
+            ->with('success', 'Profile updated successfully');
+    }
+
+    /**
+     * Show the form for changing the user's password.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function changePassword()
+    {
+        return view('profile.change-password');
+    }
+
+    /**
+     * Update the user's password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = Auth::user();
+
+        // Check current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'The provided password does not match your current password.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('profile.show')
+            ->with('success', 'Password changed successfully');
+    }
+
+    /**
+     * Sanitize filename for security purposes.
+     *
+     * @param string $filename
+     * @return string
+     */
+    protected function sanitizeFileName($filename)
+    {
+        // Remove any path info to avoid writing outside the upload directory
+        $filename = basename($filename);
+        
+        // Replace any non-alphanumeric characters except for "." and "-"
+        $filename = preg_replace('/[^a-zA-Z0-9\-\.]/', '_', $filename);
+        
+        // Add random string to prevent overwriting
+        $name = pathinfo($filename, PATHINFO_FILENAME);
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        
+        return $name . '_' . time() . '_' . random_int(1000, 9999) . '.' . $extension;
+    }
+
+    /**
+     * Delete the user's account.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = Auth::user();
+
+        // Delete user avatar if exists
+        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        Auth::logout();
+        
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+}
+```
+
+
+
 ### Langkah 10: Membuat Route
 
 Edit `routes/web.php`:
@@ -736,6 +898,204 @@ Buat file `resources/views/categories/index.blade.php`:
 
 Dan buat file untuk `create.blade.php`, `edit.blade.php`, dan `show.blade.php` dengan pendekatan yang sama.
 
+
+
+#### Profile
+
+profile/show.blade.php
+
+```php
+@extends('layouts.app')
+
+@section('content')
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">My Profile</h5>
+                    <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm">Edit Profile</a>
+                </div>
+
+                <div class="card-body">
+                    @if (session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            @if ($user->avatar)
+                                <img src="{{ Storage::url($user->avatar) }}" class="img-fluid rounded-circle" style="max-width: 150px;">
+                            @else
+                                <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 150px; height: 150px;">
+                                    <span style="font-size: 3rem;">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-8">
+                            <table class="table">
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>{{ $user->name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td>{{ $user->email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone:</th>
+                                    <td>{{ $user->phone ?? 'Not provided' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address:</th>
+                                    <td>{{ $user->address ?? 'Not provided' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Member Since:</th>
+                                    <td>{{ $user->created_at->format('F d, Y') }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('profile.change-password') }}" class="btn btn-outline-primary">Change Password</a>
+                            
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAccountModalLabel">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ route('profile.destroy') }}">
+                @csrf
+                @method('DELETE')
+                <div class="modal-body">
+                    <p class="text-danger">Warning: This action cannot be undone. All your data will be permanently deleted.</p>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        @error('password')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+```
+
+#### profile/edit.blade.php
+
+```php
+@extends('layouts.app')
+
+@section('content')
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Edit Profile</h5>
+                    <a href="{{ route('profile.show') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="row mb-4">
+                            <div class="col-md-4 text-center">
+                                @if ($user->avatar)
+                                    <img src="{{ Storage::url($user->avatar) }}" class="img-fluid rounded-circle mb-2" style="max-width: 150px;">
+                                @else
+                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 150px; height: 150px;">
+                                        <span style="font-size: 3rem;">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                    </div>
+                                @endif
+                                
+                                <div class="mb-3">
+                                    <label for="avatar" class="form-label">Profile Picture</label>
+                                    <input class="form-control" type="file" id="avatar" name="avatar">
+                                    @error('avatar')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                    <div class="form-text">Max 2MB. Allowed formats: JPG, PNG, GIF</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+                                    @error('name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                                    @error('phone')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <textarea class="form-control" id="address" name="address" rows="3">{{ old('address', $user->address) }}</textarea>
+                                    @error('address')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+```
+
+
+
 ### Langkah 12: Menambahkan DashboardController
 
 ```bash
@@ -857,6 +1217,86 @@ class ProductRequest extends FormRequest
     }
 }
 ```
+
+
+
+ProfileUpdateRequest.php
+
+```php
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+
+class ProfileUpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules()
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore(Auth::id()),
+            ],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // Sanitize HTML input
+        $this->sanitizeHtmlInput();
+    }
+
+    /**
+     * Sanitize HTML input to prevent XSS attacks.
+     *
+     * @return void
+     */
+    protected function sanitizeHtmlInput()
+    {
+        $inputs = $this->only(['name', 'address']);
+        
+        foreach ($inputs as $field => $value) {
+            if ($value) {
+                // Remove potentially dangerous tags and attributes
+                $clean = strip_tags($value);
+                $this->merge([$field => $clean]);
+            }
+        }
+    }
+}
+```
+
+
 
 ### Langkah 14: Menambahkan Middleware dan Role
 
