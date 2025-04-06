@@ -46,6 +46,7 @@
     * [Arisan](web-development/project/arisan.md)
   * [Laravel](web-development/laravel/README.md)
     * [Modul](web-development/laravel/modul.md)
+    * [Latihan Project](web-development/laravel/latihan-project.md)
 * [Filsafat](filsafat/README.md)
   * [Aforisme](filsafat/aforisme.md)
   * [Socrates](filsafat/socrates.md)
