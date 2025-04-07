@@ -47,6 +47,7 @@
   * [Laravel](web-development/laravel/README.md)
     * [Modul](web-development/laravel/modul.md)
     * [Latihan Project](web-development/laravel/latihan-project.md)
+    * [Update Modul](web-development/laravel/update-modul.md)
 * [Filsafat](filsafat/README.md)
   * [Aforisme](filsafat/aforisme.md)
   * [Socrates](filsafat/socrates.md)
