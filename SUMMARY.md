@@ -76,6 +76,7 @@
   * [Use Case](go-language/use-case/README.md)
     * [Notes Restful API](go-language/use-case/notes-restful-api.md)
   * [Go Networking](go-language/go-networking.md)
+  * [Modul 2](go-language/modul-2.md)
 * [Self Development](self-development.md)
 * [Virtual Manager](virtual-manager/README.md)
   * [Proxmox](virtual-manager/proxmox.md)
