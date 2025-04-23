@@ -1,6 +1,8 @@
 # Table of contents
 
 * [Dashboard](README.md)
+* [Module Comprehensive](module-comprehensive/README.md)
+  * [Bahasa Inggris](module-comprehensive/bahasa-inggris.md)
 * [Bookmark](bookmark.md)
 * [Ideas](ideas/README.md)
   * [Apps](ideas/ideas.md)
