@@ -788,11 +788,537 @@ Setiap modul mencakup:
 * Opini: good (bagus), bad (buruk), beautiful (indah), ugly (jelek)
 * Karakter: kind (baik hati), clever (pintar), lazy (malas), brave (berani)
 
-**Latihan:**
+## MODUL PEMBELAJARAN BAHASA INGGRIS KOMPREHENSIF (LANJUTAN)
+
+### Modul 4: Kepemilikan dan Deskripsi (Lanjutan)
+
+#### 1. Kata Sifat Dasar (Lanjutan)
+
+**Latihan (Lanjutan):**
 
 1. Lengkapi kalimat dengan kata sifat yang tepat dari pilihan yang disediakan: (tall, delicious, cold, expensive, interesting)
-   * The weather is very \_\_\_\_\_\_\_ today.
-   * That is a very \_\_\_\_\_\_\_ building.
-   * The food at this restaurant is \_\_\_\_\_\_\_.
-   * This book is really \_\_\_\_\_\_\_.
-   * That car is
+   * The weather is very _cold_ today.
+   * That is a very _tall_ building.
+   * The food at this restaurant is _delicious_.
+   * This book is really _interesting_.
+   * That car is _expensive_.
+2. Tuliskan lawan kata (antonim) dari kata sifat berikut:
+   * Hot → _cold_
+   * Happy → _sad_
+   * Big → _small_
+   * Easy → _difficult/hard_
+   * Young → _old_
+3. Deskripsikan 5 benda di sekitar Anda menggunakan minimal 2 kata sifat untuk masing-masing benda: Contoh: "I have a small, black bag."
+4. Terjemahkan kata sifat berikut ke dalam bahasa Inggris:
+   * Menarik → _interesting_
+   * Cepat → _fast_
+   * Lezat → _delicious_
+   * Murah → _cheap_
+   * Cantik → _beautiful_
+5. Buatlah kalimat dengan menggunakan kata sifat berikut:
+   * Boring
+   * Difficult
+   * Modern
+   * Friendly
+   * Dangerous
+
+#### 2. Posisi Kata Sifat dalam Kalimat
+
+**Penjelasan:** Dalam bahasa Inggris, kata sifat umumnya diletakkan sebelum kata benda yang dideskripsikan (attributive position) atau setelah kata kerja "be" dan linking verbs lainnya (predicative position).
+
+**Contoh:**
+
+* Attributive position (sebelum kata benda):
+  * I have a red car. (Saya memiliki mobil merah.)
+  * She bought an expensive dress. (Dia membeli gaun mahal.)
+  * They live in a big house. (Mereka tinggal di rumah besar.)
+* Predicative position (setelah kata kerja "be" atau linking verbs):
+  * The car is red. (Mobil itu merah.)
+  * This dress looks expensive. (Gaun ini terlihat mahal.)
+  * Their house seems big. (Rumah mereka tampak besar.)
+* Linking verbs lainnya: look, seem, appear, feel, taste, sound, smell
+
+**Latihan:**
+
+1. Tentukan posisi kata sifat dalam kalimat berikut (attributive atau predicative):
+   * The tall man is my father.
+   * The soup tastes delicious.
+   * I bought a new phone yesterday.
+   * The weather is sunny today.
+   * She seems happy with her job.
+2. Susunlah kata-kata berikut menjadi kalimat yang benar:
+   * blue / a / she / beautiful / has / dress
+   * delicious / smells / the / food
+   * cold / is / today / weather / the
+   * bought / yesterday / I / comfortable / shoes / new
+   * appears / the / man / friendly / very
+3. Ubah kalimat berikut dari attributive position menjadi predicative position atau sebaliknya:
+   * The coffee is hot.
+   * They have an old house.
+   * The baby looks cute.
+   * I met a friendly woman.
+   * The exam was difficult.
+4. Lengkapi kalimat dengan kata sifat yang diberikan dalam posisi yang tepat:
+   * The \_\_\_\_\_\_\_ girl won the competition. (smart)
+   * The food tastes \_\_\_\_\_\_\_. (spicy)
+   * I have a \_\_\_\_\_\_\_ dog at home. (small)
+   * The music sounds \_\_\_\_\_\_\_. (beautiful)
+   * Your idea seems \_\_\_\_\_\_\_. (good)
+5. Identifikasi dan perbaiki kesalahan dalam kalimat berikut:
+   * I have a car red.
+   * The weather cold is today.
+   * She bought expensive a dress.
+   * The food delicious tastes.
+   * He lives in house old an.
+
+#### 3. Kepemilikan dengan 's dan of
+
+**Penjelasan:** Untuk menyatakan kepemilikan dalam bahasa Inggris, ada dua cara utama: menggunakan akhiran 's (apostrophe s) atau menggunakan preposisi "of". Penggunaan 's umumnya untuk benda hidup, sementara "of" lebih sering digunakan untuk benda mati.
+
+**Contoh:**
+
+* Menggunakan 's:
+  * John's car (Mobil John)
+  * The teacher's book (Buku guru)
+  * My sister's room (Kamar adik perempuan saya)
+  * The children's toys (Mainan anak-anak)
+  * People's opinions (Pendapat orang-orang)
+* Menggunakan "of":
+  * The color of the car (Warna mobil)
+  * The title of the book (Judul buku)
+  * The door of the house (Pintu rumah)
+  * The end of the story (Akhir cerita)
+  * The result of the exam (Hasil ujian)
+
+**Latihan:**
+
+1. Nyatakan kepemilikan dalam bahasa Inggris dengan menggunakan 's atau "of":
+   * Buku milik John → _John's book_
+   * Pintu rumah → _The door of the house_
+   * Mobil orang tua saya → _My parents' car_
+   * Nama kucing → _The cat's name_
+   * Halaman buku → _The pages of the book_
+2. Pilih bentuk kepemilikan yang lebih tepat ('s atau "of"):
+   * The bag (Mary)
+   * The leg (table)
+   * The tail (dog)
+   * The roof (house)
+   * The president (country)
+3. Perbaiki kesalahan dalam kalimat berikut:
+   * The book of John is interesting.
+   * The house's door is broken.
+   * The teacher books are on the table.
+   * The cars wheels need to be replaced.
+   * The of story end was unexpected.
+4. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Rumah temanku sangat besar.
+   * Warna mobil itu merah.
+   * Anjing adikku sangat lucu.
+   * Ujung jalan ini adalah pasar.
+   * Tas ibu saya berwarna hitam.
+5. Buatlah 5 kalimat menggunakan bentuk kepemilikan 's dan 5 kalimat menggunakan bentuk kepemilikan "of".
+
+#### 4. Kata Ganti Kepemilikan (my, your, his, her, its, our, their)
+
+**Penjelasan:** Kata ganti kepemilikan (possessive pronouns) digunakan untuk menunjukkan kepemilikan atau hubungan antara orang atau benda. Ada dua bentuk kata ganti kepemilikan: bentuk kata sifat kepemilikan (possessive adjectives) yang diikuti kata benda dan bentuk kata ganti kepemilikan (possessive pronouns) yang digunakan sendiri.
+
+**Contoh:**
+
+* Possessive adjectives (diikuti kata benda):
+  * my book (buku saya)
+  * your car (mobil kamu)
+  * his house (rumah dia - laki-laki)
+  * her bag (tas dia - perempuan)
+  * its tail (ekornya - untuk binatang atau benda)
+  * our classroom (kelas kami)
+  * their children (anak-anak mereka)
+* Possessive pronouns (digunakan sendiri):
+  * mine (milik saya)
+  * yours (milik kamu)
+  * his (milik dia - laki-laki)
+  * hers (milik dia - perempuan)
+  * its (miliknya - untuk binatang atau benda)
+  * ours (milik kami)
+  * theirs (milik mereka)
+
+**Latihan:**
+
+1. Lengkapi kalimat dengan possessive adjective yang tepat:
+   * I have a dog. \_\_\_\_\_\_\_ dog is black.
+   * You have a car. \_\_\_\_\_\_\_ car is new.
+   * He has a book. \_\_\_\_\_\_\_ book is interesting.
+   * She has a bag. \_\_\_\_\_\_\_ bag is expensive.
+   * We have a house. \_\_\_\_\_\_\_ house is big.
+   * They have a garden. \_\_\_\_\_\_\_ garden is beautiful.
+   * The cat has a toy. \_\_\_\_\_\_\_ toy is broken.
+2. Ubah kalimat berikut menggunakan possessive pronouns:
+   * This is my book. This book is \_\_\_\_\_\_\_.
+   * That is your pen. That pen is \_\_\_\_\_\_\_.
+   * Those are his shoes. Those shoes are \_\_\_\_\_\_\_.
+   * This is her dress. This dress is \_\_\_\_\_\_\_.
+   * This is our project. This project is \_\_\_\_\_\_\_.
+   * Those are their bicycles. Those bicycles are \_\_\_\_\_\_\_.
+3. Perbaiki kesalahan dalam penggunaan kata ganti kepemilikan:
+   * She lost him book.
+   * The dog broke it's toy.
+   * They forgot they homework.
+   * We parked we car outside.
+   * The phone is her's.
+4. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Ini adalah rumah saya. (menggunakan possessive adjective)
+   * Mobil itu milik dia (laki-laki). (menggunakan possessive pronoun)
+   * Kucing mereka sangat lucu.
+   * Apakah ini bukumu atau bukunya (perempuan)?
+   * Komputer kami lebih baru daripada komputer kalian.
+5. Buatlah dialog pendek menggunakan minimal 5 kata ganti kepemilikan berbeda.
+
+#### 5. Kalimat Deskriptif Sederhana
+
+**Penjelasan:** Kalimat deskriptif digunakan untuk menggambarkan seseorang, sesuatu, atau tempat. Kalimat deskriptif sering menggunakan berbagai kata sifat untuk memberikan informasi yang lebih spesifik tentang subjek.
+
+**Contoh:**
+
+* My brother is tall and handsome. (Kakak laki-laki saya tinggi dan tampan.)
+* Jakarta is a big, crowded city. (Jakarta adalah kota besar yang ramai.)
+* Their house is old but comfortable. (Rumah mereka tua tapi nyaman.)
+* This flower has a beautiful red color. (Bunga ini memiliki warna merah yang indah.)
+* The old man has white hair and a friendly smile. (Orang tua itu memiliki rambut putih dan senyum yang ramah.)
+
+**Latihan:**
+
+1. Buatlah kalimat deskriptif untuk menggambarkan:
+   * Rumah Anda
+   * Sahabat Anda
+   * Sebuah restoran favorit
+   * Kota tempat tinggal Anda
+   * Binatang peliharaan (nyata atau imajiner)
+2. Lengkapi kalimat deskriptif berikut dengan kata sifat yang tepat:
+   * The beach has \_\_\_\_\_\_\_ white sand and \_\_\_\_\_\_\_ blue water.
+   * My grandmother is a \_\_\_\_\_\_\_ woman with \_\_\_\_\_\_\_ white hair.
+   * The \_\_\_\_\_\_\_ restaurant serves \_\_\_\_\_\_\_ traditional food.
+   * This is a \_\_\_\_\_\_\_ and \_\_\_\_\_\_\_ neighborhood.
+   * He has a \_\_\_\_\_\_\_ face with \_\_\_\_\_\_\_ eyes.
+3. Perbaiki susunan kata pada kalimat deskriptif berikut:
+   * The has man tall a beard black.
+   * Is my friend short and hair has brown.
+   * Old the building big and is historical.
+   * A cat black small on the is fence.
+   * Book interesting is this and informative.
+4. Gabungkan dua kalimat sederhana menjadi satu kalimat deskriptif yang lebih kompleks:
+   * The car is red. The car is fast.
+   * My sister is tall. My sister has long hair.
+   * The house is old. The house is beautiful.
+   * The dog is small. The dog is friendly.
+   * The movie is exciting. The movie is popular.
+5. Deskripsikan gambar atau foto (atau bayangkan satu) menggunakan minimal 5 kalimat deskriptif dengan berbagai kata sifat.
+
+### Modul 5: Present Simple
+
+#### 1. Struktur Kalimat Positif
+
+**Penjelasan:** Present Simple (Simple Present Tense) digunakan untuk menyatakan kebiasaan, fakta umum, atau kebenaran abadi. Struktur kalimat positif Present Simple adalah: Subjek + Kata Kerja Dasar (+ s/es untuk subjek orang ketiga tunggal: he, she, it).
+
+**Contoh:**
+
+* I work in an office. (Saya bekerja di kantor.)
+* You study English. (Kamu belajar bahasa Inggris.)
+* He works in a hospital. (Dia bekerja di rumah sakit.)
+* She teaches mathematics. (Dia mengajar matematika.)
+* It rains a lot in December. (Hujan sering turun di bulan Desember.)
+* We live in Jakarta. (Kami tinggal di Jakarta.)
+* They play basketball every weekend. (Mereka bermain basket setiap akhir pekan.)
+
+**Catatan:**
+
+* Untuk subjek orang ketiga tunggal (he, she, it), tambahkan -s pada kata kerja: work → works
+* Untuk kata kerja yang berakhiran dengan -s, -sh, -ch, -x, -z, tambahkan -es: watch → watches
+* Untuk kata kerja yang berakhiran dengan konsonan + y, ubah y menjadi i dan tambahkan -es: study → studies
+* Untuk kata kerja yang berakhiran dengan vokal + y, tambahkan -s: play → plays
+
+**Latihan:**
+
+1. Lengkapi kalimat dengan bentuk kata kerja yang tepat:
+   * I \_\_\_\_\_\_\_ (go) to school every day.
+   * She \_\_\_\_\_\_\_ (study) English twice a week.
+   * They \_\_\_\_\_\_\_ (watch) TV in the evening.
+   * He \_\_\_\_\_\_\_ (teach) mathematics at our school.
+   * The sun \_\_\_\_\_\_\_ (rise) in the east.
+2. Perbaiki kesalahan dalam kalimat berikut:
+   * She work in a bank.
+   * He play football every Saturday.
+   * They lives in Surabaya.
+   * The dog barks at night.
+   * I goes to the gym three times a week.
+3. Buatlah kalimat Present Simple positif menggunakan kata kerja berikut:
+   * Eat (untuk "I")
+   * Read (untuk "she")
+   * Play (untuk "they")
+   * Drive (untuk "he")
+   * Teach (untuk "we")
+4. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Saya minum kopi setiap pagi.
+   * Dia (perempuan) bekerja di rumah sakit.
+   * Mereka belajar bahasa Inggris pada hari Senin.
+   * Kucing itu tidur sepanjang hari.
+   * Kami pergi ke pasar setiap minggu.
+5. Buatlah 5 kalimat positif tentang kebiasaan atau rutinitas harian Anda menggunakan Present Simple.
+
+#### 2. Struktur Kalimat Negatif (don't/doesn't)
+
+**Penjelasan:** Kalimat negatif dalam Present Simple dibentuk dengan menambahkan "do not" (don't) atau "does not" (doesn't) sebelum kata kerja dasar. "Don't" digunakan untuk subjek I, you, we, they, sedangkan "doesn't" digunakan untuk subjek he, she, it.
+
+**Contoh:**
+
+* I do not (don't) like coffee. (Saya tidak suka kopi.)
+* You do not (don't) work on Sundays. (Kamu tidak bekerja pada hari Minggu.)
+* He does not (doesn't) speak French. (Dia tidak berbicara bahasa Prancis.)
+* She does not (doesn't) eat meat. (Dia tidak makan daging.)
+* It does not (doesn't) rain in summer. (Tidak hujan di musim panas.)
+* We do not (don't) live in Bandung. (Kami tidak tinggal di Bandung.)
+* They do not (don't) study on weekends. (Mereka tidak belajar di akhir pekan.)
+
+**Catatan:**
+
+* Dalam kalimat negatif Present Simple, kata kerja utama selalu dalam bentuk dasar (tanpa -s/es).
+
+**Latihan:**
+
+1. Ubahlah kalimat positif berikut menjadi kalimat negatif:
+   * I speak Japanese.
+   * She lives in Bali.
+   * They work in a factory.
+   * He plays guitar.
+   * The shop opens at 8 AM.
+2. Lengkapi kalimat dengan don't atau doesn't:
+   * I \_\_\_\_\_\_\_ like spicy food.
+   * He \_\_\_\_\_\_\_ work on Saturdays.
+   * They \_\_\_\_\_\_\_ understand English.
+   * She \_\_\_\_\_\_\_ drive a car.
+   * We \_\_\_\_\_\_\_ go to school on Sundays.
+3. Perbaiki kesalahan dalam kalimat negatif berikut:
+   * She don't eat breakfast.
+   * I doesn't like coffee.
+   * They doesn't speak English.
+   * He don't have a car.
+   * It don't rain in August.
+4. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Saya tidak minum teh.
+   * Dia (laki-laki) tidak bekerja pada hari Minggu.
+   * Mereka tidak mengerti bahasa Jepang.
+   * Toko itu tidak buka pada hari libur.
+   * Kami tidak tinggal di apartemen.
+5. Buatlah 5 kalimat negatif tentang hal-hal yang tidak Anda lakukan atau sukai menggunakan Present Simple.
+
+#### 3. Struktur Kalimat Tanya
+
+**Penjelasan:** Kalimat tanya dalam Present Simple dibentuk dengan menambahkan "do" atau "does" di awal kalimat kemudian diikuti subjek dan kata kerja dasar. "Do" digunakan untuk subjek I, you, we, they, sedangkan "does" digunakan untuk subjek he, she, it.
+
+**Contoh:**
+
+* Do I work hard? (Apakah saya bekerja keras?)
+* Do you speak English? (Apakah kamu berbicara bahasa Inggris?)
+* Does he live in Jakarta? (Apakah dia tinggal di Jakarta?)
+* Does she like coffee? (Apakah dia suka kopi?)
+* Does it rain a lot here? (Apakah sering hujan di sini?)
+* Do we need to bring books? (Apakah kita perlu membawa buku?)
+* Do they study every day? (Apakah mereka belajar setiap hari?)
+
+**Catatan:**
+
+* Dalam kalimat tanya Present Simple, kata kerja utama selalu dalam bentuk dasar (tanpa -s/es).
+* Jawaban pendek: Yes, subject + do/does atau No, subject + don't/doesn't
+
+**Latihan:**
+
+1. Ubahlah kalimat berikut menjadi kalimat tanya:
+   * You live in Jakarta.
+   * She works in a hospital.
+   * They speak English fluently.
+   * He drives to work every day.
+   * We need more time.
+2. Buatlah kalimat tanya dengan kata tanya (question words) berikut dalam Present Simple:
+   * Where / you / live
+   * What / she / do / for work
+   * When / they / go / to school
+   * How / he / get / to work
+   * Why / it / rain / so much / here
+3. Berikan jawaban pendek positif dan negatif untuk pertanyaan berikut:
+   * Do you speak English?
+   * Does she work in a bank?
+   * Do they live nearby?
+   * Does he play football?
+   * Do I need to bring my passport?
+4. Perbaiki kesalahan dalam kalimat tanya berikut:
+   * Does you like coffee?
+   * Do she work here?
+   * Does they understand the problem?
+   * Do he have a car?
+   * Does I need to sign this?
+5. Terjemahkan pertanyaan-pertanyaan berikut ke dalam bahasa Inggris:
+   * Apakah kamu suka musik pop?
+   * Apakah dia (perempuan) tinggal di Jakarta?
+   * Apakah mereka berbicara bahasa Indonesia?
+   * Apakah dia (laki-laki) bekerja di rumah sakit?
+   * Apakah kalian pergi ke sekolah setiap hari?
+
+#### 4. Penggunaan untuk Kebiasaan dan Fakta
+
+**Penjelasan:** Present Simple sering digunakan untuk mengekspresikan:
+
+1. Kebiasaan atau rutinitas (hal yang terjadi secara teratur)
+2. Fakta umum atau kebenaran universal
+3. Preferensi atau opini yang bersifat permanen
+
+**Contoh:**
+
+* Kebiasaan/Rutinitas:
+  * I wake up at 6 AM every day. (Saya bangun pukul 6 pagi setiap hari.)
+  * She goes to the gym three times a week. (Dia pergi ke gym tiga kali seminggu.)
+  * They visit their grandparents on Sundays. (Mereka mengunjungi kakek-nenek mereka pada hari Minggu.)
+* Fakta umum/Kebenaran universal:
+  * The Earth revolves around the Sun. (Bumi berputar mengelilingi Matahari.)
+  * Water boils at 100 degrees Celsius. (Air mendidih pada suhu 100 derajat Celsius.)
+  * Lions eat meat. (Singa makan daging.)
+* Preferensi/Opini permanen:
+  * I like chocolate ice cream. (Saya suka es krim coklat.)
+  * She believes in democracy. (Dia percaya pada demokrasi.)
+  * They prefer to live in the countryside. (Mereka lebih suka tinggal di pedesaan.)
+
+**Latihan:**
+
+1. Tuliskan 3 kebiasaan atau rutinitas Anda menggunakan Present Simple.
+2. Buatlah 3 kalimat yang menyatakan fakta umum atau kebenaran universal.
+3. Lengkapi kalimat berikut dengan kata kerja dalam Present Simple:
+   * The sun \_\_\_\_\_\_\_ (rise) in the east and \_\_\_\_\_\_\_ (set) in the west.
+   * Dogs \_\_\_\_\_\_\_ (bark) and cats \_\_\_\_\_\_\_ (meow).
+   * My mother \_\_\_\_\_\_\_ (cook) dinner every evening.
+   * Most people in Indonesia \_\_\_\_\_\_\_ (speak) Bahasa Indonesia.
+   * The library \_\_\_\_\_\_\_ (close) at 9 PM on weekdays.
+4. Identifikasi apakah kalimat berikut menyatakan kebiasaan, fakta umum, atau preferensi:
+   * I drink coffee every morning.
+   * Humans need oxygen to survive.
+   * She loves classical music.
+   * Jakarta is the capital city of Indonesia.
+   * They eat dinner at 7 PM.
+5. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Matahari terbit di timur.
+   * Saya sarapan pada pukul 7 pagi.
+   * Dia tidak suka makanan pedas.
+   * Kucing saya tidur sepanjang hari.
+   * Burung terbang di udara.
+
+#### 5. Adverbia Kekerapan (always, usually, sometimes, never)
+
+**Penjelasan:** Adverbia kekerapan (adverbs of frequency) menunjukkan seberapa sering suatu kegiatan dilakukan. Adverbia ini sering digunakan dengan Present Simple dan biasanya diletakkan sebelum kata kerja utama, tetapi setelah kata kerja be.
+
+**Contoh:**
+
+* Adverbia kekerapan dari yang paling sering hingga paling jarang:
+  * Always (selalu): 100%
+  * Usually (biasanya): 80-90%
+  * Often (sering): 70-80%
+  * Sometimes (kadang-kadang): 30-60%
+  * Rarely/Seldom (jarang): 10-30%
+  * Never (tidak pernah): 0%
+* Posisi adverbia kekerapan:
+  * I always wake up early. (Saya selalu bangun pagi.)
+  * She usually goes to work by bus. (Dia biasanya pergi bekerja dengan bus.)
+  * They sometimes visit us on weekends. (Mereka kadang-kadang mengunjungi kami di akhir pekan.)
+  * He never eats meat. (Dia tidak pernah makan daging.)
+  * I am always on time. (Saya selalu tepat waktu.)
+  * They are never late for school. (Mereka tidak pernah terlambat ke sekolah.)
+
+**Latihan:**
+
+1. Susunlah kata-kata berikut menjadi kalimat yang benar:
+   * always / I / breakfast / eat
+   * usually / she / at home / studies
+   * sometimes / they / to the cinema / go
+   * never / he / coffee / drinks
+   * often / we / on weekends / meet
+2. Lengkapi kalimat dengan adverbia kekerapan yang sesuai (always, usually, often, sometimes, rarely, never):
+   * I \_\_\_\_\_\_\_ go to bed before 10 PM.
+   * She \_\_\_\_\_\_\_ watches TV in the evening.
+   * They \_\_\_\_\_\_\_ eat at restaurants because it's expensive.
+   * He \_\_\_\_\_\_\_ forgets his keys.
+   * We \_\_\_\_\_\_\_ have meetings on Monday mornings.
+3. Perbaiki kesalahan dalam posisi adverbia kekerapan:
+   * I drink always coffee in the morning.
+   * She goes usually to the gym after work.
+   * They are late sometimes for class.
+   * He watches never horror movies.
+   * We visit often our grandparents.
+4. Buatlah kalimat menggunakan adverbia kekerapan berikut untuk menggambarkan kebiasaan Anda:
+   * Always
+   * Usually
+   * Sometimes
+   * Rarely
+   * Never
+5. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Saya selalu sarapan sebelum berangkat kerja.
+   * Dia biasanya tidur sebelum jam 10 malam.
+   * Mereka kadang-kadang pergi ke bioskop pada akhir pekan.
+   * Kami sering bertemu di kafe itu.
+   * Dia tidak pernah datang terlambat ke sekolah.
+
+### Modul 6: Aktivitas Sehari-hari
+
+#### 1. Rutinitas Harian
+
+**Penjelasan:** Rutinitas harian (daily routines) adalah kegiatan yang kita lakukan secara teratur setiap hari. Ketika membicarakan tentang rutinitas harian, kita umumnya menggunakan Present Simple.
+
+**Contoh:**
+
+* I wake up at 6 AM. (Saya bangun pada pukul 6 pagi.)
+* I brush my teeth and take a shower. (Saya menyikat gigi dan mandi.)
+* I have breakfast at 7 AM. (Saya sarapan pada pukul 7 pagi.)
+* I leave for work at 7:30. (Saya berangkat kerja pada pukul 7:30.)
+* I start work at 8 AM. (Saya mulai bekerja pada pukul 8 pagi.)
+* I have lunch at noon. (Saya makan siang pada pukul 12 siang.)
+* I finish work at 5 PM. (Saya selesai bekerja pada pukul 5 sore.)
+* I have dinner at 7 PM. (Saya makan malam pada pukul 7 malam.)
+* I go to bed at 10 PM. (Saya tidur pada pukul 10 malam.)
+
+**Latihan:**
+
+1. Tuliskan rutinitas pagi Anda dalam bahasa Inggris menggunakan minimal 5 kalimat.
+2. Lengkapi kalimat dengan kata kerja yang tepat dalam Present Simple:
+   * She \_\_\_\_\_\_\_ (wake up) at 5:30 AM every day.
+   * He \_\_\_\_\_\_\_ (take) a shower in the morning.
+   * They \_\_\_\_\_\_\_ (have) breakfast together.
+   * I \_\_\_\_\_\_\_ (brush) my teeth twice a day.
+   * We \_\_\_\_\_\_\_ (leave) for school at 7 AM.
+3. Susunlah kata-kata berikut menjadi kalimat yang benar:
+   * up / I / at / 6 AM / wake
+   * breakfast / she / has / 7 AM / at
+   * to / go / they / at / school / 8 AM
+   * lunch / we / at / have / noon
+   * in / he / the evening / TV / watches
+4. Buatlah pertanyaan tentang rutinitas harian:
+   * Apa yang \_\_\_\_ (kamu lakukan) di pagi hari?
+   * Kapan \_\_\_\_ (dia bangun) setiap hari?
+   * Dimana \_\_\_\_ (mereka makan siang)?
+   * Bagaimana \_\_\_\_ (kamu pergi) ke sekolah/kantor?
+   * Dengan siapa \_\_\_\_ (dia sarapan)?
+5. Terjemahkan kalimat-kalimat berikut ke dalam bahasa Inggris:
+   * Saya bangun pukul 6 pagi setiap hari.
+   * Dia sarapan dan kemudian berangkat ke kantor.
+   * Mereka pulang ke rumah pukul 5 sore.
+   * Kami makan malam bersama keluarga.
+   * Dia tidur pukul 10 malam setiap hari.
+
+#### 2. Waktu dan Jam
+
+**Penjelasan:** Dalam bahasa Inggris, ada dua cara umum untuk menyatakan waktu: format 12 jam dan format 24 jam. Format 12 jam menggunakan AM (ante meridiem: sebelum tengah hari) dan PM (post meridiem: setelah tengah hari).
+
+**Contoh:**
+
+* Cara formal (dengan "o'clock"):
+  * 7:00 - It's seven o'clock. (Pukul tujuh.)
+  * 2:00 - It's two o'clock. (Pukul dua.)
+* Menggunakan "past" untuk menit 1-30:
+  * 7:05 - It's five past seven. (Pukul tujuh lewat lima menit.)
+  * 7:15 - It's a quarter past seven. (Pukul tujuh lebih seperempat.)
+  * 7:30 - It's half past seven. (Pukul setengah delapan.)
+* Menggunakan "to" untuk menit 31-59:
+  * 7:45 - It's a quarter to eight
