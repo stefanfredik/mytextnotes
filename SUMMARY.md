@@ -80,6 +80,7 @@
   * [Go Networking](go-language/go-networking.md)
   * [Modul 2](go-language/modul-2/README.md)
     * [Example](go-language/modul-2/example.md)
+  * [Golang Cheat sheet](go-language/golang-cheat-sheet.md)
 * [Self Development](self-development/README.md)
   * [Mindset Programmer](self-development/mindset-programmer.md)
 * [Virtual Manager](virtual-manager/README.md)
