@@ -1,4 +1,5 @@
 ---
+description: Dibuat oleh Claude AI
 icon: notebook
 ---
 
