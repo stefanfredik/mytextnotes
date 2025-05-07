@@ -40,6 +40,7 @@
   * [Open WRT](networking/open-wrt.md)
   * [DNS](networking/dns.md)
   * [Teori](networking/teori.md)
+  * [Wireless Authentication](networking/wireless-authentication.md)
 * [Web Development](web-development/README.md)
   * [Vue JS](web-development/vue-js/README.md)
     * [Vue and tailwind](web-development/vue-js/vue-and-tailwind.md)
