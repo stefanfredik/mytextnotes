@@ -41,6 +41,7 @@
   * [DNS](networking/dns.md)
   * [Teori](networking/teori.md)
   * [Wireless Authentication](networking/wireless-authentication.md)
+  * [Setting WPA2 Enterprise di Freeradius dan Perangkat Mikrotik](networking/setting-wpa2-enterprise-di-freeradius-dan-perangkat-mikrotik.md)
 * [Web Development](web-development/README.md)
   * [Vue JS](web-development/vue-js/README.md)
     * [Vue and tailwind](web-development/vue-js/vue-and-tailwind.md)
