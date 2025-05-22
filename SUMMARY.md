@@ -63,6 +63,7 @@
   * [Modul](dev-ops/modul.md)
   * [Modul Docker](dev-ops/modul-docker.md)
   * [Script Docker](dev-ops/script-docker.md)
+  * [Setup FTP Server di Windows Server 2025](dev-ops/setup-ftp-server-di-windows-server-2025.md)
 * [Troubleshooting Logs](troubleshooting-logs/README.md)
   * [Linux](troubleshooting-logs/linux.md)
   * [Docker](troubleshooting-logs/docker.md)
