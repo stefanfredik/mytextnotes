@@ -75,6 +75,7 @@
     * [github](script/uncategorized/github.md)
     * [GitHub](script/uncategorized/github-1.md)
   * [Javascript](script/javascript.md)
+  * [Windows and Office Activation Script](script/windows-and-office-activation-script.md)
 * [GO Language](go-language/README.md)
   * [Modul](go-language/modul.md)
   * [Basic](go-language/basic.md)
