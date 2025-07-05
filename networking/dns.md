@@ -147,3 +147,172 @@ Jika Anda menggunakan distribusi Linux modern dengan systemd, gunakan perintah i
 ***
 
 Metode-metode di atas akan membantu Anda mengukur performa DNS server untuk kebutuhan troubleshooting atau analisis kecepatan respon. Pilih tool yang paling sesuai dengan preferensi Anda.
+
+
+
+## Setup Cloudflare DNS
+
+Berikut ini adalah **panduan lengkap dan praktis** untuk **membuat web server Node.js di Ubuntu** agar **bisa diakses melalui subdomain `rwb.kopiflores.my.id` menggunakan HTTPS**, **tanpa IP publik**, menggunakan **Cloudflare Tunnel**.
+
+***
+
+### 🌐 Arsitektur
+
+```
+Browser → Cloudflare DNS → Cloudflare Tunnel → Node.js (port 80, di Ubuntu lokal)
+```
+
+***
+
+### 🧰 Yang Dibutuhkan
+
+✅ Domain `kopiflores.my.id` sudah dikelola di Cloudflare\
+✅ Subdomain `rwb.kopiflores.my.id` akan dibuat\
+✅ Server Ubuntu (lokal/VPS) sudah ada\
+✅ Node.js App jalan di port `80`
+
+***
+
+### 🪜 LANGKAH 1: Install Node.js & Jalankan Aplikasi
+
+Jika belum punya Node.js:
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+Contoh `app.js` sederhana:
+
+```js
+const http = require('http');
+const port = 80;
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Halo dari Node.js!');
+});
+
+server.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+```
+
+Jalankan:
+
+```bash
+sudo node app.js
+```
+
+***
+
+### 🪜 LANGKAH 2: Install `cloudflared`
+
+```bash
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo dpkg -i cloudflared-linux-amd64.deb
+```
+
+***
+
+### 🪜 LANGKAH 3: Login ke Cloudflare
+
+```bash
+cloudflared tunnel login
+```
+
+* Akan membuka browser
+* Pilih domain: `kopiflores.my.id`
+* Setelah sukses, file auth tersimpan di `~/.cloudflared/`
+
+***
+
+### 🪜 LANGKAH 4: Buat Tunnel Baru
+
+```bash
+cloudflared tunnel create rwb-tunnel
+```
+
+> Akan membuat file `rwb-tunnel.json` di `~/.cloudflared`
+
+***
+
+### 🪜 LANGKAH 5: Buat File Konfigurasi Tunnel
+
+Buat file `~/.cloudflared/config.yml`:
+
+```yaml
+tunnel: rwb-tunnel
+credentials-file: /home/namakamu/.cloudflared/rwb-tunnel.json
+
+ingress:
+  - hostname: rwb.kopiflores.my.id
+    service: http://localhost:80
+  - service: http_status:404
+```
+
+> Ganti `/home/namakamu/` sesuai path home kamu (cek dengan `echo $HOME`).
+
+***
+
+### 🪜 LANGKAH 6: Tambah Subdomain di DNS (otomatis)
+
+```bash
+cloudflared tunnel route dns rwb-tunnel rwb.kopiflores.my.id
+```
+
+> Ini akan otomatis menambahkan record CNAME ke Cloudflare.
+
+***
+
+### 🪜 LANGKAH 7: Jalankan Tunnel
+
+```bash
+cloudflared tunnel run rwb-tunnel
+```
+
+> Web server kamu sekarang bisa diakses via:\
+> `https://rwb.kopiflores.my.id`
+
+✅ Otomatis sudah HTTPS via Cloudflare\
+✅ Tidak perlu IP Publik\
+✅ Tidak perlu open port di router
+
+***
+
+### 🔁 (Opsional) Setup Autostart Tunnel
+
+Agar tunnel otomatis jalan saat boot:
+
+```bash
+sudo cloudflared service install
+```
+
+***
+
+### 🛡️ Tips Keamanan
+
+* Pastikan firewall hanya mengizinkan akses dari localhost kalau perlu (web server hanya dibuka untuk cloudflared).
+* Gunakan `pm2` untuk menjalankan Node.js jika ingin produksi:
+
+```bash
+npm install -g pm2
+pm2 start app.js
+pm2 startup
+pm2 save
+```
+
+***
+
+### 🧪 Cek dan Uji
+
+1. Akses `https://rwb.kopiflores.my.id`
+2.  Cek log di:
+
+    ```bash
+    cloudflared tunnel logs
+    ```
+
+***
+
+Kalau kamu ingin integrasi dengan **Docker**, **reverse proxy Nginx**, atau **lebih dari satu subdomain**, tinggal bilang — akan saya bantu buatkan juga. Mau lanjut ke sana?
