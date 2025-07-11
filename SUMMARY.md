@@ -32,6 +32,8 @@
   * [Firewall](mikrotik/firewall.md)
   * [VPN](mikrotik/vpn.md)
   * [Qos](mikrotik/qos.md)
+  * [Routing](mikrotik/routing.md)
+  * [Mangle](mikrotik/mangle.md)
 * [Networking](networking/README.md)
   * [Cisco Router](networking/cisco-router.md)
   * [🔢 All About IP Address](networking/ip-address.md)
