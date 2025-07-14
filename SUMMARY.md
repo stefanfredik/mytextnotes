@@ -20,6 +20,8 @@
   * [Upgrade Linux LTS](linux/upgrade-linux-lts.md)
   * [Certificate](linux/certificate.md)
   * [Text Manipulation](linux/text-manipulation.md)
+* [Windows](windows/README.md)
+  * [Windows Server 2025](windows/windows-server-2025.md)
 * [Mikrotik](mikrotik/README.md)
   * [Tips and Trick](mikrotik/tips-and-trick.md)
   * [Connection Priority](mikrotik/connection-priority.md)
