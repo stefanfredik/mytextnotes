@@ -207,3 +207,183 @@ Berikut adalah beberapa perubahan penting yang perlu diperhatikan:
 * [Dokumentasi Resmi Zabbix - Prosedur Upgrade](https://www.zabbix.com/documentation/current/en/manual/installation/upgrade)
 * [Dokumentasi Resmi Zabbix - Catatan Upgrade untuk 7.4.0](https://www.zabbix.com/documentation/current/en/manual/installation/upgrade_notes)
 * [Panduan Initmax - Upgrade ke Zabbix 7.4](https://www.initmax.com/wiki/zabbix-upgrade-to-the-latest-version-7-4/)
+
+
+
+## Integrasi Proxmox ke Zabbix
+
+## Panduan Lengkap Integrasi Proxmox dengan Zabbix Server untuk Monitoring
+
+Panduan ini memberikan langkah-langkah terperinci untuk mengintegrasikan Proxmox Virtual Environment (VE) dengan Zabbix Server agar Anda dapat memantau node Proxmox, mesin virtual (VM), container (LXC), dan sumber daya seperti CPU, memori, dan penyimpanan melalui Zabbix. Integrasi ini menggunakan API Proxmox berbasis HTTP, sehingga tidak memerlukan instalasi agen Zabbix di node Proxmox. Panduan ini dirancang untuk Zabbix versi 7.4 atau lebih tinggi dan mencakup troubleshooting berdasarkan masalah umum seperti yang terlihat pada lampiran Anda.
+
+### Prasyarat
+
+Sebelum memulai, pastikan Anda memiliki:
+
+| **Komponen**          | **Persyaratan**                                                                                                                   |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Zabbix Server**     | Versi 7.4 atau lebih tinggi, terinstal dan berjalan dengan akses ke antarmuka web.                                                |
+| **Proxmox VE**        | Versi apa saja dengan API aktif (port default 8006). Akses ke antarmuka web Proxmox diperlukan.                                   |
+| **Jaringan**          | Port 8006 terbuka untuk komunikasi antara Zabbix dan Proxmox.                                                                     |
+| **Backup**            | Backup konfigurasi Zabbix (`/etc/zabbix/`) dan database, serta konfigurasi Proxmox.                                               |
+| **Pengetahuan Dasar** | Pemahaman tentang API Proxmox ([Dokumentasi API](https://pve.proxmox.com/pve-docs/api-viewer/index.html)) dan konfigurasi Zabbix. |
+
+**Catatan**: Selalu lakukan backup sebelum memulai untuk mencegah kehilangan data.
+
+### Langkah 1: Konfigurasi Proxmox untuk Monitoring
+
+Untuk memungkinkan Zabbix mengakses data Proxmox melalui API, Anda perlu membuat pengguna khusus dan token API dengan izin yang sesuai.
+
+1. **Buat Pengguna Khusus untuk Monitoring**:
+   * Login ke antarmuka web Proxmox.
+   * Buka **Datacenter** > **Permissions** > **Users** > **Add**.
+   * Buat pengguna baru, misalnya, `zabbix_monitor@pve`.
+   * Berikan izin minimal berikut melalui **Permissions** > **Add** > **User Permission**:
+     * **Path**: `/`
+       * **Role**: `Sys.Audit` (untuk memantau status sistem).
+     * **Path**: `/storage`
+       * **Role**: `Datastore.Audit` (untuk memantau penyimpanan).
+     * **Path**: `/vms`
+       * **Role**: `VM.Audit` (untuk memantau VM dan container).
+   *   Contoh perintah CLI (opsional):
+
+       ```bash
+       pveum user add zabbix_monitor@pve
+       pveum acl modify / -user zabbix_monitor@pve -role Sys.Audit
+       pveum acl modify /storage -user zabbix_monitor@pve -role Datastore.Audit
+       pveum acl modify /vms -user zabbix_monitor@pve -role VM.Audit
+       ```
+2. **Buat Token API**:
+   * Buka **Datacenter** > **Permissions** > **API Tokens** > **Add**.
+   * Pilih pengguna `zabbix_monitor@pve` dan beri nama token (misalnya, `ZabbixMonitoring01`).
+   * Pastikan opsi **Privilege Separation** tidak dicentang untuk kemudahan.
+   * Catat **Token ID** (misalnya, `zabbix_monitor@pve!ZabbixMonitoring01`) dan **Token Secret** yang muncul sekali saja.
+   * Berikan izin yang sama seperti pengguna:
+     * **Path**: `/`, **Role**: `Sys.Audit`
+     * **Path**: `/storage`, **Role**: `Datastore.Audit`
+     * **Path**: `/vms`, **Role**: `VM.Audit`
+3. **Uji Akses API**:
+   *   Dari server Zabbix, uji koneksi API menggunakan `curl`:
+
+       ```bash
+       curl -k -H "Authorization: PVEAPIToken=zabbix_monitor@pve!ZabbixMonitoring01=<Token Secret>" https://<Proxmox_IP>:8006/api2/json/nodes
+       ```
+   *   Respons harus berupa JSON yang valid, seperti:
+
+       ```json
+       {
+         "data": [
+           {"node": "node8", "status": "online"},
+           {"node": "node9", "status": "online"}
+         ]
+       }
+       ```
+   * Jika respons menunjukkan error (misalnya, 403 Forbidden), periksa izin pengguna atau token.
+
+### Langkah 2: Konfigurasi Zabbix
+
+Setelah Proxmox dikonfigurasi, langkah selanjutnya adalah mengatur Zabbix untuk memantau Proxmox menggunakan template resmi.
+
+1. **Unduh dan Impor Template Proxmox**:
+   * Unduh template "Proxmox VE by HTTP" dari [Zabbix Share](https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/app/proxmox?at=release/7.4) (file: `template_app_proxmox.xml`).
+   * Di Zabbix, buka **Configuration** > **Templates** > **Import**.
+   * Unggah file template dan pastikan impor berhasil.
+2. **Buat Host Baru untuk Proxmox**:
+   * Buka **Configuration** > **Hosts** > **Create host**.
+   * Isi detail host:
+     * **Host name**: Misalnya, "HomeNet Node 8".
+     * **Visible name**: Opsional, bisa sama dengan host name.
+     * **Groups**: Pilih grup seperti "Linux servers" atau buat grup baru "Proxmox Nodes".
+     * **Interfaces**:
+       * Tambahkan interface **HTTP Agent**:
+         * **Connect to**: IP atau DNS Proxmox (misalnya, `192.168.1.100`).
+         * **Port**: `8006`.
+       * Interface Agent (port 10050) tidak diperlukan untuk metode HTTP ini.
+3. **Setel Macro untuk Host**:
+   *   Di tab **Macros** host, tambahkan:
+
+       | **Macro**             | **Nilai**        | **Deskripsi**                                                                  |
+       | --------------------- | ---------------- | ------------------------------------------------------------------------------ |
+       | `{$PVE.URL.HOST}`     | `<Proxmox_IP>`   | IP atau hostname Proxmox (misalnya, `192.168.1.100`).                          |
+       | `{$PVE.URL.PORT}`     | `8006`           | Port API Proxmox (default).                                                    |
+       | `{$PVE.TOKEN.ID}`     | `<Token ID>`     | Token ID dari langkah 1.2 (misalnya, `zabbix_monitor@pve!ZabbixMonitoring01`). |
+       | `{$PVE.TOKEN.SECRET}` | `<Token Secret>` | Token Secret dari langkah 1.2.                                                 |
+4. **Tautkan Template ke Host**:
+   * Di tab **Templates**, klik **Link new templates** dan pilih "Proxmox VE by HTTP".
+   * Simpan konfigurasi host.
+5. **Aktifkan Monitoring**:
+   * Pastikan host diaktifkan (status "Enabled").
+   * Tunggu beberapa menit agar Zabbix mulai mengumpulkan data.
+
+### Langkah 3: Verifikasi Monitoring
+
+Setelah konfigurasi selesai, verifikasi apakah Zabbix berhasil memantau Proxmox:
+
+1. **Periksa Data Terbaru**:
+   * Buka **Monitoring** > **Latest data**.
+   * Cari host "HomeNet Node 8" dan periksa item seperti:
+     * **API service status**: Harus menunjukkan "OK (200)".
+     * **Node \[nodeX]: CPU, loadavg**: Menunjukkan beban CPU.
+     * **Node \[nodeX]: Memory, usage**: Menunjukkan penggunaan memori.
+   * Jika item menunjukkan "Not supported" atau error, lanjutkan ke troubleshooting.
+2. **Lihat Grafik**:
+   * Klik link "Graph" pada item untuk melihat tren data (misalnya, penggunaan CPU atau memori).
+3. **Periksa Log Zabbix**:
+   *   Buka log Zabbix untuk memeriksa error:
+
+       ```bash
+       tail -f /var/log/zabbix/zabbix_server.log
+       ```
+
+### Langkah 4: Troubleshooting Masalah Umum
+
+Berdasarkan lampiran dan log error yang Anda berikan, berikut adalah solusi untuk masalah umum:
+
+| **Masalah**                                                                                                                                     | **Penyebab**                                  | **Solusi**                                                                                                                                                                                                                                              |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Error "Not supported"** (contoh: `cannot extract value from json by path "$.data.[?(@.name == 'node8' && @.type == 'node')].online.first()"`) | Respons API tidak valid atau path JSON salah. | <p>- Uji API dengan <code>curl</code> untuk memastikan respons JSON valid.<br>- Periksa preprocessing item di Zabbix dan sesuaikan path JSON dengan struktur respons API.<br>- Pastikan node (misalnya, <code>node8</code>) ada di cluster Proxmox.</p> |
+| **Error "Response code 403"** (contoh: `Response code "403" did not match any of the required status codes "200"`)                              | Izin API tidak mencukupi.                     | <p>- Periksa izin pengguna dan token di Proxmox (lihat langkah 1.1 dan 1.2).<br>- Tambahkan izin seperti <code>Sys.Audit</code> untuk path <code>/</code>.<br>- Uji API dengan <code>curl</code> untuk memverifikasi akses.</p>                         |
+| **Perubahan Nilai Negatif** (contoh: `-320` pada "API service status")                                                                          | Masalah preprocessing atau data tidak sesuai. | <p>- Periksa log Zabbix untuk detail error.<br>- Pastikan item menggunakan unit yang benar (misalnya, status code vs nilai numerik).</p>                                                                                                                |
+
+**Langkah Troubleshooting Tambahan**:
+
+*   **Periksa Log Proxmox**:
+
+    ```bash
+    tail -f /var/log/pve/proxy.log
+    ```
+
+    Cari error terkait permintaan API.
+* **Uji Item Secara Manual**:
+  * Di Zabbix, buka konfigurasi item, klik "Test", dan masukkan data JSON uji untuk memverifikasi preprocessing.
+* **Perbarui Template**:
+  * Jika template lama, impor ulang versi terbaru dari [Zabbix Share](https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/app/proxmox?at=release/7.4).
+* **Periksa Firewall**:
+  *   Pastikan port 8006 terbuka:
+
+      ```bash
+      nc -zv <Proxmox_IP> 8006
+      ```
+
+### Langkah 5: Best Practices
+
+* **Gunakan Pengguna Khusus**: Selalu gunakan pengguna dan token API khusus untuk keamanan.
+* **Pantau Log Secara Berkala**: Periksa log Zabbix dan Proxmox untuk mendeteksi masalah dini.
+* **Gunakan Tag**: Manfaatkan tag seperti `component: system`, `node: node8` untuk mengelompokkan data.
+* **Perbarui Secara Rutin**: Pastikan Zabbix dan template selalu diperbarui ke versi terbaru.
+
+### Contoh Kasus dari Lampiran
+
+Berdasarkan lampiran yang Anda unggah:
+
+* **Lampiran 0**: Item "API service status" menunjukkan "OK (200)" tetapi dengan perubahan nilai "-320". Ini mungkin menunjukkan masalah preprocessing. Periksa log Zabbix untuk detail dan pastikan unit data sesuai.
+* **Lampiran 1**: Status "Not supported" pada beberapa item menunjukkan respons API tidak valid atau path JSON salah. Uji API dan sesuaikan preprocessing.
+* **Lampiran 2**: Error "Response code 403" pada item "Node \[node8]: CPU, loadavg" menunjukkan masalah izin. Perbarui izin pengguna di Proxmox.
+
+### Sumber dan Referensi
+
+* [Dokumentasi Resmi Zabbix untuk Integrasi Proxmox](https://www.zabbix.com/integrations/proxmox)
+* [Template Resmi Proxmox di Zabbix Share](https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/app/proxmox?at=release/7.4)
+* [Dokumentasi API Proxmox](https://pve.proxmox.com/pve-docs/api-viewer/index.html)
+* [Panduan Geek is the Way untuk Zabbix Agent](https://geekistheway.com/2022/12/31/monitoring-proxmox-ve-using-zabbix-agent/)
+* [Tutorial RDR-IT untuk Proxmox dan Zabbix](https://rdr-it.com/en/proxmox-supervision-with-zabbix/)
