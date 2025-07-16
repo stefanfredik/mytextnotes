@@ -419,3 +419,177 @@ Untuk panduan lebih lanjut, gunakan dokumentasi resmi Proxmox: [https://pve.prox
 
 
 
+## Upgrade Versi Proxmox
+
+16 Juli 2025 - Dibuat Oleh Grok AI
+
+## Panduan Lengkap Upgrade Proxmox VE ke Versi Terbaru (8.4)
+
+Panduan ini memberikan langkah-langkah terperinci untuk mengupgrade Proxmox Virtual Environment (VE) ke versi terbaru, yaitu versi 8.4 pada Juli 2025. Panduan ini mencakup dua skenario utama: upgrade dari versi 7 ke 8 dan update dari versi 8.x ke 8.4. Proxmox VE adalah platform virtualisasi open-source berbasis Debian yang mendukung KVM dan LXC, dan upgrade ke versi terbaru memastikan Anda mendapatkan fitur terbaru, perbaikan bug, dan pembaruan keamanan.
+
+### 1. Persiapan
+
+Sebelum memulai proses upgrade, pastikan Anda memenuhi persyaratan berikut untuk menghindari masalah:
+
+| **Persyaratan**           | **Detail**                                                                                                                                                              |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cadangan Data**         | Buat cadangan lengkap semua VM, container, dan konfigurasi sistem. Gunakan alat seperti Proxmox Backup Server atau solusi eksternal.                                    |
+| **Versi Awal**            | Untuk upgrade dari versi 7, pastikan Anda menggunakan Proxmox VE 7.4 dengan `pve-manager` versi minimal `7.4-18`. Jalankan `pveversion` untuk memeriksa.                |
+| **Ceph (Jika Digunakan)** | Jika menggunakan Ceph hyper-converged, upgrade ke Ceph 17.2 Quincy terlebih dahulu. Lihat panduan: [Ceph Upgrade](https://pve.proxmox.com/wiki/Ceph_Pacific_to_Quincy). |
+| **Akses Node**            | Pastikan akses andal ke node melalui iKVM/IPMI, akses fisik, atau SSH. Tes SSH pada mesin non-produksi jika memungkinkan.                                               |
+| **Kesehatan Cluster**     | Pastikan cluster (jika digunakan) dalam keadaan sehat tanpa masalah kritis.                                                                                             |
+| **Ruang Disk**            | Pastikan ada minimal 5 GB ruang kosong pada mount point root (`df -h /`).                                                                                               |
+| **Repositori**            | Pastikan repositori dikonfigurasi dengan benar (enterprise atau no-subscription).                                                                                       |
+
+**Catatan**: Selalu periksa isu-isu yang diketahui di [Proxmox Roadmap](https://pve.proxmox.com/wiki/Roadmap#8.0-known-issues) sebelum memulai.
+
+### 2. Upgrade dari Proxmox VE 7 ke 8
+
+Jika Anda menggunakan Proxmox VE versi 7, ikuti langkah-langkah berikut berdasarkan dokumentasi resmi: [Upgrade from 7 to 8](https://pve.proxmox.com/wiki/Upgrade_from_7_to_8).
+
+#### **Langkah-Langkah**
+
+**a. Tes Upgrade**
+
+* Lakukan uji coba upgrade pada server standalone atau VM dengan Proxmox VE 7.4 untuk mereplikasi lingkungan produksi. Instal ISO Proxmox VE 7.4, perbarui ke versi terbaru, dan lakukan upgrade ke versi 8.
+
+**b. Gunakan Script pve7to8**
+
+*   Jalankan perintah berikut untuk memeriksa potensi masalah:
+
+    ```
+    # pve7to8
+    ```
+
+    atau gunakan opsi lengkap:
+
+    ```
+    # pve7to8 --full
+    ```
+* Perbaiki masalah yang ditemukan dan jalankan ulang script hingga tidak ada isu kritis.
+
+**c. Pindahkan VM dan Container**
+
+* Migrasikan semua VM dan container yang berjalan ke node lain dalam cluster untuk menghindari gangguan. Catatan: Migrasi dari versi lama ke baru selalu berhasil, tetapi sebaliknya mungkin tidak.
+
+**d. Perbarui Repositori APT**
+
+1.  Pastikan sistem sudah menggunakan paket terbaru untuk versi 7.4:
+
+    ```
+    # apt update
+    # apt dist-upgrade
+    # pveversion
+    ```
+
+    (Pastikan output menunjukkan `7.4-15` atau lebih baru).
+2.  Ganti repositori Debian dari Bullseye ke Bookworm:
+
+    ```
+    # sed -i 's/bullseye/bookworm/g' /etc/apt/sources.list
+    ```
+3. Tambahkan repositori Proxmox VE 8:
+   *   Untuk repositori enterprise:
+
+       ```
+       # echo "deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise" > /etc/apt/sources.list.d/pve-enterprise.list
+       ```
+   *   Untuk repositori no-subscription (jika tidak memiliki langganan):
+
+       ```
+       # echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" > /etc/apt/sources.list.d/pve-no-subscription.list
+       ```
+4. Jika menggunakan Ceph hyper-converged, perbarui repositori Ceph:
+   *   Untuk enterprise:
+
+       ```
+       # echo "deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise" > /etc/apt/sources.list.d/ceph.list
+       ```
+   *   Untuk no-subscription:
+
+       ```
+       # echo "deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription" > /etc/apt/sources.list.d/ceph.list
+       ```
+5. Hapus baris backports (jika ada) dari `/etc/apt/sources.list`.
+6.  Segarkan repositori:
+
+    ```
+    # apt update
+    ```
+
+**e. Upgrade Sistem**
+
+*   Jalankan perintah upgrade:
+
+    ```
+    # apt dist-upgrade
+    ```
+* Perhatikan perubahan konfigurasi pada file berikut:
+  * `/etc/issue`: Pilih "No" untuk mempertahankan konfigurasi saat ini.
+  * `/etc/lvm/lvm.conf`: Pilih "Yes" jika tidak ada perubahan khusus.
+  * `/etc/ssh/sshd_config`: Pilih "Yes" jika hanya ada perubahan pada `ChallengeResponseAuthentication`.
+  * `/etc/default/grub`: Pilih "No" jika tidak yakin.
+* Jika diminta, periksa perubahan dengan hati-hati sebelum mengonfirmasi.
+
+**f. Pasca-Upgrade**
+
+*   Reboot sistem untuk menggunakan kernel baru:
+
+    ```
+    # reboot
+    ```
+* Kosongkan cache browser untuk Web UI (tekan `CTRL + SHIFT + R` atau `⌘ + Alt + R` pada MacOS).
+* Jika menggunakan cluster, ulangi proses untuk setiap node setelah memastikan node pertama berhasil diupgrade.
+
+### 3. Update dari Proxmox VE 8.x ke Versi Terbaru (8.4)
+
+Jika Anda sudah menggunakan Proxmox VE versi 8.x (misalnya 8.0 atau 8.2), Anda dapat memperbarui ke versi terbaru (8.4) menggunakan perintah standar update, karena Proxmox menggunakan model rilis rolling untuk versi minor.
+
+#### **Langkah-Langkah**
+
+1.  Perbarui sistem:
+
+    ```
+    # apt-get update
+    # apt-get dist-upgrade
+    ```
+2.  Reboot sistem setelah update selesai:
+
+    ```
+    # reboot
+    ```
+
+#### **Catatan Tambahan**
+
+* **Repositori Enterprise**: Jika Anda mendapatkan kesalahan 401 Unauthorized, nonaktifkan repositori enterprise melalui GUI:
+  * Buka **Server -> Update -> Repository**.
+  * Nonaktifkan "Proxmox enterprise repo".
+  *   Tambahkan repositori no-subscription:
+
+      ```
+      # echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" > /etc/apt/sources.list.d/pve-no-subscription.list
+      ```
+* **VM dan Container**: Matikan atau pindahkan VM/container ke node lain sebelum update untuk menghindari gangguan.
+* **Cluster**: Jangan tinggalkan cluster selama proses update. Pastikan semua node diperbarui secara berurutan.
+
+### 4. Catatan Penting
+
+| **Aspek**              | **Detail**                                                                                                                                                  |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Backup**             | Selalu lakukan backup sebelum upgrade untuk mencegah kehilangan data.                                                                                       |
+| **Repositori**         | Gunakan repositori no-subscription jika tidak memiliki langganan enterprise.                                                                                |
+| **Cluster**            | Upgrade node satu per satu dalam cluster, pastikan node tetap dalam cluster selama proses.                                                                  |
+| **Isu yang Diketahui** | Periksa [Proxmox Roadmap](https://pve.proxmox.com/wiki/Roadmap#8.0-known-issues) untuk isu kompatibilitas, terutama untuk perangkat keras lama (>10 tahun). |
+| **Versi Terbaru**      | Versi terbaru adalah 8.4, tersedia di [Proxmox Downloads](https://www.proxmox.com/en/downloads).                                                            |
+| **Perangkat Keras**    | Versi 8.4 mendukung perangkat keras baru (misalnya Intel 12th gen ke atas) dan fitur seperti live migration dengan mediated devices.                        |
+
+### 5. Sumber
+
+* [Proxmox VE Official Documentation - Upgrade from 7 to 8](https://pve.proxmox.com/wiki/Upgrade_from_7_to_8)
+* [Proxmox VE Official Documentation - System Software Updates](https://pve.proxmox.com/wiki/System_Software_Updates)
+* [Proxmox Support Forum - Update from 8.0 to 8.2](https://forum.proxmox.com/threads/update-from-8-0-to-8-2.148476/)
+* [Proxmox Official Website - Downloads](https://www.proxmox.com/en/downloads)
+* [Proxmox VE Roadmap](https://pve.proxmox.com/wiki/Roadmap)
+
+Panduan ini dirancang untuk memastikan proses upgrade berjalan lancar dengan risiko minimal. Jika Anda menghadapi masalah, periksa forum komunitas Proxmox atau hubungi dukungan resmi untuk bantuan lebih lanjut.
+
