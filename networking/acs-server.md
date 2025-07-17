@@ -143,7 +143,7 @@ Untuk penggunaan produksi, pertimbangkan langkah-langkah berikut:
 
 ## Menggunakan Docker Compose
 
-```bash
+```yaml
 services:
   ### GenieACS Service ###
   genieacs:
@@ -160,7 +160,7 @@ services:
       GENIEACS_UI_ACCESS_LOG_FILE: /var/log/genieacs/genieacs-ui-access.log
       GENIEACS_DEBUG_FILE: /var/log/genieacs/genieacs-debug.yaml
       GENIEACS_EXT_DIR: /opt/genieacs/ext
-      GENIEACS_MONGODB_CONNECTION_URL: mongodb://admin:Mongodb123@mongo/genieacs?authSource=admin
+      GENIEACS_MONGODB_CONNECTION_URL: mongodb://admin:Homenetdb123@mongo/genieacs?authSource=admin
     ports:
       - "7547:7547" # CWMP
       - "7557:7557" # NBI
@@ -178,7 +178,7 @@ services:
     container_name: mongo-genieacs
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: Mongodb123
+      MONGO_INITDB_ROOT_PASSWORD: Homenetdb123
       MONGO_INITDB_DATABASE: genieacs
       MONGO_DATA_DIR: /data/db
       MONGO_LOG_DIR: /var/log/mongodb
@@ -208,7 +208,7 @@ services:
     environment:
       ACS_URL: http://genieacs:7557
       ACS_USER: admin
-      ACS_PASS: admin123
+      ACS_PASS: Homenet@123
     ports:
       - "8080:8080"
     networks:
@@ -223,8 +223,12 @@ services:
     container_name: mongo-express
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: Mongodb123
-      ME_CONFIG_MONGODB_URL: mongodb://admin:Mongodb123@mongo:27017/genieacs?authSource=admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Homenetdb123
+	  ME_CONFIG_BASICAUTH=true
+	  ME_CONFIG_BASICAUTH_USERNAME=admin
+	  ME_CONFIG_BASICAUTH_PASSWORD=secret123
+	  ME_CONFIG_MONGODB_URL=mongodb://admin:secret@mongodb:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://admin:Homenetdb123@mongo:27017/genieacs?authSource=admin
     ports:
       - "8081:8081"
     networks:
