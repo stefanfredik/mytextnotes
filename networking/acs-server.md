@@ -139,6 +139,107 @@ Untuk penggunaan produksi, pertimbangkan langkah-langkah berikut:
     ```
 * **Dokumentasi Tambahan**: Jika Anda mengalami masalah, kunjungi [forum komunitas GenieACS](https://forum.genieacs.com/) atau [wiki GenieACS](https://github.com/genieacs/genieacs/wiki) untuk bantuan lebih lanjut.
 
+
+
+## Menggunakan Docker Compose
+
+```bash
+services:
+  ### GenieACS Service ###
+  genieacs:
+    depends_on:
+      - mongo
+    image: drumsergio/genieacs:latest
+    restart: always
+    container_name: genieacs
+    environment:
+      GENIEACS_UI_JWT_SECRET: changeme
+      GENIEACS_CWMP_ACCESS_LOG_FILE: /var/log/genieacs/genieacs-cwmp-access.log
+      GENIEACS_NBI_ACCESS_LOG_FILE: /var/log/genieacs/genieacs-nbi-access.log
+      GENIEACS_FS_ACCESS_LOG_FILE: /var/log/genieacs/genieacs-fs-access.log
+      GENIEACS_UI_ACCESS_LOG_FILE: /var/log/genieacs/genieacs-ui-access.log
+      GENIEACS_DEBUG_FILE: /var/log/genieacs/genieacs-debug.yaml
+      GENIEACS_EXT_DIR: /opt/genieacs/ext
+      GENIEACS_MONGODB_CONNECTION_URL: mongodb://admin:Mongodb123@mongo/genieacs?authSource=admin
+    ports:
+      - "7547:7547" # CWMP
+      - "7557:7557" # NBI
+      - "7567:7567" # FS
+      - "3000:3000" # UI
+    volumes:
+      - opt_volume:/opt
+    networks:
+      - genieacs_network
+
+  ### MongoDB Service ###
+  mongo:
+    image: mongo:8.0
+    restart: always
+    container_name: mongo-genieacs
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: Mongodb123
+      MONGO_INITDB_DATABASE: genieacs
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /var/log/mongodb
+    volumes:
+      - data_db:/data/db
+      - data_configdb:/data/configdb
+    expose:
+      - 27017
+    networks:
+      - genieacs_network
+
+  ### GenieACS Simulator (Optional for Testing) ###
+  genieacs-sim:
+    depends_on:
+      - genieacs
+    image: drumsergio/genieacs-sim:latest
+    container_name: genieacs-sim
+    networks:
+      - genieacs_network
+
+  ### GenieACS MCP Server (AI, Optional) ###
+  genieacs-mcp:
+    depends_on:
+      - genieacs
+    image: drumsergio/genieacs-mcp:latest
+    container_name: genieacs-mcp
+    environment:
+      ACS_URL: http://genieacs:7557
+      ACS_USER: admin
+      ACS_PASS: admin123
+    ports:
+      - "8080:8080"
+    networks:
+      - genieacs_network
+
+  ### Mongo Express Service ###
+  mongo-express:
+    depends_on:
+      - mongo
+    image: mongo-express:latest
+    restart: always
+    container_name: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Mongodb123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:Mongodb123@mongo:27017/genieacs?authSource=admin
+    ports:
+      - "8081:8081"
+    networks:
+      - genieacs_network
+
+volumes:
+  data_db:
+  data_configdb:
+  opt_volume:
+
+networks:
+  genieacs_network:
+    driver: bridge
+```
+
 ### Sumber Daya Tambahan
 
 * **Dokumentasi Resmi**: [docs.genieacs.com](http://docs.genieacs.com/) (catatan: situs ini mungkin tidak selalu dapat diakses; periksa wiki sebagai alternatif).
