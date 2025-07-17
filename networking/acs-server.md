@@ -1,5 +1,179 @@
 # ACS Server
 
+## About
+
+## Pembahasan Lengkap TR-069 dan ACS
+
+TR-069 dan _Auto Configuration Server_ (ACS) adalah komponen kunci dalam pengelolaan jaringan broadband modern. TR-069 menyediakan protokol standar untuk komunikasi antara perangkat pelanggan (_Customer Premises Equipment_ atau CPE) dan server pengelola, sementara ACS adalah server yang menjalankan perintah untuk mengatur, memperbarui, dan mendiagnosis perangkat tersebut. Berikut adalah pembahasan terstruktur dan mendetail tentang keduanya.
+
+### 1. Pengenalan TR-069
+
+TR-069, yang dikenal sebagai _CPE WAN Management Protocol (CWMP)_, adalah spesifikasi teknis yang dikembangkan oleh _Broadband Forum_ untuk memungkinkan pengelolaan jarak jauh perangkat CPE seperti modem, router, gateway, set-top box, dan telepon VoIP. Protokol ini pertama kali diterbitkan pada Mei 2004, dengan versi terbaru adalah _Amendment 6 Corrigendum 1_ (Juni 2020).
+
+#### **Tujuan TR-069**
+
+* **Konfigurasi Otomatis**: Memungkinkan aktivasi layanan tanpa intervensi manual (_zero-touch_ atau _one-touch provisioning_).
+* **Pembaruan Firmware/Perangkat Lunak**: Mendukung pembaruan atau penurunan versi firmware serta backup/restore konfigurasi.
+* **Diagnostik dan Monitoring**: Memungkinkan pengujian performa jaringan, seperti throughput dan konektivitas, serta pengambilan log atau parameter perangkat.
+* **Efisiensi Operasional**: Mengurangi kebutuhan teknisi lapangan, sehingga menurunkan biaya operasional ISP.
+* **Standarisasi**: Menyediakan pendekatan yang konsisten untuk pengelolaan perangkat dari berbagai vendor.
+
+#### **Fitur Utama**
+
+| **Fitur**                 | **Deskripsi**                                                              |
+| ------------------------- | -------------------------------------------------------------------------- |
+| Aktivasi Layanan          | Mendukung konfigurasi awal dan rekonfigurasi layanan secara otomatis.      |
+| Pengelolaan Firmware      | Memungkinkan pembaruan, penurunan versi, dan backup/restore konfigurasi.   |
+| Diagnostik dan Monitoring | Memungkinkan pengujian konektivitas, throughput, dan pengambilan data log. |
+| Komunikasi Aman           | Menggunakan HTTPS untuk komunikasi yang aman antara CPE dan ACS.           |
+| Model Data Hierarkis      | Struktur data standar untuk mendefinisikan parameter perangkat.            |
+
+#### **Mekanisme Transport**
+
+* Berbasis teks, menggunakan protokol HTTP/HTTPS.
+* CPE bertindak sebagai klien HTTP, sementara ACS berfungsi sebagai server HTTP.
+* Sesi komunikasi selalu diinisiasi oleh CPE, memberikan kontrol alur sesi kepada perangkat.
+
+#### **Model Data**
+
+* Struktur hierarkis dengan root seperti _Device_ atau _InternetGatewayDevice_.
+* Didefinisikan dalam format XML dan PDF oleh _Broadband Forum_.
+* Mendukung objek multi-instance, meskipun sering terjadi masalah seperti parameter yang hilang atau tingkat akses yang salah.
+* Standar model data mencakup TR-181 (perangkat rumah), TR-104 (VoIP), TR-135 (set-top box), dan TR-140 (penyimpanan).
+
+#### **Operasi Umum**
+
+TR-069 mendukung beberapa operasi _Remote Procedure Call (RPC)_, termasuk:
+
+* **GetParameterNames**: Mengambil daftar nama parameter yang tersedia.
+* **GetParameterValues**: Mengambil nilai parameter tertentu.
+* **SetParameterValues**: Mengatur nilai parameter.
+* **GetParameterAttributes**: Mengambil atribut parameter (misalnya, notifikasi aktif).
+* **SetParameterAttributes**: Mengatur atribut parameter.
+* **Download/Upload**: Untuk transfer firmware atau file konfigurasi.
+* **AddObject/DeleteObject**: Menambah atau menghapus objek dalam model data.
+
+#### **Keamanan**
+
+* Menggunakan HTTPS untuk enkripsi komunikasi.
+* Verifikasi sertifikat ACS oleh CPE untuk memastikan keaslian server.
+* Autentikasi CPE menggunakan _shared secret_ (username/password) yang dinegosiasikan per sesi.
+* Default password digunakan untuk kontak pertama atau setelah reset pabrik.
+* Mendukung traversal NAT melalui Annex G (STUN/UDP) atau Annex K (XMPP, Amendment 5).
+
+#### **Tantangan Keamanan**
+
+Jika tidak diimplementasikan dengan benar, TR-069 dapat menimbulkan risiko keamanan, seperti:
+
+* Penyadapan basis pelanggan.
+* Pengalihan DNS atau pemasangan backdoor melalui firmware.
+* Eksploitasi oleh botnet seperti Mirai akibat implementasi ACS yang tidak aman.
+
+#### **Adopsi**
+
+Hingga tahun 2020, TR-069 telah digunakan oleh hampir satu miliar perangkat di seluruh dunia, menunjukkan adopsi yang sangat luas.
+
+### 2. Pengenalan ACS (_Auto Configuration Server_)
+
+ACS adalah server perangkat lunak yang menggunakan protokol TR-069 untuk mengelola perangkat CPE secara jarak jauh. ACS bertindak sebagai pusat kendali yang memungkinkan ISP untuk mengatur, memperbarui, dan mendiagnosis perangkat tanpa perlu teknisi di lokasi.
+
+#### **Fungsi Utama ACS**
+
+* **Konfigurasi Perangkat**: Mengatur parameter seperti pengaturan WiFi, IP, atau firewall.
+* **Pembaruan Firmware**: Mengelola pembaruan perangkat lunak atau firmware.
+* **Diagnostik Jarak Jauh**: Memantau performa jaringan dan mendeteksi masalah.
+* **Otomatisasi**: Mengurangi intervensi manual untuk aktivasi layanan dan pemeliharaan.
+* **Skalabilitas**: Mampu mengelola jutaan perangkat secara bersamaan.
+
+#### **Cara Kerja ACS**
+
+* **Inisiasi Sesi**: CPE memulai sesi dengan mengirim pesan _Inform_ ke ACS, yang berisi informasi status perangkat.
+* **Autentikasi**: ACS memverifikasi identitas CPE menggunakan _shared secret_ atau sertifikat.
+* **Eksekusi Tugas**: ACS mengirim perintah seperti _GetParameterValues_, _SetParameterValues_, atau _Download_ untuk melakukan tugas tertentu.
+* **Penutupan Sesi**: Sesi berakhir setelah semua tugas selesai, biasanya hanya berlangsung beberapa detik.
+
+#### **Keamanan ACS**
+
+* Menggunakan HTTPS dan sertifikat SSL/TLS untuk komunikasi aman.
+* Autentikasi CPE melalui username/password atau sertifikat klien.
+* Aturan firewall ketat untuk membatasi akses ke ACS.
+* Pembaruan perangkat lunak rutin dan audit keamanan untuk mencegah ancaman siber.
+
+#### **Implementasi ACS**
+
+* Contoh implementasi populer adalah _GenieACS_, yang mendukung pengelolaan skala besar.
+* ACS dapat dijalankan di lingkungan _on-premise_, cloud, atau hybrid menggunakan teknologi seperti Docker dan Kubernetes.
+
+### 3. Hubungan Antara TR-069 dan ACS
+
+TR-069 adalah protokol yang mendefinisikan komunikasi antara CPE dan ACS, sementara ACS adalah server yang menjalankan perintah tersebut. Hubungan ini dapat dijelaskan sebagai berikut:
+
+#### **Mekanisme Komunikasi**
+
+* CPE menginisiasi sesi dengan ACS menggunakan protokol TR-069 melalui HTTPS.
+* ACS merespons dengan perintah untuk mengambil data, mengatur parameter, atau melakukan pembaruan.
+* Sesi bersifat sementara dan hanya berlangsung selama diperlukan untuk menyelesaikan tugas.
+
+#### **Sesi Provisioning**
+
+Sesi provisioning dimulai dengan pesan _Inform_ dari CPE dan dapat dipicu oleh berbagai alasan, seperti:
+
+| **Alasan Sesi**     | **Penjelasan**                                                         |
+| ------------------- | ---------------------------------------------------------------------- |
+| BOOTSTRAP           | URL ACS disimpan/berubah atau perangkat di-reset ke pengaturan pabrik. |
+| PERIODIC            | Berdasarkan interval yang ditentukan (_PeriodicInformInterval_).       |
+| CONNECTION REQUEST  | ACS meminta koneksi segera melalui HTTP.                               |
+| VALUE CHANGE        | Parameter dengan notifikasi aktif berubah.                             |
+| BOOT                | Perangkat di-reset atau terhubung kembali ke daya.                     |
+| SCHEDULED           | ACS menjadwalkan sesi dengan perintah _ScheduleInform_.                |
+| transfer complete   | Melaporkan selesainya transfer (download/upload).                      |
+| DIAGNOSTIC COMPLETE | Mengonfirmasi penyelesaian diagnostik yang dipesan.                    |
+
+#### **Manfaat Kolaborasi**
+
+* **Kontrol Real-Time**: ACS dapat mengubah pengaturan perangkat secara langsung.
+* **Efisiensi Instalasi**: Konfigurasi awal dilakukan secara otomatis.
+* **Pemeliharaan Jarak Jauh**: Pembaruan firmware dan diagnostik tanpa kunjungan teknisi.
+* **Optimasi Jaringan**: ACS dapat mengatur parameter seperti saluran WiFi untuk performa optimal.
+* **Monitoring Otomatis**: ACS mengumpulkan data untuk analisis performa jaringan.
+
+### 4. Kelebihan dan Kekurangan TR-069
+
+#### **Kelebihan**
+
+* Standar yang mapan dengan dukungan luas dari berbagai vendor perangkat.
+* Mengurangi biaya operasional melalui otomatisasi.
+* Mendukung berbagai jenis CPE, dari modem hingga set-top box.
+* Memungkinkan pengelolaan skala besar dengan efisiensi tinggi.
+
+#### **Kekurangan**
+
+* Tidak mendukung transaksi atomik, yang dapat menyebabkan masalah konsistensi data.
+* Risiko keamanan jika implementasi tidak dilakukan dengan benar.
+* Bergantung pada konektivitas internet yang stabil untuk komunikasi.
+
+### 5. TR-369 sebagai Penerus TR-069
+
+TR-369, atau _User Services Platform (USP)_, diperkenalkan oleh _Broadband Forum_ pada tahun 2018 sebagai penerus TR-069. TR-369 menawarkan:
+
+* **Skalabilitas Lebih Baik**: Mendukung jaringan dengan jumlah perangkat yang lebih besar.
+* **Keamanan yang Ditingkatkan**: Mekanisme autentikasi dan enkripsi yang lebih kuat.
+* **Komunikasi Real-Time**: Mendukung interaksi yang lebih dinamis.
+* **Integrasi Fleksibel**: Kompatibel dengan platform modern seperti IoT dan smart home.
+
+Meskipun TR-369 lebih canggih, TR-069 tetap relevan karena adopsi yang luas dan kompatibilitas model data yang sama.
+
+### 6. Kesimpulan
+
+TR-069 dan ACS adalah fondasi penting dalam pengelolaan jaringan broadband. TR-069 menyediakan protokol standar untuk komunikasi yang aman dan efisien antara CPE dan ACS, sementara ACS memungkinkan ISP untuk mengelola perangkat secara otomatis, mengurangi biaya, dan meningkatkan kualitas layanan. Dengan adopsi yang luas dan fitur seperti konfigurasi otomatis, pembaruan firmware, dan diagnostik jarak jauh, keduanya telah menjadi standar industri. Namun, keamanan harus menjadi prioritas untuk mencegah risiko siber. Dengan munculnya TR-369, pengelolaan jaringan di masa depan akan semakin canggih, tetapi TR-069 tetap menjadi solusi yang andal untuk saat ini.
+
+### 7. Sumber Referensi
+
+* [Wikipedia: TR-069](https://en.wikipedia.org/wiki/TR-069)
+* [Axiros: TR-069](https://www.axiros.com/knowledge-base/tr-069)
+* [Avsystem: TR-069 Crash Course](https://www.avsystem.com/crashcourse/tr069/)
+* [Broadband Forum: TR-069 Standard](https://www.broadband-forum.org/pdfs/tr-069-1-6-1.pdf)
+
 ## Setup Genie ACS
 
 Dibuat oleh Grox AI
@@ -224,10 +398,9 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: Homenetdb123
-	  ME_CONFIG_BASICAUTH=true
-	  ME_CONFIG_BASICAUTH_USERNAME=admin
-	  ME_CONFIG_BASICAUTH_PASSWORD=secret123
-	  ME_CONFIG_MONGODB_URL=mongodb://admin:secret@mongodb:27017/
+      ME_CONFIG_BASICAUTH: true
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: Homenet@123
       ME_CONFIG_MONGODB_URL: mongodb://admin:Homenetdb123@mongo:27017/genieacs?authSource=admin
     ports:
       - "8081:8081"
