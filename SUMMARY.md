@@ -99,5 +99,8 @@
   * [Mindset Programmer](self-development/mindset-programmer.md)
 * [Virtual Manager](virtual-manager/README.md)
   * [Proxmox](virtual-manager/proxmox.md)
+* [Hardware](hardware/README.md)
+  * [Uboot](hardware/uboot.md)
 * [GSM](gsm/README.md)
   * [Telkomsel APN](gsm/telkomsel-apn.md)
+  * [Page 1](gsm/page-1.md)
