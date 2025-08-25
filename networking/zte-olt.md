@@ -781,3 +781,68 @@ Profile name  :100M
 **INFO:**\
 Gemport berada di dalam T-cont.\
 Satu gemport berisi satu vlan/service
+
+
+
+## Membuat Onu Type Profile
+
+
+
+Onu profile berfungsi untuk memberitau OLT tentang interface/port yang ada di ONU tersebut.
+
+Jadi disini kita akan mendeskripsikan :
+
+* jumlah port ethernet
+* jumlah SSID yang disupport
+* jumlah port telpon yang disupport
+
+```
+ZXAN#con t
+%Info 20272: Enter configuration commands, one per line. End with CTRL/Z.
+ZXAN(config)#pon
+ZXAN(config-pon)#
+onu-type ALL gpon max-tcont 7 max-gemport 32 max-switch-perslot 1 max-flow-perswitch 8
+onu-type-if ALL eth_0/1-4 
+onu-type-if ALL wifi_0/1-4 
+onu-type-if ALL pots_0/1-2 
+
+ZXAN(config)#show onu-type
+ONU type name:          ALL
+PON type:               gpon
+Description:            4FE,4WIFI,2POTS
+Max T-CONT:             255
+Max GEM port:           255
+Max switch per slot:    255
+Max flow per switch:    255
+Max IP host:            2
+Max IPv6 host:          0
+Service ability N:1:    support
+Service ability 1:M:    support
+Service ability 1:P:    support
+WIFI mgmt via non OMCI: disable
+OMCI send mode:         async
+Default multicast range:none
+VRG:                    disable
+MGC configure mode:     zte
+Max VEIP:               0(default: 1 VEIP)
+Extended OMCI:          disable
+Location:               disable
+
+ONU type name:          cina
+PON type:               gpon
+Description:            4FE,2WIFI,2POTS
+Max T-CONT:             255
+Max GEM port:           255
+Max switch per slot:    255
+Max flow per switch:    255
+Max IP host:            2
+Max IPv6 host:          0
+Service ability N:1:    support
+Service ability 1:M:    support
+Service ability 1:P:    support
+WIFI mgmt via non OMCI: disable
+OMCI send mode:         async
+Default multicast range:none
+VRG:                    disable
+MGC configure mode:     zte
+```
