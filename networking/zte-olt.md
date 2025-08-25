@@ -680,3 +680,104 @@ registration-method sn ZTE1234567890
 end
 write
 ```
+
+
+
+## Setup Tcont dan Traffic Profile
+
+#### Membuat Traffic Profile (T-cont)
+
+Traffic profile/ profile Tcont digunakan untuk melimit bandwidth tunnel (tcont) dari olt ke onu client.
+
+Profile Tcont ini menentukan jumlah modem onu yang dapat ditampung dalam 1 PON.
+
+Jika total tcont dalam 1 port pon melebihi 1000M maka saat menambahkan onu baru akan error **GPONSRV Parameter Exceeds Range**
+
+Ada perhitungan dalam menentukan tcont profile, Aturan nya adalah:
+
+* 1 Pon kapasitas bandwidth 1.25Gbps atau 1000Mbps
+* jumlah fix bandwidth (FBW) total modem tidak boleh lebih dari 1Gbps
+
+Misal kita membuat profile fix bandwidth 100Mbps, maka jumlah maksimum onu nya adalah :
+
+1000/100=10 ONU.
+
+Berdasar spesifikasi PON, maksumum onu yang bisa dihandle dalam satu port PON adalah 128 ONU
+
+Jika ingin membuat 1 profile tcont yang bisa memuat 128 ONU maka perlu dihitung sebagai berikut:
+
+1000/128=7,8 kita bulatkan saja jadi 8Mbps atau 8000kbps.
+
+Dalam prakteknya jangan pernah mengisi pon secara maksimal sampai 128 ONU, sebisa mungkin maksimum 120 atau kurang agar beban PON tidak terlalu berat.
+
+Berti tcon profile yg harus kita buat agar muat 120 ONU per PON adalah TCONT profile jenis UP TO, bukan Fixed bandwidth.
+
+* type1 Bandwidth tetap(fixed) //suara
+* type2 Bandwidth terjamin(assured) //voice
+* type3 Bandwidth terjamin, Bandwidth maksimum
+* type4 Bandwidth maksimum //layanan internet
+* type5 Bandwidth tetap, Bandwidth terjamin, Bandwidth maksimum
+
+Dari 5 type diatas, kita bisa menggunakan type 3 atau type 5 untuk membuat tcont profile UP TO.
+
+```
+ZXAN(config)#gpon 
+ZXAN(config-gpon)#profile tcont upto100M type 5 fixed 8000 assured 10000 maximum 100000   
+
+ZXAN(config-if)#show gpon profile tcont 
+Profile name :default  
+ Type           FBW(kbps)   ABW(kbps)   MBW(kbps)   PRIORITY   WEIGHT    
+ 1              10000       0           0           N/A         N/A         
+ 
+Profile name :100M  
+ Type           FBW(kbps)   ABW(kbps)   MBW(kbps)   PRIORITY   WEIGHT    
+ 1              100000      0           0           N/A         N/A         
+ 
+Profile name :1G  
+ Type           FBW(kbps)   ABW(kbps)   MBW(kbps)   PRIORITY   WEIGHT    
+ 1              1024000     0           0           N/A         N/A         
+ 
+Profile name :upto100M  
+ Type           FBW(kbps)   ABW(kbps)   MBW(kbps)   PRIORITY   WEIGHT    
+ 5              8000        10000       100000      N/A         N/A    
+```
+
+onu vlan profile nantinya akan dipakai saat kita mensetting ONU.
+
+Nama profile yang akan dipakai disana harus dibuat dulu disini supaya tidak error.
+
+**INFO:**\
+Tcont merupakan tunnel point to point yang bemnghubungkan antara OLT dengan ONU.\
+Tcont berisi gemport yang dipakai untuk lewat VLAN.\
+Satu Tcont bisa memuat/diisi banyak gemport.
+
+**WARNING:**\
+Tcont merupakan tunnel point to point yang bemnghubungkan antara OLT dengan ONU.\
+Tcont berisi gemport yang dipakai untuk lewat VLAN.\
+Satu Tcont bisa memuat/diisi banyak gemport.
+
+#### Membuat bandwidth/Traffic Profile (Gemport)
+
+Traffic profile dipakai untuk melimit bandwidth gemport.
+
+Gemport biasanya berisi satu service yang dibungkus menggunakan vlan.
+
+Dengan profile ini kita bisa melimit setiap service secara independen.
+
+```
+ZXAN(config)#gpon 
+ZXAN(config-gpon)#profile traffic 100M sir 100000 pir 100000
+[Successful]
+ZXAN(config-gpon)#show gpon profile traffic 
+Profile name  :default          
+  SIR(kbps)           PIR(kbps)           CBS(kbytes)         PBS(kbytes)          
+ 9953280             9953280             default             default             
+ 
+Profile name  :100M          
+  SIR(kbps)           PIR(kbps)           CBS(kbytes)         PBS(kbytes)          
+ 100000              100000              default             default        
+```
+
+**INFO:**\
+Gemport berada di dalam T-cont.\
+Satu gemport berisi satu vlan/service
