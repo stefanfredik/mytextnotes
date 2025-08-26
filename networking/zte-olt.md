@@ -786,8 +786,6 @@ Satu gemport berisi satu vlan/service
 
 ## Membuat Onu Type Profile
 
-
-
 Onu profile berfungsi untuk memberitau OLT tentang interface/port yang ada di ONU tersebut.
 
 Jadi disini kita akan mendeskripsikan :
@@ -795,54 +793,115 @@ Jadi disini kita akan mendeskripsikan :
 * jumlah port ethernet
 * jumlah SSID yang disupport
 * jumlah port telpon yang disupport
+* jumlah port USB
+
+
+
+### ZTE F670L
+
+#### 📌 Spesifikasi ONT ZTE F670L
+
+* **4 Port LAN (RJ45 / GE)**
+* **2 Port POTS (RJ11 / VoIP)**
+* **WiFi Dual Band (2.4 GHz + 5 GHz), biasanya 4 SSID**
+* **1 Port USB (kadang tidak perlu didefinisikan di OLT, tergantung kebutuhan)**
+* **Mendukung T-CONT & GEMPORT standar GPON**
+
+***
+
+#### 📖 Contoh konfigurasi `onu-type profile` untuk ZTE F670L
+
+#### Short Hand
+
+```bash
+configure terminal
+pon
+
+onu-type F670L gpon max-tcont 8 max-gemport 32 max-switch-perslot 1 max-flow-perswitch 8
+onu-type-if F670L eth_0/1-4
+onu-type-if F670L wifi_0/1-8
+onu-type-if F670L pots_0/1
+onu-type-if F670L usb_0/1
+
+end
+wr
+```
+
+#### 📌 Penjelasan
+
+* `onu-type ZTE-F670L gpon` → Membuat profile baru dengan nama **ZTE-F670L**.
+* `max-tcont 8` → biasanya F670L support hingga 8 T-CONT (default aman).
+* `max-gemport 32` → support banyak GEMPORT (untuk Internet, IPTV, VoIP).
+* `onu-type-if ZTE-F670L eth_0/1-4` → menambahkan **LAN1–LAN4**.
+* `onu-type-if ZTE-F670L wifi_0/1-8` → menambahkan **WiFi SSID 2.4 GHZ (1-8) – dan SSID 5Ghz (1-8)**.
+* `onu-type-if ZTE-F670L pots_0/1-2` → menambahkan **2 port VoIP**.
+
+#### Setingan Lengkap
 
 ```
-ZXAN#con t
-%Info 20272: Enter configuration commands, one per line. End with CTRL/Z.
-ZXAN(config)#pon
-ZXAN(config-pon)#
-onu-type ALL gpon max-tcont 7 max-gemport 32 max-switch-perslot 1 max-flow-perswitch 8
-onu-type-if ALL eth_0/1-4 
-onu-type-if ALL wifi_0/1-4 
-onu-type-if ALL pots_0/1-2 
-
-ZXAN(config)#show onu-type
-ONU type name:          ALL
-PON type:               gpon
-Description:            4FE,4WIFI,2POTS
-Max T-CONT:             255
-Max GEM port:           255
-Max switch per slot:    255
-Max flow per switch:    255
-Max IP host:            2
-Max IPv6 host:          0
-Service ability N:1:    support
-Service ability 1:M:    support
-Service ability 1:P:    support
-WIFI mgmt via non OMCI: disable
-OMCI send mode:         async
-Default multicast range:none
-VRG:                    disable
-MGC configure mode:     zte
-Max VEIP:               0(default: 1 VEIP)
-Extended OMCI:          disable
-Location:               disable
-
-ONU type name:          cina
-PON type:               gpon
-Description:            4FE,2WIFI,2POTS
-Max T-CONT:             255
-Max GEM port:           255
-Max switch per slot:    255
-Max flow per switch:    255
-Max IP host:            2
-Max IPv6 host:          0
-Service ability N:1:    support
-Service ability 1:M:    support
-Service ability 1:P:    support
-WIFI mgmt via non OMCI: disable
-OMCI send mode:         async
-Default multicast range:none
-VRG:                    disable
-MGC configure mode:     zte
+configure terminal
 ```
+
+#### Step 2: Enter PON Configuration Mode
+
+```
+pon
+```
+
+#### Step 3: Define the ONU Type Profile
+
+```bash
+onu-type ZTE-F670L gpon description 4GE,1POTS,DualBandWIFI
+onu-type ZTE-F670L gpon max-tcont 7
+onu-type ZTE-F670L gpon max-gemport 32
+onu-type ZTE-F670L gpon max-switch-perslot 8
+onu-type ZTE-F670L gpon max-flow-perswitch 32
+onu-type ZTE-F670L gpon max-iphost 5
+onu-type ZTE-F670L gpon service-mgmt-via-non-omci wifi enable
+```
+
+* **Explanation of Parameters**:
+  * `description`: Provides a human-readable summary of the ONT's interfaces.
+  * `max-tcont`: Maximum T-CONTs (typically 7 for residential ONTs).
+  * `max-gemport`: Maximum GEM ports (32 is standard for this class).
+  * `max-switch-perslot`: Maximum switch slots (8 or 32; adjust based on your firmware version if needed).
+  * `max-flow-perswitch`: Maximum flows per switch (32 or higher; 32 is common).
+  * `max-iphost`: Maximum IP hosts (5 for multi-host support).
+  * `service-mgmt-via-non-omci wifi enable`: Enables Wi-Fi management outside of OMCI for flexibility.
+
+#### Step 4: Define the Interfaces
+
+Specify the user-network interfaces (UNI) available on the F670L. This includes Ethernet (GE), POTS, and Wi-Fi interfaces. Wi-Fi is defined with multiple virtual interfaces to support SSIDs and bands.
+
+```bash
+onu-type-if ZTE-F670L eth_0/1
+onu-type-if ZTE-F670L eth_0/2
+onu-type-if ZTE-F670L eth_0/3
+onu-type-if ZTE-F670L eth_0/4
+onu-type-if ZTE-F670L pots_0/1
+onu-type-if ZTE-F670L wifi_0/1
+onu-type-if ZTE-F670L wifi_0/2
+onu-type-if ZTE-F670L wifi_0/3
+onu-type-if ZTE-F670L wifi_0/4
+```
+
+* **Explanation**:
+  * `eth_0/1` to `eth_0/4`: Correspond to the 4 Gigabit Ethernet ports.
+  * `pots_0/1`: Corresponds to the single telephony (POTS) port.
+  * `wifi_0/1` to `wifi_0/4`: Virtual Wi-Fi interfaces for dual-band support (e.g., multiple SSIDs; extend to more if your firmware requires, up to 8 for advanced configurations).
+
+#### Step 5: Exit Configuration Modes and Save
+
+```
+end
+write
+```
+
+After saving, verify the profile with:
+
+```
+show onu-type ZTE-F670L
+show onu-type-if ZTE-F670L
+```
+
+This profile can now be used when registering the F670L ONT (e.g., via `onu <onu-id> type ZTE-F670L sn <serial-number>` under the appropriate GPON interface). If your OLT firmware version differs or specific errors occur, consult the ZTE C320 user manual for adjustments to parameters like max-switch-perslot.
