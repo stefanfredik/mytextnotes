@@ -1,6 +1,8 @@
 # Table of contents
 
-* [Dashboard](README.md)
+* [AI](README.md)
+  * [Bonsai AI](ai/bonsai-ai.md)
+* [Dashboard](<README (1).md>)
 * [Module Comprehensive](module-comprehensive/README.md)
   * [Bahasa Inggris](module-comprehensive/bahasa-inggris.md)
 * [Bookmark](bookmark.md)
@@ -78,6 +80,7 @@
   * [Script Docker](dev-ops/script-docker.md)
   * [Setup FTP Server di Windows Server 2025](dev-ops/setup-ftp-server-di-windows-server-2025.md)
   * [Cloudflare](dev-ops/cloudflare.md)
+  * [Tmux](dev-ops/tmux.md)
 * [Troubleshooting Logs](troubleshooting-logs/README.md)
   * [Linux](troubleshooting-logs/linux.md)
   * [Docker](troubleshooting-logs/docker.md)

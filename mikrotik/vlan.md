@@ -194,8 +194,7 @@ Trunk port dapat menimbulkan risiko keamanan jika tidak dikonfigurasi dengan ben
 * **Access Port**: Hanya mendukung satu VLAN dan digunakan untuk menghubungkan perangkat end-user. Traffic yang melewati access port tidak ditag dengan VLAN ID.
 * **Trunk Port**: Digunakan untuk membawa traffic dari beberapa VLAN sekaligus, terutama untuk menghubungkan switch ke switch atau switch ke router. Traffic yang lewat pada trunk port diberi VLAN tag agar perangkat di ujung trunk port dapat mengetahui VLAN asal paket.
 
-Dengan memahami perbedaan dan penggunaan **Access Port** dan **Trunk Port**, Anda dapat mengatur dan mengelola jaringan VLAN dengan lebih efektif, baik untuk menghubungkan perangkat end-user maupun untuk menghubungkan antar perangkat jaringan dengan skala yang lebih besar.\
-
+Dengan memahami perbedaan dan penggunaan **Access Port** dan **Trunk Port**, Anda dapat mengatur dan mengelola jaringan VLAN dengan lebih efektif, baik untuk menghubungkan perangkat end-user maupun untuk menghubungkan antar perangkat jaringan dengan skala yang lebih besar.<br>
 
 ## Tagged and Unttaged VLAN
 
