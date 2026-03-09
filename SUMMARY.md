@@ -24,6 +24,7 @@
   * [Text Manipulation](linux/text-manipulation.md)
   * [Arh Linux](linux/arh-linux.md)
   * [Package Manager](linux/package-manager.md)
+  * [SSH](linux/ssh.md)
 * [Windows](windows/README.md)
   * [Windows Server 2025](windows/windows-server-2025.md)
 * [Mikrotik](mikrotik/README.md)
