@@ -113,3 +113,5 @@
 * [GSM](gsm/README.md)
   * [Telkomsel APN](gsm/telkomsel-apn.md)
   * [Page 1](gsm/page-1.md)
+* [GIT](git.md)
+* [Prompt](prompt.md)
