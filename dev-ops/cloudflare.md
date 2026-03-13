@@ -491,7 +491,7 @@ Saran Saya: Gunakan Opsi 1 (Redirect). Ini adalah cara tercepat untuk memastikan
 
 
 
-## Setup Cloudflare
+## Setup Cloudflare RDP Tunneling
 
 Untuk menghubungkan dua komputer Windows menggunakan Cloudflare Tunnel (biasanya untuk keperluan Remote Desktop atau _file sharing_ tanpa perlu membuka _port_ di router), Anda perlu menjadikan satu komputer sebagai Target (Server) dan komputer lainnya sebagai Klien.
 

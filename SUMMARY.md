@@ -48,7 +48,7 @@
   * [🎛️ Mikrotik](networking/mikrotik.md)
   * [Nmap](networking/nmap.md)
   * [Jaringan Komputer](networking/jaringan-komputer.md)
-  * [OLT](networking/olt/README.md)
+  * [OLT](networking/olt.md)
     * [TCON dan Gemport](networking/olt/tcon-dan-gemport.md)
     * [VLAN](networking/olt/vlan.md)
   * [Open WRT](networking/open-wrt.md)
