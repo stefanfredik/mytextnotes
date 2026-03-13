@@ -1,89 +1,10 @@
 ---
-description: Berisi catatan singkat terkati istilah dan masalah pada OLT
-icon: ethernet
+icon: network-wired
 ---
 
-# OLT
+# TCON dan Gemport
 
-## Indikator OLT
-
-Alarms terkait ODN (Optical Distribution Network) mengacu pada masalah yang terjadi dalam jaringan distribusi optik, terutama antara OLT (Optical Line Terminal) dan ONT (Optical Network Terminal). Alarms ini mengindikasikan adanya gangguan atau anomali dalam komunikasi optik, yang dapat disebabkan oleh masalah perangkat keras, sinyal, atau bahkan kabel serat optik yang terputus. Mari kita uraikan maksud dari setiap alarm beserta contoh kasusnya:
-
-#### 1. **0x2e112002: Loss of GEM Channel Delineation (LCDGi) Occurs**
-
-**Deskripsi:** GEM (GPON Encapsulation Method) channel delineation hilang. Hal ini berarti ada masalah dalam penguraian saluran GEM yang digunakan untuk mengirimkan data antara OLT dan ONT.
-
-**Contoh kasus:** Misalkan dalam sebuah jaringan GPON, beberapa pelanggan melaporkan gangguan internet secara tiba-tiba. Setelah dicek, terdeteksi alarm **0x2e112002** pada ONT pelanggan. Ini menunjukkan bahwa ada masalah pada jalur data GEM yang menyebabkan data tidak dapat diterima dengan benar.
-
-***
-
-#### 2. **0x2e112003: Signal Degrade of ONTi (SDi) Occurs**
-
-**Deskripsi:** Terjadi degradasi sinyal di ONT. Degradasi ini menunjukkan bahwa kualitas sinyal optik yang diterima ONT menurun di bawah ambang batas tertentu, meskipun sinyal masih ada.
-
-**Contoh kasus:** Seorang teknisi menemukan bahwa salah satu ONT pelanggan mengalami penurunan kecepatan internet. Alarm **0x2e112003** muncul, mengindikasikan bahwa meskipun sinyal masih ada, kualitasnya sudah menurun, mungkin disebabkan oleh redaman yang tinggi pada kabel optik atau kotoran di konektor optik.
-
-***
-
-#### 3. **0x2e112004: Signal Fail of ONTi (SFi) Occurs**
-
-**Deskripsi:** Sinyal di ONT hilang sama sekali. Ini merupakan alarm yang lebih serius dibandingkan degradasi sinyal, karena menunjukkan bahwa ONT tidak dapat menerima sinyal optik sama sekali.
-
-**Contoh kasus:** Jika sebuah ONT di rumah pelanggan tiba-tiba kehilangan semua koneksi internet dan alarm **0x2e112004** muncul, ini bisa menunjukkan bahwa ada gangguan fisik pada kabel serat optik, seperti kabel yang putus atau koneksi optik yang terlepas.
-
-***
-
-#### 4. **0x2e112006: Loss of Frame of ONTi (LOFi) Occurs**
-
-**Deskripsi:** Terjadi kehilangan frame di ONT. Frame di sini mengacu pada unit data optik yang dikirim antara OLT dan ONT. Kehilangan frame dapat menyebabkan data tidak dapat diproses dengan benar.
-
-**Contoh kasus:** Pelanggan mengeluh bahwa koneksi internet mereka tidak stabil. Setelah dilakukan pengecekan, alarm **0x2e112006** terdeteksi di OLT. Ini menunjukkan bahwa ONT kehilangan frame data, mungkin karena gangguan optik yang sporadis, seperti interferensi atau kabel yang tidak terhubung dengan baik.
-
-***
-
-#### 5. **0x2e11a001: The Feed Fiber is Broken or OLT Cannot Receive Any Expected Optical Signals (LOS)**
-
-**Deskripsi:** Fiber optik utama (feed fiber) yang menghubungkan OLT ke jaringan distribusi terputus, atau OLT tidak dapat menerima sinyal optik yang diharapkan (Loss of Signal - LOS).
-
-**Contoh kasus:** Jaringan di seluruh lingkungan tiba-tiba mengalami gangguan besar. Alarm **0x2e11a001** muncul, menunjukkan bahwa kabel serat optik utama yang menghubungkan OLT ke jaringan backbone terputus, mungkin karena penggalian jalan yang tidak disengaja.
-
-***
-
-#### 6. **0x2e112007: The Distribute Fiber is Broken or the OLT Cannot Receive Expected Optical Signals from the ONT (LOSi/LOBi)**
-
-**Deskripsi:** Serat optik distribusi (distribute fiber) yang menghubungkan OLT ke ONT terputus, atau OLT tidak dapat menerima sinyal optik yang diharapkan dari ONT (Loss of Signal Indicator - LOSi).
-
-**Contoh kasus:** Seorang pelanggan di lokasi tertentu kehilangan koneksi internet. Alarm **0x2e112007** menunjukkan bahwa kabel serat optik distribusi yang menghubungkan OLT ke rumah pelanggan mungkin terputus karena kabel tersebut tertarik atau rusak secara fisik.
-
-***
-
-#### 7. **0x2e314021: There are Illegal Incursionary Rogue ONTs Under the Port**
-
-**Deskripsi:** OLT mendeteksi adanya ONT "rogue" (ONT liar) yang mencoba terhubung ke port jaringan. ONT rogue adalah perangkat ONT yang tidak sah atau berperilaku buruk, yang dapat menyebabkan gangguan pada jaringan GPON.
-
-**Contoh kasus:** Seorang administrator jaringan mendeteksi alarm **0x2e314021** yang menunjukkan adanya ONT rogue di jaringan. ONT rogue ini mungkin merupakan perangkat ONT yang tidak diotorisasi yang dipasang oleh pihak ketiga tanpa izin.
-
-***
-
-#### 8. **0x2e314022: The ONT is a Rogue ONT**
-
-**Deskripsi:** ONT yang bersangkutan dikategorikan sebagai ONT rogue. Ini bisa terjadi jika ONT berperilaku tidak normal atau menyebabkan interferensi di jaringan.
-
-**Contoh kasus:** Setelah dilakukan pemantauan, alarm **0x2e314022** muncul pada salah satu ONT. Ini bisa berarti bahwa perangkat ONT tersebut terinfeksi malware atau berusaha mengirimkan lalu lintas yang tidak sah, sehingga dianggap sebagai ONT rogue oleh OLT.
-
-***
-
-#### Kesimpulan:
-
-Alarms ini membantu dalam memonitor dan menjaga kualitas serta stabilitas jaringan GPON. Dengan memahami setiap alarm, teknisi dapat mendiagnosis masalah dengan lebih efektif dan cepat mengambil tindakan yang tepat.
-
-
-
-Berikut penjelasan **detail, terstruktur, dan komprehensif** mengenai **T-CONT** dan **GEM Port** pada OLT (khususnya konteks **GPON / XG-PON / XGS-PON**), dengan sudut pandang **operasional ISP**.
-
-***
-
-### 1. Gambaran Besar Arsitektur GPON
+## Gambaran Besar Arsitektur GPON
 
 Pada GPON, ada dua jalur logis utama:
 
@@ -103,7 +24,7 @@ Untuk mengatur **upstream** agar rapi, adil, dan sesuai SLA, GPON menggunakan:
 
 ***
 
-### 2. T-CONT (Traffic Container)
+## T-CONT (Traffic Container)
 
 #### 2.1 Definisi
 
@@ -218,7 +139,7 @@ Alur DBA:
 
 ***
 
-### 3. GEM Port (GPON Encapsulation Method Port)
+## GEM Port (GPON Encapsulation Method Port)
 
 #### 3.1 Definisi
 
@@ -277,7 +198,7 @@ Contoh pemetaan:
 
 ***
 
-### 4. Relasi T-CONT dan GEM Port
+## Relasi T-CONT dan GEM Port
 
 Ini bagian paling penting dan sering membingungkan.
 
@@ -547,3 +468,351 @@ CUSTOMER PACKAGE: 50 Mbps
 > **VLAN mengidentifikasi layanan → GEM Port membawa traffic → T-CONT mengatur bandwidth upstream → DBA menentukan kapan ONU boleh mengirim data**
 
 ***
+
+
+
+## DBA Profil
+
+Berikut penjelasan **sangat detail, terstruktur, dan komprehensif** tentang **DBA (Dynamic Bandwidth Allocation)** pada **OLT GPON / XG-PON / XGS-PON**, disusun dari sudut pandang **desain, implementasi, operasi, dan troubleshooting ISP**.
+
+***
+
+## 1. Apa itu DBA (Dynamic Bandwidth Allocation)
+
+**DBA** adalah **mekanisme inti di OLT** yang bertugas:
+
+* Mengatur **alokasi bandwidth upstream**
+* Menentukan **urutan & waktu transmisi ONU**
+* Menjamin **QoS dan SLA layanan**
+
+Tanpa DBA:
+
+* Semua ONU akan mengirim upstream bersamaan
+* Terjadi collision
+* GPON tidak bisa berfungsi
+
+> **DBA = “Traffic Controller” upstream di GPON**
+
+***
+
+## 2. Kenapa DBA Sangat Penting di GPON
+
+Karakteristik upstream GPON:
+
+* Media **shared**
+* Topologi **point-to-multipoint**
+* Kapasitas terbatas (2.5 Gbps GPON, 10 Gbps XGS-PON)
+
+DBA memastikan:
+
+* Fairness antar pelanggan
+* Prioritas layanan real-time
+* Optimalisasi kapasitas
+
+***
+
+## 3. Komponen DBA di OLT
+
+```
+ONU Buffers → Bandwidth Report → DBA Engine → BWmap → ONU Transmission
+```
+
+#### Komponen utama:
+
+| Komponen         | Fungsi                          |
+| ---------------- | ------------------------------- |
+| Buffer occupancy | Informasi jumlah data di ONU    |
+| T-CONT           | Kontainer traffic upstream      |
+| DBA Profile      | Policy alokasi bandwidth        |
+| DBA Engine       | Algoritma pengambilan keputusan |
+| BWmap            | Jadwal waktu kirim ONU          |
+
+***
+
+## 4. Alur Kerja DBA (Step-by-Step)
+
+#### 4.1 Buffer Reporting (ONU → OLT)
+
+ONU melaporkan:
+
+* Panjang antrian per T-CONT
+* Prioritas traffic
+
+Format laporan:
+
+* Embedded in upstream burst
+* Dikirim periodik
+
+***
+
+#### 4.2 DBA Processing (OLT Internal)
+
+OLT melakukan:
+
+1. Membaca laporan buffer
+2. Mengacu ke:
+   * T-CONT type
+   * DBA profile
+   * SLA
+3. Menghitung:
+   * Slot waktu
+   * Ukuran burst
+
+***
+
+#### 4.3 BWmap Distribution (OLT → ONU)
+
+OLT mengirim:
+
+* **BWmap** di downstream frame
+* Berisi:
+  * Alloc-ID
+  * Start time
+  * Duration
+
+ONU hanya boleh transmit sesuai BWmap.
+
+***
+
+#### 4.4 Upstream Transmission (ONU → OLT)
+
+ONU:
+
+* Mengirim data tepat waktu
+* Tidak boleh melebihi alokasi
+* Tidak overlap dengan ONU lain
+
+***
+
+## 5. Jenis DBA Berdasarkan T-CONT
+
+### 5.1 T-CONT Type 1 – Fixed DBA
+
+| Karakteristik | Keterangan       |
+| ------------- | ---------------- |
+| Bandwidth     | Tetap            |
+| Latency       | Sangat rendah    |
+| Contoh        | Voice, signaling |
+
+📌 **Selalu dialokasikan meskipun tidak ada data**
+
+***
+
+### 5.2 T-CONT Type 2 – Assured DBA
+
+| Karakteristik | Keterangan    |
+| ------------- | ------------- |
+| CIR           | Dijamin       |
+| Extra BW      | Jika tersedia |
+| Contoh        | IPTV, Video   |
+
+📌 **Prioritas di atas Best Effort**
+
+***
+
+### 5.3 T-CONT Type 3 – Hybrid DBA
+
+| Karakteristik | Keterangan      |
+| ------------- | --------------- |
+| CIR           | Dijamin         |
+| PIR           | Maksimum        |
+| Best practice | Internet access |
+
+📌 **Paling umum di ISP FTTH**
+
+***
+
+### 5.4 T-CONT Type 4 – Best Effort DBA
+
+| Karakteristik | Keterangan            |
+| ------------- | --------------------- |
+| Guarantee     | Tidak ada             |
+| Allocation    | Sisa bandwidth        |
+| Contoh        | Internet low priority |
+
+***
+
+Dalam arsitektur GPON, T-CONT dan GEM Port adalah dua komponen logis yang berfungsi sebagai "jalan" atau "wadah" untuk mengirimkan data antara OLT (sisi ISP) dan ONT (sisi pelanggan).
+
+Analogi sederhananya: Jika data Anda adalah barang kiriman, maka GEM Port adalah kardus/paketnya, sedangkan T-CONT adalah truk pengangkutnya.
+
+***
+
+### 1. T-CONT (Transmission Container)
+
+T-CONT adalah unit dasar untuk manajemen bandwidth pada jalur Upstream (dari pelanggan ke pusat). Fungsinya adalah untuk mengatur alokasi kecepatan (bandwidth) agar tidak terjadi tabrakan data antar pelanggan.
+
+* Tujuan Utama: Mengelola QoS (Quality of Service) dan DBA (Dynamic Bandwidth Allocation).
+* Cara Kerja: OLT memberikan "izin" (timeslot) kepada setiap T-CONT untuk mengirimkan data pada waktu tertentu.
+* Tipe T-CONT: Ada 5 tipe standar yang menentukan prioritas bandwidth:
+  1. Type 1 (Fixed): Bandwidth tetap, biasanya untuk layanan sangat kritis seperti VOIP.
+  2. Type 2 (Assured): Bandwidth yang dijamin tersedia.
+  3. Type 3 (Non-Assured): Bandwidth minimal dijamin, tapi bisa lebih jika trafik longgar.
+  4. Type 4 (Best Effort): Tidak ada jaminan, hanya menggunakan sisa bandwidth (biasanya untuk Internet biasa).
+  5. Type 5 (Superset): Gabungan dari semua tipe di atas.
+
+***
+
+### 2. GEM Port (GPON Encapsulation Method Port)
+
+GEM Port adalah unit terkecil yang membawa layanan (_service_) spesifik. Jika T-CONT mengatur "kapan" data dikirim, GEM Port mengatur "data apa" yang sedang dikirim.
+
+* Tujuan Utama: Melakukan enkapsulasi (pembungkusan) frame Ethernet ke dalam format GPON.
+* Identifikasi: Setiap GEM Port memiliki GEM Port ID yang unik (0–4095) dalam satu interface PON.
+* Fungsi Layanan: Biasanya satu jenis layanan dipisahkan oleh GEM Port yang berbeda. Contoh:
+  * GEM Port 1: Membawa data Internet (VLAN 100).
+  * GEM Port 2: Membawa data IPTV (VLAN 200).
+  * GEM Port 3: Membawa data VOIP (VLAN 300).
+
+***
+
+### 3. Hubungan Mapping: T-CONT vs GEM Port
+
+Di dalam konfigurasi OLT, keduanya saling terikat. Berikut adalah aturan pemetaannya:
+
+1. Satu T-CONT bisa menampung banyak GEM Port.
+2. Satu GEM Port hanya bisa dimiliki oleh satu T-CONT.
+
+#### Alur Data (Upstream):
+
+1. Data dari PC pelanggan masuk ke ONT.
+2. ONT membungkus data tersebut ke dalam GEM Port berdasarkan VLAN-nya.
+3. Beberapa GEM Port dikelompokkan ke dalam satu T-CONT.
+4. OLT memberikan izin kepada T-CONT untuk mengirimkan seluruh "isi truk" tersebut ke jaringan pusat sesuai dengan profil bandwidth yang sudah diatur.
+
+***
+
+### Perbandingan Ringkas
+
+| **Fitur**    | **T-CONT**                 | **GEM Port**                       |
+| ------------ | -------------------------- | ---------------------------------- |
+| Fungsi Fokus | Manajemen Bandwidth & QoS  | Enkapsulasi Layanan & VLAN         |
+| Identifikasi | Alloc-ID                   | GEM Port ID                        |
+| Analogi      | Truk / Kontainer           | Kardus / Paket Layanan             |
+| Arah Utama   | Sangat krusial di Upstream | Digunakan di Upstream & Downstream |
+
+Apakah Anda ingin saya buatkan contoh perintah konfigurasi (CLI) untuk membuat T-CONT dan GEM Port ini di OLT (seperti Huawei atau ZTE)?
+
+## DBA Profile (Konfigurasi di OLT)
+
+DBA Profile berisi:
+
+| Parameter  | Fungsi            |
+| ---------- | ----------------- |
+| Fixed BW   | Bandwidth tetap   |
+| Assured BW | CIR               |
+| Max BW     | PIR               |
+| Priority   | Urutan scheduling |
+| Weight     | Fairness          |
+
+***
+
+### Contoh DBA Profile ISP
+
+```
+DBA-PROFILE: INTERNET_50M
+Fixed     : 0
+Assured   : 10 Mbps
+Max       : 50 Mbps
+Priority  : Medium
+```
+
+***
+
+## 7. DBA Scheduling Algorithm
+
+Vendor menggunakan algoritma proprietary, umumnya kombinasi:
+
+| Algoritma           | Fungsi           |
+| ------------------- | ---------------- |
+| Strict Priority     | Layanan kritikal |
+| WRR                 | Fairness         |
+| WFQ                 | SLA granular     |
+| Deficit Round Robin | Efisiensi        |
+
+📌 Biasanya:
+
+```
+Voice → IPTV → Internet
+```
+
+***
+
+## 8. DBA pada XG-PON & XGS-PON
+
+| Teknologi | Upstream  |
+| --------- | --------- |
+| GPON      | 1.25 Gbps |
+| XG-PON    | 2.5 Gbps  |
+| XGS-PON   | 10 Gbps   |
+
+Prinsip DBA **sama**, hanya:
+
+* Kapasitas lebih besar
+* Granularitas lebih tinggi
+* Lebih banyak T-CONT per ONU
+
+***
+
+## 9. Dampak DBA ke Pengalaman Pelanggan
+
+| Salah Konfigurasi      | Dampak             |
+| ---------------------- | ------------------ |
+| CIR terlalu kecil      | Upload lambat      |
+| PIR terlalu besar      | Oversubscription   |
+| Priority salah         | VoIP delay         |
+| DBA profile sama semua | SLA tidak tercapai |
+
+***
+
+## 10. Monitoring & KPI DBA
+
+Parameter penting:
+
+| KPI                  | Indikator    |
+| -------------------- | ------------ |
+| Upstream utilization | >70% waspada |
+| DBA delay            | Latency      |
+| T-CONT drops         | Congestion   |
+| BWmap efficiency     | Scheduling   |
+
+***
+
+## 11. Troubleshooting DBA (Lapangan)
+
+#### Case 1: Upload tidak sesuai paket
+
+* Cek T-CONT type
+* Cek DBA profile
+* Cek oversubscription
+
+#### Case 2: IPTV freeze
+
+* Pastikan Type 2
+* Prioritas lebih tinggi
+* Multicast GEM benar
+
+#### Case 3: ONU online tapi upload nol
+
+* Alloc-ID mismatch
+* DBA profile tidak bind
+
+***
+
+## 12. Best Practice ISP FTTH
+
+✅ Pisahkan T-CONT per layanan\
+✅ Jangan satu DBA profile untuk semua paket\
+✅ Monitor peak hour\
+✅ Gunakan CIR realistis\
+✅ Simpan capacity buffer 20–30%
+
+***
+
+## 13. Ringkasan Eksekutif
+
+> **DBA adalah otak upstream GPON.**\
+> **T-CONT adalah wadahnya.**\
+> **DBA Profile adalah aturannya.**\
+> **BWmap adalah jadwal mainnya.**
+
