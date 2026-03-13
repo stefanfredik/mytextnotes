@@ -486,3 +486,102 @@ Mengapa NXDOMAIN Masih Muncul? Jika setelah melakukan salah satu opsi di atas An
 2. Status Domain: Pastikan domain organisasi.online berstatus "Active" di Dashboard Cloudflare. Jika statusnya "Pending Nameserver Update", maka pengaturan DNS apa pun tidak akan berpengaruh.
 
 Saran Saya: Gunakan Opsi 1 (Redirect). Ini adalah cara tercepat untuk memastikan user sampai ke aplikasi Anda yang sudah jalan di mbeliling.kopiflores.my.id tanpa pusing masalah SSL.
+
+
+
+
+
+## Setup Cloudflare
+
+Untuk menghubungkan dua komputer Windows menggunakan Cloudflare Tunnel (biasanya untuk keperluan Remote Desktop atau _file sharing_ tanpa perlu membuka _port_ di router), Anda perlu menjadikan satu komputer sebagai Target (Server) dan komputer lainnya sebagai Klien.
+
+Berikut adalah panduan langkah demi langkah menggunakan contoh koneksi Remote Desktop Protocol (RDP):
+
+### Prasyarat
+
+* Akun Cloudflare yang aktif.
+* Sebuah nama domain yang sudah terdaftar dan dikelola DNS-nya di Cloudflare (misal: `domainanda.com`).
+* Mengunduh `cloudflared.exe` dari situs resmi Cloudflare di kedua komputer.
+
+***
+
+### Langkah 1: Persiapan di Komputer Target (Yang Akan Diakses)
+
+Komputer ini akan menjalankan tunnel yang mengarah ke layanan lokalnya (dalam hal ini RDP di port 3389).
+
+1. Aktifkan RDP: Pastikan fitur Remote Desktop sudah aktif di pengaturan Windows Anda.
+2.  Login ke Cloudflare: Buka Command Prompt (CMD) sebagai Administrator, arahkan ke folder tempat `cloudflared.exe` berada, dan jalankan:
+
+    DOS
+
+    ```
+    cloudflared login
+    ```
+
+    _Sebuah jendela browser akan terbuka. Pilih domain Anda untuk memberikan otorisasi._
+3.  Buat Tunnel Baru:
+
+    DOS
+
+    ```
+    cloudflared tunnel create namatunnel
+    ```
+
+    _Catat ID Tunnel yang muncul di layar._
+4.  Hubungkan Tunnel ke Domain: Buat subdomain khusus untuk koneksi ini (misal: `rdp.domainanda.com`).
+
+    DOS
+
+    ```
+    cloudflared tunnel route dns namatunnel rdp.domainanda.com
+    ```
+5.  Buat File Konfigurasi: Di folder `.cloudflared` (biasanya di `C:\Users\NamaUser\.cloudflared\`), buat file bernama `config.yml` dan isi dengan konfigurasi berikut:
+
+    YAML
+
+    ```
+    tunnel: <ID-Tunnel-Anda>
+    credentials-file: C:\Users\NamaUser\.cloudflared\<ID-Tunnel-Anda>.json
+
+    ingress:
+      - hostname: rdp.domainanda.com
+        service: rdp://localhost:3389
+      - service: http_status:404
+    ```
+6.  Jalankan Tunnel sebagai Service: Agar tunnel selalu berjalan di latar belakang:
+
+    DOS
+
+    ```
+    cloudflared service install
+    ```
+
+***
+
+### Langkah 2: Persiapan di Komputer Klien (Yang Akan Mengakses)
+
+Komputer ini tidak perlu login atau memiliki file konfigurasi, hanya butuh aplikasi `cloudflared` untuk meneruskan lalu lintas jaringan.
+
+1.  Jalankan Port Forwarding Lokal: Buka CMD dan jalankan perintah ini untuk membuka port lokal yang akan diteruskan ke tunnel Cloudflare:
+
+    DOS
+
+    ```
+    cloudflared access tcp --hostname rdp.domainanda.com --url localhost:3388
+    ```
+
+    _Biarkan jendela CMD ini tetap terbuka selama Anda ingin terkoneksi._
+2. Mulai Koneksi: Buka aplikasi Remote Desktop Connection di Windows.
+3. Masukkan `localhost:3388` pada kolom "Computer" dan klik Connect. Anda akan diminta memasukkan _username_ dan _password_ komputer Target.
+
+***
+
+### Langkah 3: Pengamanan Ekstra (Sangat Direkomendasikan)
+
+Karena RDP sekarang terekspos ke internet via subdomain Anda, sangat disarankan untuk melindunginya dengan Cloudflare Zero Trust (Access).
+
+1. Masuk ke dashboard Cloudflare Zero Trust.
+2. Buat _Access Application_ untuk `rdp.domainanda.com`.
+3. Atur kebijakan (_Policy_) agar hanya email Anda (menggunakan OTP) yang diizinkan untuk mengakses subdomain tersebut.
+
+Apakah Anda ingin saya menjelaskan lebih detail tentang cara mengatur keamanan di Cloudflare Zero Trust, atau Anda ingin menggunakan tunnel ini untuk layanan selain RDP (seperti _file sharing_ SMB)?
