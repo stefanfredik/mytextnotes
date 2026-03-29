@@ -2,6 +2,7 @@
 
 * [AI](README.md)
   * [Bonsai AI](ai/bonsai-ai.md)
+  * [Codex](ai/codex.md)
 * [Dashboard](<README (1).md>)
 * [Module Comprehensive](module-comprehensive/README.md)
   * [Bahasa Inggris](module-comprehensive/bahasa-inggris.md)
