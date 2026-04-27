@@ -53,3 +53,15 @@ Parameter `-r` akan menghapus direktori home dan file spool pengguna. Gunakan de
 ```bash
 cut -d: -f1 /etc/passwd
 ```
+
+
+
+### Bypass Sudo Password&#x20;
+
+Bypass via visudo (Untuk Eksekusi Otomatis AI Agent)\
+Jika skrip tersebut memang sengaja Anda buat agar nantinya bisa dijalankan secara otonom oleh AI Agent Antigravity, agen tersebut akan selalu gagal jika masih dihadang prompt sudo. Solusinya adalah membebaskan user Anda dari kewajiban input password:
+
+Buka terminal standar, lalu ketik: `sudo visudo`
+
+Tambahkan konfigurasi ini di bagian paling bawah file (ganti user\_anda dengan username Linux/Mac yang Anda gunakan):\
+`user_anda ALL=(ALL) NOPASSWD: ALL`
