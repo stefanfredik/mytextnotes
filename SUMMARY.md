@@ -28,6 +28,7 @@
   * [Package Manager](linux/package-manager.md)
   * [Linux Comprhensive Dok](linux/linux-comprhensive-dok.md)
   * [Page 3](linux/page-3.md)
+  * [Page 3](linux/page-3-1.md)
 * [Windows](windows/README.md)
   * [Windows Server 2025](windows/windows-server-2025.md)
 * [SSH](ssh/README.md)
