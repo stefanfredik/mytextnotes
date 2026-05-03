@@ -1,3 +1,7 @@
+---
+icon: rectangle-terminal
+---
+
 # SSH
 
 ## Login SSH Key
