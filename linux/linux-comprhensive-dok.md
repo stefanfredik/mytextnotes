@@ -2480,29 +2480,156 @@ systemctl list-timers          # List semua timer
 ### 15.1 Pengantar Systemd
 
 ```text
-SYSTEMD adalah sistem init modern yang menggantikan SysV Init.Systemd adalah PID 1 (proses pertama yang berjalan saat boot).Komponen Systemd:- systemctl   → Kontrol layanan- journalctl  → Manajemen log- systemd-analyze → Analisis waktu boot- hostnamectl → Manajemen hostname- timedatectl → Manajemen waktu- localectl   → Manajemen locale- loginctl    → Manajemen session login- networkctl  → Manajemen jaringan
+SYSTEMD adalah sistem init modern yang menggantikan SysV Init.
+Systemd adalah PID 1 (proses pertama yang berjalan saat boot).
+
+Komponen Systemd:
+- systemctl       → Kontrol layanan
+- journalctl      → Manajemen log
+- systemd-analyze → Analisis waktu boot
+- hostnamectl     → Manajemen hostname
+- timedatectl     → Manajemen waktu
+- localectl       → Manajemen locale
+- loginctl        → Manajemen session login
+- networkctl      → Manajemen jaringan
 ```
 
 ### 15.2 Systemctl - Manajemen Layanan
 
 ```bash
-# ─────────────────────────────────────────────────────────────# STATUS & INFORMASI# ─────────────────────────────────────────────────────────────systemctl status nginx              # Status layanan nginxsystemctl status                    # Status semua unitsystemctl list-units                # List semua unit aktifsystemctl list-units --type=service # Hanya servicesystemctl list-units --failed       # Unit yang gagalsystemctl list-unit-files           # Semua file unitsystemctl is-active nginx           # Cek apakah nginx aktifsystemctl is-enabled nginx          # Cek apakah nginx auto-startsystemctl is-failed nginx           # Cek apakah nginx gagal# ─────────────────────────────────────────────────────────────# KONTROL LAYANAN# ─────────────────────────────────────────────────────────────systemctl start nginx               # Mulai layanansystemctl stop nginx                # Hentikan layanansystemctl restart nginx             # Restart layanansystemctl reload nginx              # Reload konfigurasisystemctl reload-or-restart nginx   # Reload jika bisa, else restart# ─────────────────────────────────────────────────────────────# ENABLE/DISABLE (Auto-start saat boot)# ─────────────────────────────────────────────────────────────systemctl enable nginx              # Enable layanan saat bootsystemctl disable nginx             # Disable layanan saat bootsystemctl enable --now nginx        # Enable + start sekarangsystemctl disable --now nginx       # Disable + stop sekarangsystemctl mask nginx                # Masking (tidak bisa diaktifkan)systemctl unmask nginx              # Hapus masking# ─────────────────────────────────────────────────────────────# POWER MANAGEMENT# ─────────────────────────────────────────────────────────────systemctl poweroff              # Matikan sistemsystemctl reboot                # Restart sistemsystemctl halt                  # Halt sistemsystemctl suspend               # Suspend (sleep)systemctl hibernate             # Hibernate# ─────────────────────────────────────────────────────────────# TARGETS (pengganti runlevel)# ─────────────────────────────────────────────────────────────systemctl get-default           # Target defaultsystemctl set-default graphical.target  # Set target defaultsystemctl isolate multi-user.target     # Pindah target saat ini# Target umum:# poweroff.target    = matikan# rescue.target      = mode rescue (runlevel 1)# multi-user.target  = multi-user tanpa GUI (runlevel 3)# graphical.target   = GUI (runlevel 5)# reboot.target      = reboot
+# ─────────────────────────────────────────────────────────────
+# STATUS & INFORMASI
+# ─────────────────────────────────────────────────────────────
+
+systemctl status nginx              # Status layanan nginx
+systemctl status                    # Status semua unit
+systemctl list-units                # List semua unit aktif
+systemctl list-units --type=service # Hanya service
+systemctl list-units --failed       # Unit yang gagal
+systemctl list-unit-files           # Semua file unit
+systemctl is-active nginx           # Cek apakah nginx aktif
+systemctl is-enabled nginx          # Cek apakah nginx auto-start
+systemctl is-failed nginx           # Cek apakah nginx gagal
+
+# ─────────────────────────────────────────────────────────────
+# KONTROL LAYANAN
+# ─────────────────────────────────────────────────────────────
+
+systemctl start nginx               # Mulai layanan
+systemctl stop nginx                # Hentikan layanan
+systemctl restart nginx             # Restart layanan
+systemctl reload nginx              # Reload konfigurasi
+systemctl reload-or-restart nginx   # Reload jika bisa, else restart
+
+# ─────────────────────────────────────────────────────────────
+# ENABLE/DISABLE (Auto-start saat boot)
+# ─────────────────────────────────────────────────────────────
+
+systemctl enable nginx              # Enable layanan saat boot
+systemctl disable nginx             # Disable layanan saat boot
+systemctl enable --now nginx        # Enable + start sekarang
+systemctl disable --now nginx       # Disable + stop sekarang
+systemctl mask nginx                # Masking (tidak bisa diaktifkan)
+systemctl unmask nginx              # Hapus masking
+
+# ─────────────────────────────────────────────────────────────
+# POWER MANAGEMENT
+# ─────────────────────────────────────────────────────────────
+
+systemctl poweroff              # Matikan sistem
+systemctl reboot                # Restart sistem
+systemctl halt                  # Halt sistem
+systemctl suspend               # Suspend (sleep)
+systemctl hibernate             # Hibernate
+
+# ─────────────────────────────────────────────────────────────
+# TARGETS (pengganti runlevel)
+# ─────────────────────────────────────────────────────────────
+
+systemctl get-default           # Target default
+systemctl set-default graphical.target  # Set target default
+systemctl isolate multi-user.target     # Pindah target saat ini
+
+# Target umum:
+# poweroff.target    = matikan
+# rescue.target      = mode rescue (runlevel 1)
+# multi-user.target  = multi-user tanpa GUI (runlevel 3)
+# graphical.target   = GUI (runlevel 5)
+# reboot.target      = reboot
 ```
 
 ### 15.3 Membuat Service Custom
 
-```
-ini# Contoh file service: /etc/systemd/system/myapp.service[Unit]Description=My Application ServerDocumentation=https://docs.myapp.comAfter=network.target postgresql.serviceRequires=postgresql.service[Service]Type=simpleUser=myappGroup=myappWorkingDirectory=/opt/myappExecStart=/opt/myapp/bin/server --config /etc/myapp/config.yamlExecReload=/bin/kill -HUP $MAINPIDRestart=on-failureRestartSec=5sStandardOutput=journalStandardError=journalSyslogIdentifier=myappEnvironment="NODE_ENV=production"EnvironmentFile=/etc/myapp/environment# SecurityNoNewPrivileges=truePrivateTmp=trueProtectSystem=strictReadWritePaths=/var/lib/myapp /var/log/myapp[Install]WantedBy=multi-user.target
+```ini
+# Contoh file service: /etc/systemd/system/myapp.service
+
+[Unit]
+Description=My Application Server
+Documentation=https://docs.myapp.com
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=myapp
+Group=myapp
+WorkingDirectory=/opt/myapp
+ExecStart=/opt/myapp/bin/server --config /etc/myapp/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=myapp
+Environment="NODE_ENV=production"
+EnvironmentFile=/etc/myapp/environment
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/myapp /var/log/myapp
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 ```bash
-# Setelah membuat file service:systemctl daemon-reload         # Reload konfigurasi systemdsystemctl enable myapp          # Enable servicesystemctl start myapp           # Start servicesystemctl status myapp          # Cek status
+# Setelah membuat file service:
+systemctl daemon-reload         # Reload konfigurasi systemd
+systemctl enable myapp          # Enable service
+systemctl start myapp           # Start service
+systemctl status myapp          # Cek status
 ```
 
 ### 15.4 Journalctl - Manajemen Log
 
 ```bash
-# ─────────────────────────────────────────────────────────────# JOURNALCTL - Systemd Journal# ─────────────────────────────────────────────────────────────journalctl                          # Semua logjournalctl -f                       # Follow (real-time)journalctl -n 100                   # 100 baris terakhirjournalctl -u nginx                 # Log layanan nginxjournalctl -u nginx -f              # Follow log nginxjournalctl --since "2024-01-01"    # Sejak tanggaljournalctl --since "1 hour ago"    # 1 jam terakhirjournalctl --since "09:00" --until "10:00"  # Range waktujournalctl -p err                   # Hanya errorjournalctl -p warning..err          # Warning sampai errorjournalctl _PID=1234                # Log dari PID tertentujournalctl _UID=1000                # Log dari UID tertentujournalctl -b                       # Log boot saat inijournalctl -b -1                    # Log boot sebelumnyajournalctl --list-boots             # List semua bootjournalctl -k                       # Hanya kernel messagesjournalctl --disk-usage             # Ukuran journal di diskjournalctl --vacuum-size=1G         # Batasi ukuran journaljournalctl --vacuum-time=1month     # Hapus log lebih dari 1 bulanjournalctl -o json                  # Output format JSONjournalctl -o short-iso             # Dengan timestamp ISO
+# ─────────────────────────────────────────────────────────────
+# JOURNALCTL - Systemd Journal
+# ─────────────────────────────────────────────────────────────
+
+journalctl                          # Semua log
+journalctl -f                       # Follow (real-time)
+journalctl -n 100                   # 100 baris terakhir
+journalctl -u nginx                 # Log layanan nginx
+journalctl -u nginx -f              # Follow log nginx
+journalctl --since "2024-01-01"    # Sejak tanggal
+journalctl --since "1 hour ago"    # 1 jam terakhir
+journalctl --since "09:00" --until "10:00"  # Range waktu
+journalctl -p err                   # Hanya error
+journalctl -p warning..err          # Warning sampai error
+journalctl _PID=1234                # Log dari PID tertentu
+journalctl _UID=1000                # Log dari UID tertentu
+journalctl -b                       # Log boot saat ini
+journalctl -b -1                    # Log boot sebelumnya
+journalctl --list-boots             # List semua boot
+journalctl -k                       # Hanya kernel messages
+journalctl --disk-usage             # Ukuran journal di disk
+journalctl --vacuum-size=1G         # Batasi ukuran journal
+journalctl --vacuum-time=1month     # Hapus log lebih dari 1 bulan
+journalctl -o json                  # Output format JSON
+journalctl -o short-iso             # Dengan timestamp ISO
 ```
 
 ***
