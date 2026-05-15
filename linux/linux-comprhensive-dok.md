@@ -697,19 +697,114 @@ s          → Socket
 ### 7.2 Link di Linux
 
 ```bash
-# ─────────────────────────────────────────────────────────────# HARD LINK vs SOFT LINK (SYMBOLIC LINK)# ─────────────────────────────────────────────────────────────# HARD LINK# ─────────# - Menunjuk langsung ke inode yang sama# - Tidak bisa link ke direktori# - Tidak bisa cross filesystem# - Jika file asli dihapus, link masih validln file.txt hardlink.txt        # Buat hard link# SYMBOLIC LINK (SYMLINK)# ──────────────────────# - Menunjuk ke path file asli# - Bisa link ke direktori# - Bisa cross filesystem# - Jika file asli dihapus, link menjadi brokenln -s /path/to/file symlink     # Buat symbolic linkln -s /var/log/nginx nginx-log  # Contoh: link ke direktori logls -la                          # Lihat link: lrwxrwxrwx -> target# Hapus symlinkunlink symlink                  # Hapus symbolic linkrm symlink                      # Cara lain menghapus symlink
+# ─────────────────────────────────────────────────────────────
+# HARD LINK vs SOFT LINK (SYMBOLIC LINK)
+# ─────────────────────────────────────────────────────────────
+
+# HARD LINK
+# ─────────
+# - Menunjuk langsung ke inode yang sama
+# - Tidak bisa link ke direktori
+# - Tidak bisa cross filesystem
+# - Jika file asli dihapus, link masih valid
+ln file.txt hardlink.txt        # Buat hard link
+
+# SYMBOLIC LINK (SYMLINK)
+# ──────────────────────
+# - Menunjuk ke path file asli
+# - Bisa link ke direktori
+# - Bisa cross filesystem
+# - Jika file asli dihapus, link menjadi broken
+ln -s /path/to/file symlink     # Buat symbolic link
+ln -s /var/log/nginx nginx-log  # Contoh: link ke direktori log
+ls -la                          # Lihat link: lrwxrwxrwx -> target
+
+# Hapus symlink
+unlink symlink                  # Hapus symbolic link
+rm symlink                      # Cara lain menghapus symlink
 ```
 
 ### 7.3 Kompresi dan Arsip
 
 ```bash
-# ─────────────────────────────────────────────────────────────# TAR - Tape Archive# ─────────────────────────────────────────────────────────────# Membuat arsiptar -cf arsip.tar direktori/        # Buat arsip tanpa kompresitar -czf arsip.tar.gz direktori/    # Buat arsip + kompresi gziptar -cjf arsip.tar.bz2 direktori/  # Buat arsip + kompresi bzip2tar -cJf arsip.tar.xz direktori/   # Buat arsip + kompresi xz# Mengekstrak arsiptar -xf arsip.tar                   # Ekstrak arsiptar -xzf arsip.tar.gz               # Ekstrak arsip gziptar -xjf arsip.tar.bz2              # Ekstrak arsip bzip2tar -xf arsip.tar -C /tujuan/       # Ekstrak ke direktori tertentu# Melihat isi arsiptar -tf arsip.tar                   # List isi tanpa mengekstraktar -tvf arsip.tar                  # List dengan detail# Flag tar:# c = create (buat)# x = extract (ekstrak)# t = list (lihat isi)# f = file (nama file)# v = verbose (tampilkan proses)# z = gunakan gzip# j = gunakan bzip2# J = gunakan xz# ─────────────────────────────────────────────────────────────# GZIP, BZIP2, XZ# ─────────────────────────────────────────────────────────────gzip file.txt               # Kompresi file (hasilkan file.txt.gz)gzip -d file.txt.gz         # Dekompresigzip -k file.txt            # Kompresi, pertahankan file asligzip -9 file.txt            # Kompresi maksimal (lebih lama)gunzip file.txt.gz          # Dekompresi (sama dengan gzip -d)bzip2 file.txt              # Kompresi dengan bzip2bunzip2 file.txt.bz2        # Dekompresi bzip2xz file.txt                 # Kompresi dengan xz (terbaik)unxz file.txt.xz            # Dekompresi xz# ─────────────────────────────────────────────────────────────# ZIP# ─────────────────────────────────────────────────────────────zip arsip.zip file1 file2   # Buat zipzip -r arsip.zip direktori/ # Buat zip rekursifunzip arsip.zip             # Ekstrak zipunzip -l arsip.zip          # List isi zipunzip arsip.zip -d /tujuan/ # Ekstrak ke direktori
+# ─────────────────────────────────────────────────────────────
+# TAR - Tape Archive
+# ─────────────────────────────────────────────────────────────
+
+# Membuat arsip
+tar -cf arsip.tar direktori/        # Buat arsip tanpa kompresi
+tar -czf arsip.tar.gz direktori/    # Buat arsip + kompresi gzip
+tar -cjf arsip.tar.bz2 direktori/   # Buat arsip + kompresi bzip2
+tar -cJf arsip.tar.xz direktori/    # Buat arsip + kompresi xz
+
+# Mengekstrak arsip
+tar -xf arsip.tar                   # Ekstrak arsip
+tar -xzf arsip.tar.gz               # Ekstrak arsip gzip
+tar -xjf arsip.tar.bz2              # Ekstrak arsip bzip2
+tar -xf arsip.tar -C /tujuan/       # Ekstrak ke direktori tertentu
+
+# Melihat isi arsip
+tar -tf arsip.tar                   # List isi tanpa mengekstrak
+tar -tvf arsip.tar                  # List dengan detail
+
+# Flag tar:
+# c = create (buat)
+# x = extract (ekstrak)
+# t = list (lihat isi)
+# f = file (nama file)
+# v = verbose (tampilkan proses)
+# z = gunakan gzip
+# j = gunakan bzip2
+# J = gunakan xz
+
+# ─────────────────────────────────────────────────────────────
+# GZIP, BZIP2, XZ
+# ─────────────────────────────────────────────────────────────
+gzip file.txt               # Kompresi file (hasilkan file.txt.gz)
+gzip -d file.txt.gz         # Dekompresi
+gzip -k file.txt            # Kompresi, pertahankan file asli
+gzip -9 file.txt            # Kompresi maksimal (lebih lama)
+gunzip file.txt.gz          # Dekompresi (sama dengan gzip -d)
+bzip2 file.txt              # Kompresi dengan bzip2
+bunzip2 file.txt.bz2        # Dekompresi bzip2
+xz file.txt                 # Kompresi dengan xz (terbaik)
+unxz file.txt.xz            # Dekompresi xz
+
+# ─────────────────────────────────────────────────────────────
+# ZIP
+# ─────────────────────────────────────────────────────────────
+zip arsip.zip file1 file2   # Buat zip
+zip -r arsip.zip direktori/ # Buat zip rekursif
+unzip arsip.zip             # Ekstrak zip
+unzip -l arsip.zip          # List isi zip
+unzip arsip.zip -d /tujuan/ # Ekstrak ke direktori
 ```
 
 ### 7.4 File Attributes
 
 ```bash
-# ─────────────────────────────────────────────────────────────# CHATTR - Change File Attributes# ─────────────────────────────────────────────────────────────chattr +i file.txt          # Buat file immutable (tidak bisa diubah/hapus)chattr -i file.txt          # Hapus atribut immutablechattr +a file.txt          # Append only (hanya bisa ditambah)lsattr file.txt             # Lihat atribut file# ─────────────────────────────────────────────────────────────# STAT - Informasi Detail File# ─────────────────────────────────────────────────────────────stat file.txt               # Tampilkan info lengkap file# Output mencakup:# - File name# - File size# - Blocks & IO Block# - File type# - Device & Inode# - Links# - Access, Modify, Change time# - Permissions
+# ─────────────────────────────────────────────────────────────
+# CHATTR - Change File Attributes
+# ─────────────────────────────────────────────────────────────
+chattr +i file.txt          # Buat file immutable (tidak bisa diubah/hapus)
+chattr -i file.txt          # Hapus atribut immutable
+chattr +a file.txt          # Append only (hanya bisa ditambah)
+lsattr file.txt             # Lihat atribut file
+
+# ─────────────────────────────────────────────────────────────
+# STAT - Informasi Detail File
+# ─────────────────────────────────────────────────────────────
+stat file.txt               # Tampilkan info lengkap file
+
+# Output mencakup:
+# - File name
+# - File size
+# - Blocks & IO Block
+# - File type
+# - Device & Inode
+# - Links
+# - Access, Modify, Change time
+# - Permissions
 ```
 
 ***
@@ -719,7 +814,23 @@ s          → Socket
 ### 8.1 Konsep Pengguna di Linux
 
 ```text
-JENIS PENGGUNA LINUX:┌─────────────────────────────────────────────────────────────────┐│ 1. ROOT USER (Superuser)                                        ││    - UID = 0                                                    ││    - Akses penuh ke sistem                                      ││    - Prompt: # (tanda pagar)                                    ││                                                                 ││ 2. SYSTEM USERS                                                 ││    - UID = 1 - 999                                              ││    - Untuk layanan sistem (www-data, mysql, postgres)           ││    - Biasanya tidak bisa login                                  ││                                                                 ││ 3. REGULAR USERS                                                ││    - UID = 1000+                                                ││    - Pengguna biasa                                             ││    - Prompt: $ (tanda dollar)                                   │└─────────────────────────────────────────────────────────────────┘
+JENIS PENGGUNA LINUX:
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. ROOT USER (Superuser)                                        │
+│    - UID = 0                                                    │
+│    - Akses penuh ke sistem                                      │
+│    - Prompt: # (tanda pagar)                                    │
+│                                                                 │
+│ 2. SYSTEM USERS                                                 │
+│    - UID = 1 - 999                                              │
+│    - Untuk layanan sistem (www-data, mysql, postgres)           │
+│    - Biasanya tidak bisa login                                  │
+│                                                                 │
+│ 3. REGULAR USERS                                                │
+│    - UID = 1000+                                                │
+│    - Pengguna biasa                                             │
+│    - Prompt: $ (tanda dollar)                                   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 8.2 File Konfigurasi Pengguna
@@ -727,37 +838,149 @@ JENIS PENGGUNA LINUX:┌──────────────────�
 #### /etc/passwd
 
 ```bash
-# Format: username:password:UID:GID:comment:home:shell# Contoh:alice:x:1001:1001:Alice Smith:/home/alice:/bin/bash# │    │  │    │   │           │           └── login shell# │    │  │    │   │           └── home directory# │    │  │    │   └── komentar/nama lengkap# │    │  │    └── Primary GID# │    │  └── UID# │    └── password (x = ada di /etc/shadow)# └── usernamecat /etc/passwd             # Lihat semua pengguna
+# Format: username:password:UID:GID:comment:home:shell
+# Contoh:
+# alice:x:1001:1001:Alice Smith:/home/alice:/bin/bash
+# │     │ │    │    │           │           └── login shell
+# │     │ │    │    │           └── home directory
+# │     │ │    │    └── komentar/nama lengkap
+# │     │ │    └── Primary GID
+# │     │ └── UID
+# │     └── password (x = ada di /etc/shadow)
+# └── username
+cat /etc/passwd             # Lihat semua pengguna
 ```
 
 #### /etc/shadow
 
 ```bash
-# File password yang dienkripsi (hanya root yang bisa baca)# Format: username:hashed_password:lastchg:min:max:warn:inactive:expirecat /etc/shadow             # Lihat (butuh root)
+# File password yang dienkripsi (hanya root yang bisa baca)
+# Format: username:hashed_password:lastchg:min:max:warn:inactive:expire
+cat /etc/shadow             # Lihat (butuh root)
 ```
 
 #### /etc/group
 
 ```bash
-# Format: groupname:password:GID:members# Contoh:sudo:x:27:alice,bob# │   │  │  └── anggota grup# │   │  └── GID# │   └── password grup# └── nama grupcat /etc/group              # Lihat semua grup
+# Format: groupname:password:GID:members
+# Contoh:
+# sudo:x:27:alice,bob
+# │    │ │  └── anggota grup
+# │    │ └── GID
+# │    └── password grup
+# └── nama grup
+cat /etc/group              # Lihat semua grup
 ```
 
 ### 8.3 Manajemen Pengguna
 
 ```bash
-# ─────────────────────────────────────────────────────────────# MENAMBAH PENGGUNA# ─────────────────────────────────────────────────────────────useradd username                    # Buat pengguna baru (basic)useradd -m username                 # Buat pengguna + home directoryuseradd -m -s /bin/bash username    # Buat dengan shell bashuseradd -m -G sudo username         # Buat + tambahkan ke grup sudouseradd -m -u 1500 username         # Buat dengan UID tertentuuseradd -m -c "Nama Lengkap" user   # Buat dengan komentaradduser username                    # Cara interaktif (lebih mudah)# Akan ditanya:# - Password# - Full name# - Room number# - Work phone, Home phone# - Other# ─────────────────────────────────────────────────────────────# MENGATUR PASSWORD# ─────────────────────────────────────────────────────────────passwd username             # Set password untuk penggunapasswd                      # Ubah password diri sendiripasswd -l username          # Lock account (tidak bisa login)passwd -u username          # Unlock accountpasswd -e username          # Expire password (harus ganti saat login)passwd -d username          # Hapus password (login tanpa password)passwd --mindays 7 user     # Minimal 7 hari sebelum bisa gantipasswd --maxdays 90 user    # Maksimal 90 hari sebelum harus gantipasswd --warndays 14 user   # Peringatan 14 hari sebelum expirechage -l username           # Lihat info expire passwordchage -M 90 username        # Set max age password 90 harichage -E 2025-12-31 user    # Set tanggal expire akun# ─────────────────────────────────────────────────────────────# MENGUBAH PENGGUNA# ─────────────────────────────────────────────────────────────usermod -l newname oldname          # Ganti usernameusermod -d /home/newdir username    # Ubah home directoryusermod -s /bin/zsh username        # Ubah shellusermod -G sudo,docker username     # Tambah ke grup (replace)usermod -aG sudo username           # Tambah ke grup (append)usermod -u 1600 username            # Ubah UIDusermod -L username                 # Lock accountusermod -U username                 # Unlock account# ─────────────────────────────────────────────────────────────# MENGHAPUS PENGGUNA# ─────────────────────────────────────────────────────────────userdel username            # Hapus pengguna (home tetap ada)userdel -r username         # Hapus pengguna + home directorydeluser username            # Cara interaktif# ─────────────────────────────────────────────────────────────# INFORMASI PENGGUNA# ─────────────────────────────────────────────────────────────id username                 # UID, GID, dan grupgroups username             # Grup yang diikutifinger username             # Info pengguna lengkapgetent passwd username      # Info dari database sistem
+# ─────────────────────────────────────────────────────────────
+# MENAMBAH PENGGUNA
+# ─────────────────────────────────────────────────────────────
+useradd username                    # Buat pengguna baru (basic)
+useradd -m username                 # Buat pengguna + home directory
+useradd -m -s /bin/bash username    # Buat dengan shell bash
+useradd -m -G sudo username         # Buat + tambahkan ke grup sudo
+useradd -m -u 1500 username         # Buat dengan UID tertentu
+useradd -m -c "Nama Lengkap" user   # Buat dengan komentar
+adduser username                    # Cara interaktif (lebih mudah)
+
+# Akan ditanya:
+# - Password
+# - Full name
+# - Room number
+# - Work phone, Home phone
+# - Other
+
+# ─────────────────────────────────────────────────────────────
+# MENGATUR PASSWORD
+# ─────────────────────────────────────────────────────────────
+passwd username             # Set password untuk pengguna
+passwd                      # Ubah password diri sendiri
+passwd -l username          # Lock account (tidak bisa login)
+passwd -u username          # Unlock account
+passwd -e username          # Expire password (harus ganti saat login)
+passwd -d username          # Hapus password (login tanpa password)
+passwd --mindays 7 user     # Minimal 7 hari sebelum bisa ganti
+passwd --maxdays 90 user    # Maksimal 90 hari sebelum harus ganti
+passwd --warndays 14 user   # Peringatan 14 hari sebelum expire
+chage -l username           # Lihat info expire password
+chage -M 90 username        # Set max age password 90 hari
+chage -E 2025-12-31 user    # Set tanggal expire akun
+
+# ─────────────────────────────────────────────────────────────
+# MENGUBAH PENGGUNA
+# ─────────────────────────────────────────────────────────────
+usermod -l newname oldname          # Ganti username
+usermod -d /home/newdir username    # Ubah home directory
+usermod -s /bin/zsh username        # Ubah shell
+usermod -G sudo,docker username     # Tambah ke grup (replace)
+usermod -aG sudo username           # Tambah ke grup (append)
+usermod -u 1600 username            # Ubah UID
+usermod -L username                 # Lock account
+usermod -U username                 # Unlock account
+
+# ─────────────────────────────────────────────────────────────
+# MENGHAPUS PENGGUNA
+# ─────────────────────────────────────────────────────────────
+userdel username            # Hapus pengguna (home tetap ada)
+userdel -r username         # Hapus pengguna + home directory
+deluser username            # Cara interaktif
+
+# ─────────────────────────────────────────────────────────────
+# INFORMASI PENGGUNA
+# ─────────────────────────────────────────────────────────────
+id username                 # UID, GID, dan grup
+groups username             # Grup yang diikuti
+finger username             # Info pengguna lengkap
+getent passwd username      # Info dari database sistem
 ```
 
 ### 8.4 Manajemen Grup
 
 ```bash
-# ─────────────────────────────────────────────────────────────# MANAJEMEN GRUP# ─────────────────────────────────────────────────────────────groupadd namagrup           # Buat grup barugroupadd -g 1100 namagrup   # Buat grup dengan GID tertentugroupdel namagrup           # Hapus grupgroupmod -n newname oldname # Ganti nama grupgpasswd -a user grup        # Tambah user ke grupgpasswd -d user grup        # Hapus user dari grupgpasswd -A user grup        # Set user sebagai admin grupgetent group namagrup       # Info grup
+# ─────────────────────────────────────────────────────────────
+# MANAJEMEN GRUP
+# ─────────────────────────────────────────────────────────────
+groupadd namagrup           # Buat grup baru
+groupadd -g 1100 namagrup   # Buat grup dengan GID tertentu
+groupdel namagrup           # Hapus grup
+groupmod -n newname oldname # Ganti nama grup
+gpasswd -a user grup        # Tambah user ke grup
+gpasswd -d user grup        # Hapus user dari grup
+gpasswd -A user grup        # Set user sebagai admin grup
+getent group namagrup       # Info grup
 ```
 
 ### 8.5 Sudo (Superuser Do)
 
 ```bash
-# ─────────────────────────────────────────────────────────────# SUDO# ─────────────────────────────────────────────────────────────sudo perintah               # Jalankan perintah sebagai rootsudo -i                     # Login shell sebagai rootsudo -s                     # Shell sebagai root (tanpa login)sudo -u user perintah       # Jalankan sebagai user lainsudo !!                     # Jalankan perintah sebelumnya dengan sudosudo -l                     # Lihat perintah apa yang boleh di-sudo# Edit konfigurasi sudovisudo                      # Edit /etc/sudoers (cara aman)# Format sudoers:# user ALL=(ALL:ALL) ALL# │    │    │    │   └── perintah yang boleh# │    │    │    └── grup yang boleh digunakan# │    │    └── user yang boleh digunakan# │    └── host yang berlaku# └── siapa# Contoh konfigurasi sudoers:alice ALL=(ALL:ALL) ALL                 # Alice bisa semuabob ALL=(ALL) /bin/ls, /bin/cat        # Bob hanya ls dan cat%admin ALL=(ALL) NOPASSWD: ALL         # Grup admin tanpa password
+# ─────────────────────────────────────────────────────────────
+# SUDO
+# ─────────────────────────────────────────────────────────────
+sudo perintah               # Jalankan perintah sebagai root
+sudo -i                     # Login shell sebagai root
+sudo -s                     # Shell sebagai root (tanpa login)
+sudo -u user perintah       # Jalankan sebagai user lain
+sudo !!                     # Jalankan perintah sebelumnya dengan sudo
+sudo -l                     # Lihat perintah apa yang boleh di-sudo
+
+# Edit konfigurasi sudo
+visudo                      # Edit /etc/sudoers (cara aman)
+
+# Format sudoers:
+# user ALL=(ALL:ALL) ALL
+# │    │    │    │   └── perintah yang boleh
+# │    │    │    └── grup yang boleh digunakan
+# │    │    └── user yang boleh digunakan
+# │    └── host yang berlaku
+# └── siapa
+
+# Contoh konfigurasi sudoers:
+alice ALL=(ALL:ALL) ALL                 # Alice bisa semua
+bob ALL=(ALL) /bin/ls, /bin/cat        # Bob hanya ls dan cat
+%admin ALL=(ALL) NOPASSWD: ALL         # Grup admin tanpa password
 ```
 
 ***
@@ -767,31 +990,154 @@ JENIS PENGGUNA LINUX:┌──────────────────�
 ### 9.1 Sistem Permission Linux
 
 ```text
-STRUKTUR PERMISSION:     User  Group  Other      │      │      │    rwxr   xr-   x--    │││    │││   │││    │││    │││   ││└── Execute (other)    │││    │││   │└─── Write (other)    │││    │││   └──── Read (other)    │││    ││└──── Execute (group)    │││    │└───── Write (group)    │││    └────── Read (group)    ││└──── Execute (user)    │└───── Write (user)    └────── Read (user)NILAI PERMISSION:r (read)    = 4w (write)   = 2x (execute) = 1Contoh:rwx = 4+2+1 = 7rw- = 4+2+0 = 6r-x = 4+0+1 = 5r-- = 4+0+0 = 4--- = 0+0+0 = 0Permission umum:755 = rwxr-xr-x (direktori standar)644 = rw-r--r-- (file standar)600 = rw------- (file pribadi)777 = rwxrwxrwx (semua akses - HINDARI!)
+STRUKTUR PERMISSION:
+
+     User  Group  Other
+      │      │      │
+    rwx    r-x    r--
+    │││    │││    │││
+    │││    │││    ││└── Execute (other)
+    │││    │││    │└─── Write (other)
+    │││    │││    └──── Read (other)
+    │││    ││└──── Execute (group)
+    │││    │└───── Write (group)
+    │││    └────── Read (group)
+    ││└──── Execute (user)
+    │└───── Write (user)
+    └────── Read (user)
+
+NILAI PERMISSION:
+r (read)    = 4
+w (write)   = 2
+x (execute) = 1
+
+Contoh:
+rwx = 4+2+1 = 7
+rw- = 4+2+0 = 6
+r-x = 4+0+1 = 5
+r-- = 4+0+0 = 4
+--- = 0+0+0 = 0
+
+Permission umum:
+755 = rwxr-xr-x (direktori standar)
+644 = rw-r--r-- (file standar)
+600 = rw------- (file pribadi)
+777 = rwxrwxrwx (semua akses - HINDARI!)
 ```
 
 ### 9.2 Chmod - Mengubah Permission
 
 ```bash
-# ─────────────────────────────────────────────────────────────# CHMOD - Change Mode# ─────────────────────────────────────────────────────────────# Metode Numerik (Octal)chmod 755 file.txt          # rwxr-xr-xchmod 644 file.txt          # rw-r--r--chmod 600 file.txt          # rw-------chmod 777 file.txt          # rwxrwxrwx (hindari!)chmod -R 755 direktori/     # Rekursif untuk direktori# Metode Simbolikchmod u+x file.txt          # Tambah execute untuk userchmod g-w file.txt          # Hapus write untuk groupchmod o-r file.txt          # Hapus read untuk otherchmod a+x file.txt          # Tambah execute untuk semuachmod u+x,g-w file.txt      # Kombinasichmod u=rwx,g=rx,o=r file   # Set eksplisit# u = user (pemilik)# g = group# o = other# a = all (semua)# + = tambah permission# - = hapus permission# = = set permission eksplisit# ─────────────────────────────────────────────────────────────# CHMOD SPECIAL PERMISSIONS# ─────────────────────────────────────────────────────────────# SETUID (Set User ID) - 4chmod u+s /path/to/program      # Program berjalan dengan UID pemilikchmod 4755 /path/to/program     # Numerik# Contoh: /usr/bin/passwd memiliki setuid# SETGID (Set Group ID) - 2chmod g+s direktori/            # File baru mewarisi grup direktorichmod 2755 direktori/           # Numerik# STICKY BIT - 1chmod +t /tmp                   # Hanya pemilik yang bisa hapus filenyachmod 1777 /tmp                 # Numerik# Contoh: /tmp selalu memiliki sticky bit
+# ─────────────────────────────────────────────────────────────
+# CHMOD - Change Mode
+# ─────────────────────────────────────────────────────────────
+
+# Metode Numerik (Octal)
+chmod 755 file.txt          # rwxr-xr-x
+chmod 644 file.txt          # rw-r--r--
+chmod 600 file.txt          # rw-------
+chmod 777 file.txt          # rwxrwxrwx (hindari!)
+chmod -R 755 direktori/     # Rekursif untuk direktori
+
+# Metode Simbolik
+chmod u+x file.txt          # Tambah execute untuk user
+chmod g-w file.txt          # Hapus write untuk group
+chmod o-r file.txt          # Hapus read untuk other
+chmod a+x file.txt          # Tambah execute untuk semua
+chmod u+x,g-w file.txt      # Kombinasi
+chmod u=rwx,g=rx,o=r file   # Set eksplisit
+
+# u = user (pemilik)
+# g = group
+# o = other
+# a = all (semua)
+# + = tambah permission
+# - = hapus permission
+# = = set permission eksplisit
+
+# ─────────────────────────────────────────────────────────────
+# CHMOD SPECIAL PERMISSIONS
+# ─────────────────────────────────────────────────────────────
+
+# SETUID (Set User ID) - 4
+chmod u+s /path/to/program      # Program berjalan dengan UID pemilik
+chmod 4755 /path/to/program     # Numerik
+
+# Contoh: /usr/bin/passwd memiliki setuid
+
+# SETGID (Set Group ID) - 2
+chmod g+s direktori/            # File baru mewarisi grup direktori
+chmod 2755 direktori/           # Numerik
+
+# STICKY BIT - 1
+chmod +t /tmp                   # Hanya pemilik yang bisa hapus filenya
+chmod 1777 /tmp                 # Numerik
+
+# Contoh: /tmp selalu memiliki sticky bit
 ```
 
 ### 9.3 Chown & Chgrp
 
 ```bash
-# ─────────────────────────────────────────────────────────────# CHOWN - Change Owner# ─────────────────────────────────────────────────────────────chown user file.txt             # Ubah pemilik filechown user:group file.txt       # Ubah pemilik dan grupchown :group file.txt           # Ubah hanya grupchown -R user:group direktori/  # Rekursifchown --reference=ref.txt file  # Salin kepemilikan dari file referensi# ─────────────────────────────────────────────────────────────# CHGRP - Change Group# ─────────────────────────────────────────────────────────────chgrp group file.txt            # Ubah grup filechgrp -R group direktori/       # Rekursif
+# ─────────────────────────────────────────────────────────────
+# CHOWN - Change Owner
+# ─────────────────────────────────────────────────────────────
+chown user file.txt             # Ubah pemilik file
+chown user:group file.txt       # Ubah pemilik dan grup
+chown :group file.txt           # Ubah hanya grup
+chown -R user:group direktori/  # Rekursif
+chown --reference=ref.txt file  # Salin kepemilikan dari file referensi
+
+# ─────────────────────────────────────────────────────────────
+# CHGRP - Change Group
+# ─────────────────────────────────────────────────────────────
+chgrp group file.txt            # Ubah grup file
+chgrp -R group direktori/       # Rekursif
 ```
 
 ### 9.4 UMASK
 
 ```bash
-# UMASK menentukan permission default untuk file/direktori baruumask                   # Lihat umask saat iniumask 022               # Set umask (default: 022)# Cara kerja umask:# Untuk file: 666 - umask = permission default# Untuk dir:  777 - umask = permission default# Dengan umask 022:# File baru:  666 - 022 = 644 (rw-r--r--)# Dir baru:   777 - 022 = 755 (rwxr-xr-x)# Dengan umask 027:# File baru:  666 - 027 = 640 (rw-r-----)# Dir baru:   777 - 027 = 750 (rwxr-x---)# Set umask permanen di ~/.bashrc atau /etc/profile:echo "umask 022" >> ~/.bashrc
+# UMASK menentukan permission default untuk file/direktori baru
+umask                   # Lihat umask saat ini
+umask 022               # Set umask (default: 022)
+
+# Cara kerja umask:
+# Untuk file: 666 - umask = permission default
+# Untuk dir:  777 - umask = permission default
+
+# Dengan umask 022:
+# File baru:  666 - 022 = 644 (rw-r--r--)
+# Dir baru:   777 - 022 = 755 (rwxr-xr-x)
+
+# Dengan umask 027:
+# File baru:  666 - 027 = 640 (rw-r-----)
+# Dir baru:   777 - 027 = 750 (rwxr-x---)
+
+# Set umask permanen di ~/.bashrc atau /etc/profile:
+echo "umask 022" >> ~/.bashrc
 ```
 
 ### 9.5 ACL (Access Control List)
 
 ```bash
-# ACL memberikan kontrol akses yang lebih granular# Install ACL toolsapt install acl     # Ubuntu/Debianyum install acl     # CentOS/RHEL# Lihat ACLgetfacl file.txt# Set ACLsetfacl -m u:alice:rwx file.txt     # Beri alice akses rwxsetfacl -m g:developers:rx file.txt  # Beri grup developers akses rxsetfacl -m o::r file.txt            # Set permission othersetfacl -R -m u:alice:rwx dir/      # Rekursifsetfacl -x u:alice file.txt         # Hapus ACL untuk alicesetfacl -b file.txt                 # Hapus semua ACLsetfacl -d -m u:alice:rwx dir/      # Set default ACL untuk direktori
+# ACL memberikan kontrol akses yang lebih granular
+
+# Install ACL tools
+apt install acl     # Ubuntu/Debian
+yum install acl     # CentOS/RHEL
+
+# Lihat ACL
+getfacl file.txt
+
+# Set ACL
+setfacl -m u:alice:rwx file.txt      # Beri alice akses rwx
+setfacl -m g:developers:rx file.txt  # Beri grup developers akses rx
+setfacl -m o::r file.txt             # Set permission other
+setfacl -R -m u:alice:rwx dir/       # Rekursif
+setfacl -x u:alice file.txt          # Hapus ACL untuk alice
+setfacl -b file.txt                  # Hapus semua ACL
+setfacl -d -m u:alice:rwx dir/       # Set default ACL untuk direktori
 ```
 
 ***
@@ -801,25 +1147,182 @@ STRUKTUR PERMISSION:     User  Group  Other      │      │      │    rwxr  
 ### 10.1 Konsep Proses
 
 ```text
-KONSEP PROSES LINUX:┌─────────────────────────────────────────────────────────────────┐│ PROSES adalah program yang sedang berjalan                      ││                                                                 ││ Setiap proses memiliki:                                         ││ - PID (Process ID) - angka unik                                 ││ - PPID (Parent Process ID)                                      ││ - UID (User yang menjalankan)                                   ││ - State (Running, Sleeping, Stopped, Zombie)                    ││                                                                 ││ STATE PROSES:                                                   ││ R - Running/Runnable                                            ││ S - Sleeping (interruptible)                                    ││ D - Sleeping (uninterruptible) - I/O wait                       ││ T - Stopped                                                     ││ Z - Zombie (proses selesai tapi parent belum baca exit code)    ││ I - Idle                                                        │└─────────────────────────────────────────────────────────────────┘HIERARKI PROSES:systemd (PID 1)├── NetworkManager├── sshd│   └── bash│       └── vim├── cron└── Xorg    └── gnome-shell        ├── firefox        └── terminal
+KONSEP PROSES LINUX:
+┌─────────────────────────────────────────────────────────────────┐
+│ PROSES adalah program yang sedang berjalan                      │
+│                                                                 │
+│ Setiap proses memiliki:                                         │
+│ - PID (Process ID) - angka unik                                 │
+│ - PPID (Parent Process ID)                                      │
+│ - UID (User yang menjalankan)                                   │
+│ - State (Running, Sleeping, Stopped, Zombie)                    │
+│                                                                 │
+│ STATE PROSES:                                                   │
+│ R - Running/Runnable                                            │
+│ S - Sleeping (interruptible)                                    │
+│ D - Sleeping (uninterruptible) - I/O wait                       │
+│ T - Stopped                                                     │
+│ Z - Zombie (proses selesai tapi parent belum baca exit code)    │
+│ I - Idle                                                        │
+└─────────────────────────────────────────────────────────────────┘
+
+HIERARKI PROSES:
+systemd (PID 1)
+├── NetworkManager
+├── sshd
+│   └── bash
+│       └── vim
+├── cron
+└── Xorg
+    └── gnome-shell
+        ├── firefox
+        └── terminal
 ```
 
 ### 10.2 Melihat Proses
 
 ```bash
-# ─────────────────────────────────────────────────────────────# PS - Process Status# ─────────────────────────────────────────────────────────────ps                          # Proses milik user saat inips -e                       # Semua prosesps -ef                      # Semua proses, format lengkapps -aux                     # Semua proses, format BSDps -u username              # Proses milik user tertentups --pid 1234               # Proses dengan PID tertentups --ppid 1234              # Child process dari PID tertentups -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem   # Custom format, sort# Output ps -ef:# UID   PID  PPID  C  STIME  TTY  TIME    CMD# root    1     0  0  10:00  ?    0:01    /sbin/init#  │      │     │  │   │      │    │       └── perintah#  │      │     │  │   │      │    └── waktu CPU#  │      │     │  │   │      └── terminal#  │      │     │  │   └── waktu start#  │      │     │  └── CPU usage#  │      │     └── PPID#  │      └── PID#  └── user# ─────────────────────────────────────────────────────────────# TOP & HTOP - Monitoring Interaktif# ─────────────────────────────────────────────────────────────top                         # Monitor proses real-time# Shortcut dalam top:# q = quit# k = kill proses (masukkan PID)# r = renice (ubah prioritas)# M = sort by Memory# P = sort by CPU# 1 = toggle per-CPU view# h = helphtop                        # Versi top yang lebih bagus (install dulu)# apt install htop# ─────────────────────────────────────────────────────────────# PGREP & PIDOF# ─────────────────────────────────────────────────────────────pgrep firefox               # Cari PID berdasarkan namapgrep -l firefox            # Cari PID + namapgrep -u alice              # Proses milik alicepidof nginx                 # PID dari nginx
+# ─────────────────────────────────────────────────────────────
+# PS - Process Status
+# ─────────────────────────────────────────────────────────────
+ps                          # Proses milik user saat ini
+ps -e                       # Semua proses
+ps -ef                      # Semua proses, format lengkap
+ps -aux                     # Semua proses, format BSD
+ps -u username              # Proses milik user tertentu
+ps --pid 1234               # Proses dengan PID tertentu
+ps --ppid 1234              # Child process dari PID tertentu
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem   # Custom format, sort
+
+# Output ps -ef:
+# UID   PID  PPID  C  STIME  TTY  TIME    CMD
+# root    1     0  0  10:00  ?    0:01    /sbin/init
+#  │      │     │  │   │      │    │       └── perintah
+#  │      │     │  │   │      │    └── waktu CPU
+#  │      │     │  │   │      └── terminal
+#  │      │     │  │   └── waktu start
+#  │      │     │  └── CPU usage
+#  │      │     └── PPID
+#  │      └── PID
+#  └── user
+
+# ─────────────────────────────────────────────────────────────
+# TOP & HTOP - Monitoring Interaktif
+# ─────────────────────────────────────────────────────────────
+top                         # Monitor proses real-time
+
+# Shortcut dalam top:
+# q = quit
+# k = kill proses (masukkan PID)
+# r = renice (ubah prioritas)
+# M = sort by Memory
+# P = sort by CPU
+# 1 = toggle per-CPU view
+# h = help
+
+htop                        # Versi top yang lebih bagus (install dulu)
+# apt install htop
+
+# ─────────────────────────────────────────────────────────────
+# PGREP & PIDOF
+# ─────────────────────────────────────────────────────────────
+pgrep firefox               # Cari PID berdasarkan nama
+pgrep -l firefox            # Cari PID + nama
+pgrep -u alice              # Proses milik alice
+pidof nginx                 # PID dari nginx
 ```
 
 ### 10.3 Mengelola Proses
 
 ```bash
-# ─────────────────────────────────────────────────────────────# KILL - Mengirim Signal ke Proses# ─────────────────────────────────────────────────────────────# Daftar signal umum:# SIGHUP  (1)  - Hangup, restart konfigurasi# SIGINT  (2)  - Interrupt (Ctrl+C)# SIGKILL (9)  - Force kill (tidak bisa diabaikan)# SIGTERM (15) - Terminate (graceful, default)# SIGSTOP (19) - Stop proses# SIGCONT (18) - Lanjutkan proses yang di-stopkill 1234                   # Kirim SIGTERM ke PID 1234kill -9 1234                # Kirim SIGKILL ke PID 1234 (force)kill -SIGTERM 1234          # Kirim SIGTERM secara eksplisitkill -l                     # List semua signalpkill firefox               # Kill proses bernama firefoxpkill -9 firefox            # Force killpkill -u alice              # Kill semua proses milik alicekillall nginx               # Kill semua proses bernama nginx# ─────────────────────────────────────────────────────────────# NICE & RENICE - Prioritas Proses# ─────────────────────────────────────────────────────────────# Nilai nice: -20 (tertinggi) sampai 19 (terendah)# Default: 0nice -n 10 perintah             # Jalankan dengan nice value 10nice -n -5 perintah             # Jalankan dengan prioritas lebih tinggirenice 10 -p 1234               # Ubah nice value proses 1234renice -n 5 -u alice            # Ubah nice semua proses alice# ─────────────────────────────────────────────────────────────# BACKGROUND & FOREGROUND# ─────────────────────────────────────────────────────────────perintah &                      # Jalankan di backgroundjobs                            # Lihat job yang berjalanjobs -l                         # Lihat job dengan PIDfg                              # Bawa job terakhir ke foregroundfg %1                           # Bawa job #1 ke foregroundbg                              # Kirim job ke backgroundbg %1                           # Kirim job #1 ke backgroundCtrl + Z                        # Stop proses ke background# NOHUP - Proses tetap berjalan setelah logoutnohup perintah &                # Jalankan yang tidak terpengaruh HUPnohup perintah > output.log &  # Redirect output# DISOWN - Pisahkan proses dari shelldisown %1                       # Pisahkan job #1 dari shelldisown -a                       # Pisahkan semua job
+# ─────────────────────────────────────────────────────────────
+# KILL - Mengirim Signal ke Proses
+# ─────────────────────────────────────────────────────────────
+
+# Daftar signal umum:
+# SIGHUP  (1)  - Hangup, restart konfigurasi
+# SIGINT  (2)  - Interrupt (Ctrl+C)
+# SIGKILL (9)  - Force kill (tidak bisa diabaikan)
+# SIGTERM (15) - Terminate (graceful, default)
+# SIGSTOP (19) - Stop proses
+# SIGCONT (18) - Lanjutkan proses yang di-stop
+
+kill 1234                   # Kirim SIGTERM ke PID 1234
+kill -9 1234                # Kirim SIGKILL ke PID 1234 (force)
+kill -SIGTERM 1234          # Kirim SIGTERM secara eksplisit
+kill -l                     # List semua signal
+pkill firefox               # Kill proses bernama firefox
+pkill -9 firefox            # Force kill
+pkill -u alice              # Kill semua proses milik alice
+killall nginx               # Kill semua proses bernama nginx
+
+# ─────────────────────────────────────────────────────────────
+# NICE & RENICE - Prioritas Proses
+# ─────────────────────────────────────────────────────────────
+# Nilai nice: -20 (tertinggi) sampai 19 (terendah)
+# Default: 0
+nice -n 10 perintah             # Jalankan dengan nice value 10
+nice -n -5 perintah             # Jalankan dengan prioritas lebih tinggi
+renice 10 -p 1234               # Ubah nice value proses 1234
+renice -n 5 -u alice            # Ubah nice semua proses alice
+
+# ─────────────────────────────────────────────────────────────
+# BACKGROUND & FOREGROUND
+# ─────────────────────────────────────────────────────────────
+perintah &                      # Jalankan di background
+jobs                            # Lihat job yang berjalan
+jobs -l                         # Lihat job dengan PID
+fg                              # Bawa job terakhir ke foreground
+fg %1                           # Bawa job #1 ke foreground
+bg                              # Kirim job ke background
+bg %1                           # Kirim job #1 ke background
+Ctrl + Z                        # Stop proses ke background
+
+# NOHUP - Proses tetap berjalan setelah logout
+nohup perintah &                # Jalankan yang tidak terpengaruh HUP
+nohup perintah > output.log &   # Redirect output
+
+# DISOWN - Pisahkan proses dari shell
+disown %1                       # Pisahkan job #1 dari shell
+disown -a                       # Pisahkan semua job
 ```
 
 ### 10.4 Informasi Sistem dan Resource
 
 ```bash
-# ─────────────────────────────────────────────────────────────# INFORMASI MEMORY & CPU# ─────────────────────────────────────────────────────────────free                        # Informasi memoryfree -h                     # Human-readable formatfree -m                     # Dalam MBfree -g                     # Dalam GBfree -s 2                   # Update setiap 2 detikvmstat                      # Virtual memory statisticsvmstat 1 5                  # 5 laporan, interval 1 detikiostat                      # I/O statisticsiostat -x 1                 # Extended, update 1 detik# ─────────────────────────────────────────────────────────────# INFORMASI CPU & LOAD# ─────────────────────────────────────────────────────────────lscpu                       # Detail CPUnproc                       # Jumlah CPU corecat /proc/loadavg           # Load average (1, 5, 15 menit)uptime                      # Uptime & load averagempstat                      # Per-CPU statisticssar                         # System Activity Report# ─────────────────────────────────────────────────────────────# STRACE & LSOF# ─────────────────────────────────────────────────────────────strace perintah             # Trace system calls sebuah prosesstrace -p 1234              # Trace proses yang berjalanlsof                        # List open fileslsof -p 1234                # File yang dibuka oleh PID 1234lsof -u alice               # File yang dibuka oleh alicelsof -i :80                 # Proses yang menggunakan port 80lsof /var/log/syslog        # Proses yang membuka file ini
+# ─────────────────────────────────────────────────────────────
+# INFORMASI MEMORY & CPU
+# ─────────────────────────────────────────────────────────────
+free                        # Informasi memory
+free -h                     # Human-readable format
+free -m                     # Dalam MB
+free -g                     # Dalam GB
+free -s 2                   # Update setiap 2 detik
+vmstat                      # Virtual memory statistics
+vmstat 1 5                  # 5 laporan, interval 1 detik
+iostat                      # I/O statistics
+iostat -x 1                 # Extended, update 1 detik
+
+# ─────────────────────────────────────────────────────────────
+# INFORMASI CPU & LOAD
+# ─────────────────────────────────────────────────────────────
+lscpu                       # Detail CPU
+nproc                       # Jumlah CPU core
+cat /proc/loadavg           # Load average (1, 5, 15 menit)
+uptime                      # Uptime & load average
+mpstat                      # Per-CPU statistics
+sar                         # System Activity Report
+
+# ─────────────────────────────────────────────────────────────
+# STRACE & LSOF
+# ─────────────────────────────────────────────────────────────
+strace perintah             # Trace system calls sebuah proses
+strace -p 1234              # Trace proses yang berjalan
+lsof                        # List open files
+lsof -p 1234                # File yang dibuka oleh PID 1234
+lsof -u alice               # File yang dibuka oleh alice
+lsof -i :80                 # Proses yang menggunakan port 80
+lsof /var/log/syslog        # Proses yang membuka file ini
 ```
 
 ***
@@ -829,7 +1332,24 @@ KONSEP PROSES LINUX:┌───────────────────
 ### 11.1 Sistem Paket Linux
 
 ```text
-SISTEM PAKET LINUX:┌─────────────────────────────────────────────────────────────────┐│ DEBIAN/UBUNTU (.deb packages)                                   ││   Low level:  dpkg                                              ││   High level: apt, apt-get, aptitude                            │├─────────────────────────────────────────────────────────────────┤│ RED HAT/CENTOS/FEDORA (.rpm packages)                           ││   Low level:  rpm                                               ││   High level: yum (lama), dnf (baru)                           │├─────────────────────────────────────────────────────────────────┤│ ARCH LINUX (.pkg.tar.zst)                                       ││   pacman                                                        │├─────────────────────────────────────────────────────────────────┤│ UNIVERSAL PACKAGES                                              ││   Snap:   snapd (Canonical)                                     ││   Flatpak: flatpak (freedesktop)                                ││   AppImage: self-contained executable                           │└─────────────────────────────────────────────────────────────────┘
+SISTEM PAKET LINUX:
+┌─────────────────────────────────────────────────────────────────┐
+│ DEBIAN/UBUNTU (.deb packages)                                   │
+│   Low level:  dpkg                                              │
+│   High level: apt, apt-get, aptitude                            │
+├─────────────────────────────────────────────────────────────────┤
+│ RED HAT/CENTOS/FEDORA (.rpm packages)                           │
+│   Low level:  rpm                                               │
+│   High level: yum (lama), dnf (baru)                            │
+├─────────────────────────────────────────────────────────────────┤
+│ ARCH LINUX (.pkg.tar.zst)                                       │
+│   pacman                                                        │
+├─────────────────────────────────────────────────────────────────┤
+│ UNIVERSAL PACKAGES                                              │
+│   Snap:   snapd (Canonical)                                     │
+│   Flatpak: flatpak (freedesktop)                                │
+│   AppImage: self-contained executable                           │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 11.2 APT (Advanced Package Tool) - Debian/Ubuntu
