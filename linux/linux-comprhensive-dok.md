@@ -2018,25 +2018,459 @@ nft list ruleset > /etc/nftables.conf   # Simpan konfigurasi
 ### 14.1 Jenis Shell
 
 ```text
-JENIS SHELL DI LINUX:┌──────────┬────────────────────────────────────────────────────┐│ SHELL    │ KETERANGAN                                         │├──────────┼────────────────────────────────────────────────────┤│ sh       │ Bourne Shell - shell original Unix                 ││ bash     │ Bourne Again Shell - paling populer               ││ zsh      │ Z Shell - sangat extensible, populer              ││ fish     │ Friendly Interactive Shell - user-friendly        ││ ksh      │ Korn Shell - unix tradisional                     ││ csh/tcsh │ C Shell - syntax mirip C                          ││ dash     │ Debian Almquist Shell - ringan, cepat             │└──────────┴────────────────────────────────────────────────────┘
+JENIS SHELL DI LINUX:
+
+┌──────────┬────────────────────────────────────────────────────┐
+│ SHELL    │ KETERANGAN                                         │
+├──────────┼────────────────────────────────────────────────────┤
+│ sh       │ Bourne Shell - shell original Unix                 │
+│ bash     │ Bourne Again Shell - paling populer               │
+│ zsh      │ Z Shell - sangat extensible, populer              │
+│ fish     │ Friendly Interactive Shell - user-friendly        │
+│ ksh      │ Korn Shell - unix tradisional                     │
+│ csh/tcsh │ C Shell - syntax mirip C                          │
+│ dash     │ Debian Almquist Shell - ringan, cepat             │
+└──────────┴────────────────────────────────────────────────────┘
 ```
 
 ### 14.2 Fitur Shell (Bash)
 
 ```bash
-# ─────────────────────────────────────────────────────────────# VARIABEL# ─────────────────────────────────────────────────────────────# Variabel biasanama="Linux"                # Set variabel (tanpa spasi di sekitar =)echo $nama                  # Gunakan variabelecho ${nama}                # Cara eksplisitecho "Halo $nama"           # Dalam string# Variabel environmentexport PATH="$PATH:/usr/local/bin"  # Export ke environmentprintenv                    # Tampilkan semua variabel envprintenv PATH               # Tampilkan PATHenv                         # Semua environment variable# Variabel khususecho $?                     # Exit code perintah terakhir (0=sukses)echo $$                     # PID shell saat iniecho $!                     # PID proses background terakhirecho $0                     # Nama scriptecho $1 $2 $3               # Argumen scriptecho $@                     # Semua argumenecho $#                     # Jumlah argumenecho $BASH_VERSION          # Versi bashecho $HOSTNAME              # Nama hostecho $USER                  # User saat iniecho $HOME                  # Home directoryecho $PWD                   # Direktori saat iniecho $RANDOM                # Angka random# ─────────────────────────────────────────────────────────────# INPUT/OUTPUT REDIRECTION# ─────────────────────────────────────────────────────────────# Standard Streams:# 0 = stdin  (input)# 1 = stdout (output)# 2 = stderr (error)perintah > file.txt         # Redirect stdout ke file (overwrite)perintah >> file.txt        # Redirect stdout ke file (append)perintah < file.txt         # Ambil stdin dari fileperintah 2> error.txt       # Redirect stderr ke fileperintah 2>&1               # Redirect stderr ke stdoutperintah > output.txt 2>&1  # Redirect keduanya ke fileperintah &> file.txt        # Cara singkat redirect semuaperintah > /dev/null 2>&1   # Buang semua output# Pipeperintah1 | perintah2       # Output perintah1 jadi input perintah2perintah1 | perintah2 | perintah3  # Chain pipe# Contoh pipe:ls -la | grep ".txt"ps aux | grep nginxcat /etc/passwd | cut -d: -f1 | sortcat file.txt | wc -l# HERE Documentcat << EOFIni adalahkonten multilineEOFcat << EOF > file.txtIni ditulis ke fileEOF# ─────────────────────────────────────────────────────────────# WILDCARD & GLOBBING# ─────────────────────────────────────────────────────────────ls *.txt                    # Semua file berekstensi .txtls file?.txt                # ? cocok dengan satu karakterls file[1-3].txt            # [] cocok dengan salah satu karakterls file[!1].txt             # [!] cocok dengan selain karakterls {*.txt,*.pdf}            # Brace expansion# ─────────────────────────────────────────────────────────────# HISTORY# ─────────────────────────────────────────────────────────────history                     # Riwayat perintahhistory 20                  # 20 perintah terakhir!!                          # Ulangi perintah terakhir!n                          # Ulangi perintah ke-n dari history!ls                         # Ulangi perintah terakhir yang dimulai "ls"Ctrl + R                    # Cari dalam history (reverse search)history -c                  # Hapus history
+# ─────────────────────────────────────────────────────────────
+# VARIABEL
+# ─────────────────────────────────────────────────────────────
+
+# Variabel biasa
+nama="Linux"                # Set variabel (tanpa spasi di sekitar =)
+echo $nama                  # Gunakan variabel
+echo ${nama}                # Cara eksplisit
+echo "Halo $nama"           # Dalam string
+
+# Variabel environment
+export PATH="$PATH:/usr/local/bin"  # Export ke environment
+printenv                    # Tampilkan semua variabel env
+printenv PATH               # Tampilkan PATH
+env                         # Semua environment variable
+
+# Variabel khusus
+echo $?                     # Exit code perintah terakhir (0=sukses)
+echo $$                     # PID shell saat ini
+echo $!                     # PID proses background terakhir
+echo $0                     # Nama script
+echo $1 $2 $3               # Argumen script
+echo $@                     # Semua argumen
+echo $#                     # Jumlah argumen
+echo $BASH_VERSION          # Versi bash
+echo $HOSTNAME              # Nama host
+echo $USER                  # User saat ini
+echo $HOME                  # Home directory
+echo $PWD                   # Direktori saat ini
+echo $RANDOM                # Angka random
+
+# ─────────────────────────────────────────────────────────────
+# INPUT/OUTPUT REDIRECTION
+# ─────────────────────────────────────────────────────────────
+
+# Standard Streams:
+# 0 = stdin  (input)
+# 1 = stdout (output)
+# 2 = stderr (error)
+
+perintah > file.txt         # Redirect stdout ke file (overwrite)
+perintah >> file.txt        # Redirect stdout ke file (append)
+perintah < file.txt         # Ambil stdin dari file
+perintah 2> error.txt       # Redirect stderr ke file
+perintah 2>&1               # Redirect stderr ke stdout
+perintah > output.txt 2>&1  # Redirect keduanya ke file
+perintah &> file.txt        # Cara singkat redirect semua
+perintah > /dev/null 2>&1   # Buang semua output
+
+# Pipe
+perintah1 | perintah2       # Output perintah1 jadi input perintah2
+perintah1 | perintah2 | perintah3  # Chain pipe
+
+# Contoh pipe:
+ls -la | grep ".txt"
+ps aux | grep nginx
+cat /etc/passwd | cut -d: -f1 | sort
+cat file.txt | wc -l
+
+# HERE Document
+cat << EOF
+Ini adalah
+konten multiline
+EOF
+
+cat << EOF > file.txt
+Ini ditulis ke file
+EOF
+
+# ─────────────────────────────────────────────────────────────
+# WILDCARD & GLOBBING
+# ─────────────────────────────────────────────────────────────
+
+ls *.txt                    # Semua file berekstensi .txt
+ls file?.txt                # ? cocok dengan satu karakter
+ls file[1-3].txt            # [] cocok dengan salah satu karakter
+ls file[!1].txt             # [!] cocok dengan selain karakter
+ls {*.txt,*.pdf}            # Brace expansion
+
+# ─────────────────────────────────────────────────────────────
+# HISTORY
+# ─────────────────────────────────────────────────────────────
+
+history                     # Riwayat perintah
+history 20                  # 20 perintah terakhir
+!!                          # Ulangi perintah terakhir
+!n                          # Ulangi perintah ke-n dari history
+!ls                         # Ulangi perintah terakhir yang dimulai "ls"
+Ctrl + R                    # Cari dalam history (reverse search)
+history -c                  # Hapus history
 ```
 
 ### 14.3 Bash Scripting
 
 ```bash
-#!/bin/bash# ─────────────────────────────────────────────────────────────# BASH SCRIPTING - PANDUAN LENGKAP# ─────────────────────────────────────────────────────────────# Shebang harus di baris pertama#!/bin/bash# ─────────────────────────────────────────────────────────────# CONDITIONAL (IF-ELSE)# ─────────────────────────────────────────────────────────────# Sintaks dasarif [ kondisi ]; then    perintahelif [ kondisi_lain ]; then    perintahelse    perintahfi# Operator perbandingan STRING:# == atau =  (sama)# !=         (tidak sama)# -z         (string kosong)# -n         (string tidak kosong)# <          (lebih kecil alfabet)# >          (lebih besar alfabet)# Operator perbandingan NUMERIK:# -eq   (equal)# -ne   (not equal)# -lt   (less than)# -le   (less than or equal)# -gt   (greater than)# -ge   (greater than or equal)# Operator FILE:# -f file   (ada dan merupakan file biasa)# -d file   (ada dan merupakan direktori)# -e file   (ada)# -r file   (bisa dibaca)# -w file   (bisa ditulis)# -x file   (bisa dieksekusi)# -s file   (tidak kosong)# Contoh:if [ "$nama" == "Linux" ]; then    echo "Halo Linux!"fiif [ $angka -gt 10 ]; then    echo "Lebih dari 10"elif [ $angka -eq 10 ]; then    echo "Sama dengan 10"else    echo "Kurang dari 10"fiif [ -f /etc/passwd ]; then    echo "File ada"fi# Double bracket (lebih powerful)if [[ $string =~ ^[0-9]+$ ]]; then    echo "String adalah angka"fi# ─────────────────────────────────────────────────────────────# LOOP# ─────────────────────────────────────────────────────────────# FOR loopfor i in 1 2 3 4 5; do    echo "Angka: $i"donefor file in *.txt; do    echo "File: $file"donefor i in {1..10}; do    echo $idonefor ((i=0; i<10; i++)); do    echo $idone# WHILE loopi=1while [ $i -le 10 ]; do    echo $i    ((i++))done# UNTIL loopi=1until [ $i -gt 10 ]; do    echo $i    ((i++))done# Loop dengan break & continuefor i in {1..10}; do    if [ $i -eq 5 ]; then        continue        # Skip angka 5    fi    if [ $i -eq 8 ]; then        break           # Stop di 8    fi    echo $idone# ─────────────────────────────────────────────────────────────# FUNGSI# ─────────────────────────────────────────────────────────────# Definisi fungsifunction sapa() {    local nama="$1"     # Parameter pertama    echo "Halo, $nama!"    return 0            # Return value}# Cara alternatifcek_file() {    if [ -f "$1" ]; then        echo "File $1 ada"        return 0    else        echo "File $1 tidak ada"        return 1    fi}# Panggil fungsisapa "Dunia"cek_file "/etc/passwd"# ─────────────────────────────────────────────────────────────# CASE STATEMENT# ─────────────────────────────────────────────────────────────case "$pilihan" in    "a"|"A")        echo "Pilihan A"        ;;    "b"|"B")        echo "Pilihan B"        ;;    *)        echo "Pilihan tidak valid"        ;;esac# ─────────────────────────────────────────────────────────────# ARRAY# ─────────────────────────────────────────────────────────────# Deklarasi arraybuah=("apel" "mangga" "jeruk" "pisang")nama[0]="Alice"nama[1]="Bob"# Akses arrayecho ${buah[0]}             # Elemen pertamaecho ${buah[@]}             # Semua elemenecho ${#buah[@]}            # Jumlah elemenecho ${buah[@]:1:2}         # Slice (dari index 1, ambil 2)# Loop arrayfor item in "${buah[@]}"; do    echo $itemdone# Associative array (seperti dict/hash)declare -A datadata["nama"]="Alice"data["umur"]="25"echo ${data["nama"]}echo ${!data[@]}            # Semua key# ─────────────────────────────────────────────────────────────# STRING MANIPULATION# ─────────────────────────────────────────────────────────────str="Hello World Linux"echo ${#str}                # Panjang stringecho ${str:6}               # Substring dari index 6echo ${str:6:5}             # Substring 5 karakter dari index 6echo ${str/World/Linux}     # Ganti pertamaecho ${str//l/L}            # Ganti semuaecho ${str,,}               # Lowercaseecho ${str^^}               # Uppercaseecho ${str%Linux}           # Hapus suffixecho ${str#Hello}           # Hapus prefix# Default valueecho ${var:-"default"}      # Gunakan default jika var kosongecho ${var:="default"}      # Set var ke default jika kosongecho ${var:?"Error msg"}    # Error jika var kosong# ─────────────────────────────────────────────────────────────# ARITHMETIC# ─────────────────────────────────────────────────────────────# Metode 1: $(( ))a=5b=3echo $((a + b))             # 8echo $((a - b))             # 2echo $((a * b))             # 15echo $((a / b))             # 1 (integer division)echo $((a % b))             # 2 (modulo)echo $((a ** b))            # 125 (pangkat)((a++))                     # Increment((a--))                     # Decrement((a += 5))                  # a = a + 5# Metode 2: expr (lama)expr 5 + 3# Metode 3: bc (floating point)echo "scale=2; 10/3" | bc   # 3.33# ─────────────────────────────────────────────────────────────# CONTOH SCRIPT LENGKAP# ─────────────────────────────────────────────────────────────#!/bin/bash# Script: backup.sh# Deskripsi: Backup otomatis direktoriset -e          # Exit jika ada errorset -u          # Error jika variabel tidak didefinisikanset -o pipefail # Error jika pipe gagal# KonfigurasiSOURCE_DIR="/home/user/data"BACKUP_DIR="/backup"DATE=$(date +%Y%m%d_%H%M%S)BACKUP_NAME="backup_${DATE}.tar.gz"LOG_FILE="/var/log/backup.log"# Fungsi logginglog() {    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"}# Fungsi error handlingerror_exit() {    log "ERROR: $1"    exit 1}# Validasi[ -d "$SOURCE_DIR" ] || error_exit "Direktori source tidak ada: $SOURCE_DIR"[ -d "$BACKUP_DIR" ] || mkdir -p "$BACKUP_DIR" || error_exit "Gagal buat direktori backup"# Proses backuplog "Memulai backup $SOURCE_DIR..."if tar -czf "${BACKUP_DIR}/${BACKUP_NAME}" "$SOURCE_DIR"; then    SIZE=$(du -sh "${BACKUP_DIR}/${BACKUP_NAME}" | cut -f1)    log "Backup berhasil: ${BACKUP_NAME} (${SIZE})"else    error_exit "Backup gagal!"fi# Hapus backup lebih dari 7 harifind "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +7 -deletelog "Backup lama (>7 hari) telah dihapus"log "Selesai."exit 0
+#!/bin/bash
+
+# ─────────────────────────────────────────────────────────────
+# BASH SCRIPTING - PANDUAN LENGKAP
+# ─────────────────────────────────────────────────────────────
+
+# Shebang harus di baris pertama
+#!/bin/bash
+
+# ─────────────────────────────────────────────────────────────
+# CONDITIONAL (IF-ELSE)
+# ─────────────────────────────────────────────────────────────
+
+# Sintaks dasar
+if [ kondisi ]; then
+    perintah
+elif [ kondisi_lain ]; then
+    perintah
+else
+    perintah
+fi
+
+# Operator perbandingan STRING:
+# == atau =  (sama)
+# !=         (tidak sama)
+# -z         (string kosong)
+# -n         (string tidak kosong)
+# <          (lebih kecil alfabet)
+# >          (lebih besar alfabet)
+
+# Operator perbandingan NUMERIK:
+# -eq   (equal)
+# -ne   (not equal)
+# -lt   (less than)
+# -le   (less than or equal)
+# -gt   (greater than)
+# -ge   (greater than or equal)
+
+# Operator FILE:
+# -f file   (ada dan merupakan file biasa)
+# -d file   (ada dan merupakan direktori)
+# -e file   (ada)
+# -r file   (bisa dibaca)
+# -w file   (bisa ditulis)
+# -x file   (bisa dieksekusi)
+# -s file   (tidak kosong)
+
+# Contoh:
+if [ "$nama" == "Linux" ]; then
+    echo "Halo Linux!"
+fi
+
+if [ $angka -gt 10 ]; then
+    echo "Lebih dari 10"
+elif [ $angka -eq 10 ]; then
+    echo "Sama dengan 10"
+else
+    echo "Kurang dari 10"
+fi
+
+if [ -f /etc/passwd ]; then
+    echo "File ada"
+fi
+
+# Double bracket (lebih powerful)
+if [[ $string =~ ^[0-9]+$ ]]; then
+    echo "String adalah angka"
+fi
+
+# ─────────────────────────────────────────────────────────────
+# LOOP
+# ─────────────────────────────────────────────────────────────
+
+# FOR loop
+for i in 1 2 3 4 5; do
+    echo "Angka: $i"
+done
+
+for file in *.txt; do
+    echo "File: $file"
+done
+
+for i in {1..10}; do
+    echo $i
+done
+
+for ((i=0; i<10; i++)); do
+    echo $i
+done
+
+# WHILE loop
+i=1
+while [ $i -le 10 ]; do
+    echo $i
+    ((i++))
+done
+
+# UNTIL loop
+i=1
+until [ $i -gt 10 ]; do
+    echo $i
+    ((i++))
+done
+
+# Loop dengan break & continue
+for i in {1..10}; do
+    if [ $i -eq 5 ]; then
+        continue        # Skip angka 5
+    fi
+    if [ $i -eq 8 ]; then
+        break           # Stop di 8
+    fi
+    echo $i
+done
+
+# ─────────────────────────────────────────────────────────────
+# FUNGSI
+# ─────────────────────────────────────────────────────────────
+
+# Definisi fungsi
+function sapa() {
+    local nama="$1"     # Parameter pertama
+    echo "Halo, $nama!"
+    return 0            # Return value
+}
+
+# Cara alternatif
+cek_file() {
+    if [ -f "$1" ]; then
+        echo "File $1 ada"
+        return 0
+    else
+        echo "File $1 tidak ada"
+        return 1
+    fi
+}
+
+# Panggil fungsi
+sapa "Dunia"
+cek_file "/etc/passwd"
+
+# ─────────────────────────────────────────────────────────────
+# CASE STATEMENT
+# ─────────────────────────────────────────────────────────────
+
+case "$pilihan" in
+    "a"|"A")
+        echo "Pilihan A"
+        ;;
+    "b"|"B")
+        echo "Pilihan B"
+        ;;
+    *)
+        echo "Pilihan tidak valid"
+        ;;
+esac
+
+# ─────────────────────────────────────────────────────────────
+# ARRAY
+# ─────────────────────────────────────────────────────────────
+
+# Deklarasi array
+buah=("apel" "mangga" "jeruk" "pisang")
+nama[0]="Alice"
+nama[1]="Bob"
+
+# Akses array
+echo ${buah[0]}             # Elemen pertama
+echo ${buah[@]}             # Semua elemen
+echo ${#buah[@]}            # Jumlah elemen
+echo ${buah[@]:1:2}         # Slice (dari index 1, ambil 2)
+
+# Loop array
+for item in "${buah[@]}"; do
+    echo $item
+done
+
+# Associative array (seperti dict/hash)
+declare -A data
+data["nama"]="Alice"
+data["umur"]="25"
+echo ${data["nama"]}
+echo ${!data[@]}            # Semua key
+
+# ─────────────────────────────────────────────────────────────
+# STRING MANIPULATION
+# ─────────────────────────────────────────────────────────────
+
+str="Hello World Linux"
+echo ${#str}                # Panjang string
+echo ${str:6}               # Substring dari index 6
+echo ${str:6:5}             # Substring 5 karakter dari index 6
+echo ${str/World/Linux}     # Ganti pertama
+echo ${str//l/L}            # Ganti semua
+echo ${str,,}               # Lowercase
+echo ${str^^}               # Uppercase
+echo ${str%Linux}           # Hapus suffix
+echo ${str#Hello}           # Hapus prefix
+
+# Default value
+echo ${var:-"default"}      # Gunakan default jika var kosong
+echo ${var:="default"}      # Set var ke default jika var kosong
+echo ${var:?"Error msg"}    # Error jika var kosong
+
+# ─────────────────────────────────────────────────────────────
+# ARITHMETIC
+# ─────────────────────────────────────────────────────────────
+
+# Metode 1: $(( ))
+a=5
+b=3
+echo $((a + b))             # 8
+echo $((a - b))             # 2
+echo $((a * b))             # 15
+echo $((a / b))             # 1 (integer division)
+echo $((a % b))             # 2 (modulo)
+echo $((a ** b))            # 125 (pangkat)
+((a++))                     # Increment
+((a--))                     # Decrement
+((a += 5))                  # a = a + 5
+
+# Metode 2: expr (lama)
+expr 5 + 3
+
+# Metode 3: bc (floating point)
+echo "scale=2; 10/3" | bc   # 3.33
+
+# ─────────────────────────────────────────────────────────────
+# CONTOH SCRIPT LENGKAP
+# ─────────────────────────────────────────────────────────────
+
+#!/bin/bash
+# Script: backup.sh
+# Deskripsi: Backup otomatis direktori
+
+set -e          # Exit jika ada error
+set -u          # Error jika variabel tidak didefinisikan
+set -o pipefail # Error jika pipe gagal
+
+# Konfigurasi
+SOURCE_DIR="/home/user/data"
+BACKUP_DIR="/backup"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_NAME="backup_${DATE}.tar.gz"
+LOG_FILE="/var/log/backup.log"
+
+# Fungsi logging
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+}
+
+# Fungsi error handling
+error_exit() {
+    log "ERROR: $1"
+    exit 1
+}
+
+# Validasi
+[ -d "$SOURCE_DIR" ] || error_exit "Direktori source tidak ada: $SOURCE_DIR"
+[ -d "$BACKUP_DIR" ] || mkdir -p "$BACKUP_DIR" || error_exit "Gagal buat direktori backup"
+
+# Proses backup
+log "Memulai backup $SOURCE_DIR..."
+
+if tar -czf "${BACKUP_DIR}/${BACKUP_NAME}" "$SOURCE_DIR"; then
+    SIZE=$(du -sh "${BACKUP_DIR}/${BACKUP_NAME}" | cut -f1)
+    log "Backup berhasil: ${BACKUP_NAME} (${SIZE})"
+else
+    error_exit "Backup gagal!"
+fi
+
+# Hapus backup lebih dari 7 hari
+find "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +7 -delete
+
+log "Backup lama (>7 hari) telah dihapus"
+log "Selesai."
+exit 0
 ```
 
 ### 14.4 Cron Job (Penjadwalan Tugas)
 
 ```bash
-# ─────────────────────────────────────────────────────────────# CRON - Penjadwalan Otomatis# ─────────────────────────────────────────────────────────────crontab -e                  # Edit cron job penggunacrontab -l                  # List cron jobcrontab -r                  # Hapus semua cron jobcrontab -u alice -l         # List cron job alice (root only)# FORMAT CRONTAB:# ┌─────────────── Menit (0-59)# │ ┌───────────── Jam (0-23)# │ │ ┌─────────── Hari (1-31)# │ │ │ ┌───────── Bulan (1-12)# │ │ │ │ ┌─────── Hari minggu (0-7, 0&7=Minggu)# │ │ │ │ │# * * * * * perintah# CONTOH CRON JOB:# Setiap menit* * * * * /path/to/script.sh# Setiap jam tepat (menit 0)0 * * * * /path/to/script.sh# Setiap hari jam 2:30 pagi30 2 * * * /path/to/backup.sh# Setiap hari Senin jam 8:000 8 * * 1 /path/to/script.sh# Setiap hari kerja (Senin-Jumat) jam 9:000 9 * * 1-5 /path/to/script.sh# Pertama setiap bulan0 0 1 * * /path/to/monthly.sh# Setiap 5 menit*/5 * * * * /path/to/script.sh# Setiap 2 jam0 */2 * * * /path/to/script.sh# Spesial@reboot /path/to/startup.sh    # Saat reboot@daily /path/to/daily.sh       # Sekali sehari (sama dengan 0 0 * * *)@weekly /path/to/weekly.sh     # Sekali seminggu@monthly /path/to/monthly.sh   # Sekali sebulan@yearly /path/to/yearly.sh     # Sekali setahun# Direktori cron sistemls /etc/cron.daily/            # Script yang berjalan harianls /etc/cron.weekly/           # Script yang berjalan mingguanls /etc/cron.monthly/          # Script yang berjalan bulananls /etc/cron.d/                # Konfigurasi cron tambahan# Systemd timer (modern pengganti cron)systemctl list-timers          # List semua timer
+# ─────────────────────────────────────────────────────────────
+# CRON - Penjadwalan Otomatis
+# ─────────────────────────────────────────────────────────────
+
+crontab -e                  # Edit cron job pengguna
+crontab -l                  # List cron job
+crontab -r                  # Hapus semua cron job
+crontab -u alice -l         # List cron job alice (root only)
+
+# FORMAT CRONTAB:
+# ┌─────────────── Menit (0-59)
+# │ ┌───────────── Jam (0-23)
+# │ │ ┌─────────── Hari (1-31)
+# │ │ │ ┌───────── Bulan (1-12)
+# │ │ │ │ ┌─────── Hari minggu (0-7, 0&7=Minggu)
+# │ │ │ │ │
+# * * * * * perintah
+
+# CONTOH CRON JOB:
+# Setiap menit
+* * * * * /path/to/script.sh
+
+# Setiap jam tepat (menit 0)
+0 * * * * /path/to/script.sh
+
+# Setiap hari jam 2:30 pagi
+30 2 * * * /path/to/backup.sh
+
+# Setiap hari Senin jam 8:00
+0 8 * * 1 /path/to/script.sh
+
+# Setiap hari kerja (Senin-Jumat) jam 9:00
+0 9 * * 1-5 /path/to/script.sh
+
+# Pertama setiap bulan
+0 0 1 * * /path/to/monthly.sh
+
+# Setiap 5 menit
+*/5 * * * * /path/to/script.sh
+
+# Setiap 2 jam
+0 */2 * * * /path/to/script.sh
+
+# Spesial
+@reboot /path/to/startup.sh    # Saat reboot
+@daily /path/to/daily.sh       # Sekali sehari (sama dengan 0 0 * * *)
+@weekly /path/to/weekly.sh     # Sekali seminggu
+@monthly /path/to/monthly.sh   # Sekali sebulan
+@yearly /path/to/yearly.sh     # Sekali setahun
+
+# Direktori cron sistem
+ls /etc/cron.daily/            # Script yang berjalan harian
+ls /etc/cron.weekly/           # Script yang berjalan mingguan
+ls /etc/cron.monthly/          # Script yang berjalan bulanan
+ls /etc/cron.d/                # Konfigurasi cron tambahan
+
+# Systemd timer (modern pengganti cron)
+systemctl list-timers          # List semua timer
 ```
 
 ***
