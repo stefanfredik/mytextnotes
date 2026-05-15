@@ -2892,19 +2892,170 @@ chkrootkit                          # Cek rootkit
 ### 17.1 Monitoring Sistem
 
 ```bash
-# ─────────────────────────────────────────────────────────────# MONITORING REAL-TIME# ─────────────────────────────────────────────────────────────top                         # Monitoring proses interaktifhtop                        # Top yang lebih canggihatop                        # Advanced top dengan historyglances                     # Monitoring all-in-onedstat                       # Statistik sistem komprehensifiostat                      # I/O Statisticsiotop                       # Top untuk I/O (disk)iftop                       # Top untuk networknethogs                     # Penggunaan bandwidth per prosesbmon                        # Bandwidth monitornload                       # Network load monitorvnstat                      # Network traffic statisticssar                         # System Activity Reportvmstat                      # Virtual memory statisticsmpstat                      # CPU statistics per-core# ─────────────────────────────────────────────────────────────# INFORMASI HARDWARE REAL-TIME# ─────────────────────────────────────────────────────────────sensors                     # Suhu hardware (install: apt install lm-sensors)sensors-detect              # Deteksi sensorwatch sensors               # Monitor suhu secara real-timenvidia-smi                  # Info GPU NVIDIAgpu-burn                    # Test GPUsmartctl -a /dev/sda        # SMART data disk (install: smartmontools)smartctl -t short /dev/sda  # Test SMART singkat# ─────────────────────────────────────────────────────────────# PERINTAH MONITORING JARINGAN# ─────────────────────────────────────────────────────────────ss -s                       # Statistik socketnetstat -s                  # Statistik jaringanip -s link                  # Statistik interfacecat /proc/net/dev           # Statistik raw networktcpdump -i eth0             # Capture paket jaringantcpdump -i eth0 port 80     # Capture port 80tcpdump -i eth0 -w file.pcap  # Simpan ke filewireshark                   # GUI packet analyzer
+# ─────────────────────────────────────────────────────────────
+# MONITORING REAL-TIME
+# ─────────────────────────────────────────────────────────────
+
+top                         # Monitoring proses interaktif
+htop                        # Top yang lebih canggih
+atop                        # Advanced top dengan history
+glances                     # Monitoring all-in-one
+dstat                       # Statistik sistem komprehensif
+iostat                      # I/O Statistics
+iotop                       # Top untuk I/O (disk)
+iftop                       # Top untuk network
+nethogs                     # Penggunaan bandwidth per proses
+bmon                        # Bandwidth monitor
+nload                       # Network load monitor
+vnstat                      # Network traffic statistics
+sar                         # System Activity Report
+vmstat                      # Virtual memory statistics
+mpstat                      # CPU statistics per-core
+
+# ─────────────────────────────────────────────────────────────
+# INFORMASI HARDWARE REAL-TIME
+# ─────────────────────────────────────────────────────────────
+
+sensors                     # Suhu hardware (install: apt install lm-sensors)
+sensors-detect              # Deteksi sensor
+watch sensors               # Monitor suhu secara real-time
+nvidia-smi                  # Info GPU NVIDIA
+gpu-burn                    # Test GPU
+smartctl -a /dev/sda        # SMART data disk (install: smartmontools)
+smartctl -t short /dev/sda  # Test SMART singkat
+
+# ─────────────────────────────────────────────────────────────
+# PERINTAH MONITORING JARINGAN
+# ─────────────────────────────────────────────────────────────
+
+ss -s                       # Statistik socket
+netstat -s                  # Statistik jaringan
+ip -s link                  # Statistik interface
+cat /proc/net/dev           # Statistik raw network
+tcpdump -i eth0             # Capture paket jaringan
+tcpdump -i eth0 port 80     # Capture port 80
+tcpdump -i eth0 -w file.pcap  # Simpan ke file
+wireshark                   # GUI packet analyzer
 ```
 
 ### 17.2 Manajemen Log
 
 ```bash
-# ─────────────────────────────────────────────────────────────# FILE LOG PENTING# ─────────────────────────────────────────────────────────────# Lokasi log umum:/var/log/syslog             # Log sistem umum (Debian/Ubuntu)/var/log/messages           # Log sistem umum (RHEL/CentOS)/var/log/auth.log           # Log autentikasi (Debian/Ubuntu)/var/log/secure             # Log autentikasi (RHEL/CentOS)/var/log/kern.log           # Log kernel/var/log/dmesg              # Pesan boot kernel/var/log/dpkg.log           # Log instalasi paket/var/log/apt/               # Log apt/var/log/nginx/             # Log nginx/var/log/apache2/           # Log Apache/var/log/mysql/             # Log MySQL/var/log/postgresql/        # Log PostgreSQL/var/log/cron               # Log cron jobs/var/log/lastlog            # Log login terakhir/var/log/wtmp               # Log semua login/logout/var/log/btmp               # Log percobaan login gagal# Membaca logtail -f /var/log/syslog             # Monitor log real-timetail -n 100 /var/log/auth.log       # 100 baris terakhirgrep "error" /var/log/syslog        # Cari errorgrep "Failed" /var/log/auth.log     # Login gagaldmesg                               # Kernel messagesdmesg | tail -20                    # 20 pesan kernel terakhirdmesg --level=err                   # Hanya error kerneldmesg -T                            # Dengan timestamp yang readable# Perintah khusus untuk log loginlast                        # Riwayat loginlastb                       # Login gagalwho                         # Siapa yang login sekarangw                           # Detail pengguna yang loginlastlog                     # Login terakhir semua user# ─────────────────────────────────────────────────────────────# RSYSLOG - Sistem Logging# ─────────────────────────────────────────────────────────────# Konfigurasi: /etc/rsyslog.conf dan /etc/rsyslog.d/# Format: facility.level    destination# Facility: auth, cron, daemon, kern, mail, user, local0-7# Level: emerg, alert, crit, err, warning, notice, info, debug# Contoh konfigurasi rsyslog:# auth,authpriv.*     /var/log/auth.log# kern.*              /var/log/kern.log# *.error             /var/log/error.log# local0.*            /var/log/myapp.log# Kirim log ke remote server# *.* @@remote-syslog-server:514    # TCP# *.* @remote-syslog-server:514     # UDPsystemctl restart rsyslog# ─────────────────────────────────────────────────────────────# LOGROTATE - Rotasi Log Otomatis# ─────────────────────────────────────────────────────────────# Konfigurasi: /etc/logrotate.conf dan /etc/logrotate.d/# Contoh konfigurasi logrotate:cat > /etc/logrotate.d/myapp << 'EOF'/var/log/myapp/*.log {    daily               # Rotasi harian    rotate 30           # Simpan 30 file    compress            # Kompres file lama    delaycompress       # Tunda kompresi 1 siklus    notifempty          # Tidak rotasi jika kosong    missingok           # Tidak error jika file tidak ada    create 0640 myapp myapp  # Permission file baru    postrotate          # Jalankan setelah rotasi        systemctl reload myapp    endscript}EOFlogrotate -d /etc/logrotate.d/myapp    # Dry run (test)logrotate -f /etc/logrotate.d/myapp    # Force rotasilogrotate /etc/logrotate.conf          # Rotasi manual
+# ─────────────────────────────────────────────────────────────
+# FILE LOG PENTING
+# ─────────────────────────────────────────────────────────────
+
+# Lokasi log umum:
+/var/log/syslog             # Log sistem umum (Debian/Ubuntu)
+/var/log/messages           # Log sistem umum (RHEL/CentOS)
+/var/log/auth.log           # Log autentikasi (Debian/Ubuntu)
+/var/log/secure             # Log autentikasi (RHEL/CentOS)
+/var/log/kern.log           # Log kernel
+/var/log/dmesg              # Pesan boot kernel
+/var/log/dpkg.log           # Log instalasi paket
+/var/log/apt/               # Log apt
+/var/log/nginx/             # Log nginx
+/var/log/apache2/           # Log Apache
+/var/log/mysql/             # Log MySQL
+/var/log/postgresql/        # Log PostgreSQL
+/var/log/cron               # Log cron jobs
+/var/log/lastlog            # Log login terakhir
+/var/log/wtmp               # Log semua login/logout
+/var/log/btmp               # Log percobaan login gagal
+
+# Membaca log
+tail -f /var/log/syslog             # Monitor log real-time
+tail -n 100 /var/log/auth.log       # 100 baris terakhir
+grep "error" /var/log/syslog        # Cari error
+grep "Failed" /var/log/auth.log     # Login gagal
+dmesg                               # Kernel messages
+dmesg | tail -20                    # 20 pesan kernel terakhir
+dmesg --level=err                   # Hanya error kernel
+dmesg -T                            # Dengan timestamp yang readable
+
+# Perintah khusus untuk log login
+last                        # Riwayat login
+lastb                       # Login gagal
+who                         # Siapa yang login sekarang
+w                           # Detail pengguna yang login
+lastlog                     # Login terakhir semua user
+
+# ─────────────────────────────────────────────────────────────
+# RSYSLOG - Sistem Logging
+# ─────────────────────────────────────────────────────────────
+
+# Konfigurasi: /etc/rsyslog.conf dan /etc/rsyslog.d/
+# Format: facility.level    destination
+# Facility: auth, cron, daemon, kern, mail, user, local0-7
+# Level: emerg, alert, crit, err, warning, notice, info, debug
+
+# Contoh konfigurasi rsyslog:
+# auth,authpriv.*     /var/log/auth.log
+# kern.*              /var/log/kern.log
+# *.error             /var/log/error.log
+# local0.*            /var/log/myapp.log
+
+# Kirim log ke remote server
+# *.* @@remote-syslog-server:514    # TCP
+# *.* @remote-syslog-server:514     # UDP
+
+systemctl restart rsyslog
+
+# ─────────────────────────────────────────────────────────────
+# LOGROTATE - Rotasi Log Otomatis
+# ─────────────────────────────────────────────────────────────
+
+# Konfigurasi: /etc/logrotate.conf dan /etc/logrotate.d/
+# Contoh konfigurasi logrotate:
+cat > /etc/logrotate.d/myapp << 'EOF'
+/var/log/myapp/*.log {
+    daily               # Rotasi harian
+    rotate 30           # Simpan 30 file
+    compress            # Kompres file lama
+    delaycompress       # Tunda kompresi 1 siklus
+    notifempty          # Tidak rotasi jika kosong
+    missingok           # Tidak error jika file tidak ada
+    create 0640 myapp myapp  # Permission file baru
+    postrotate          # Jalankan setelah rotasi
+        systemctl reload myapp
+    endscript
+}
+EOF
+
+logrotate -d /etc/logrotate.d/myapp    # Dry run (test)
+logrotate -f /etc/logrotate.d/myapp    # Force rotasi
+logrotate /etc/logrotate.conf          # Rotasi manual
 ```
 
 ### 17.3 Monitoring Tools Lanjutan
 
 ```bash
-# ─────────────────────────────────────────────────────────────# PROMETHEUS & GRAFANA (Monitoring Enterprise)# ─────────────────────────────────────────────────────────────# Install Node Exporter (pengumpul metrik)wget https://github.com/prometheus/node_exporter/releases/...tar xvf node_exporter-*.tar.gz./node_exporter &# Metrik tersedia di: http://localhost:9100/metrics# ─────────────────────────────────────────────────────────────# ELK STACK (Elasticsearch, Logstash, Kibana)# ─────────────────────────────────────────────────────────────# Untuk log management skala besar# Elasticsearch: penyimpanan & pencarian# Logstash: pengumpulan & transformasi log# Kibana: visualisasi# Filebeat: lightweight log shipper# ─────────────────────────────────────────────────────────────# NAGIOS / ZABBIX / ICINGA# ─────────────────────────────────────────────────────────────# Untuk monitoring infrastruktur enterprise
+# ─────────────────────────────────────────────────────────────
+# PROMETHEUS & GRAFANA (Monitoring Enterprise)
+# ─────────────────────────────────────────────────────────────
+
+# Install Node Exporter (pengumpul metrik)
+wget https://github.com/prometheus/node_exporter/releases/...
+tar xvf node_exporter-*.tar.gz
+./node_exporter &
+
+# Metrik tersedia di: http://localhost:9100/metrics
+
+# ─────────────────────────────────────────────────────────────
+# ELK STACK (Elasticsearch, Logstash, Kibana)
+# ─────────────────────────────────────────────────────────────
+
+# Untuk log management skala besar
+# Elasticsearch: penyimpanan & pencarian
+# Logstash: pengumpulan & transformasi log
+# Kibana: visualisasi
+# Filebeat: lightweight log shipper
+
+# ─────────────────────────────────────────────────────────────
+# NAGIOS / ZABBIX / ICINGA
+# ─────────────────────────────────────────────────────────────
+
+# Untuk monitoring infrastruktur enterprise
 ```
 
 ***
