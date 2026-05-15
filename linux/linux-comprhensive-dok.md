@@ -1355,25 +1355,183 @@ SISTEM PAKET LINUX:
 ### 11.2 APT (Advanced Package Tool) - Debian/Ubuntu
 
 ```bash
-# ─────────────────────────────────────────────────────────────# APT - Perintah Modern (Direkomendasikan)# ─────────────────────────────────────────────────────────────# Update repositoryapt update                  # Update daftar paket dari repository# Upgrade paketapt upgrade                 # Upgrade semua paketapt full-upgrade            # Upgrade termasuk menghapus paket lamaapt dist-upgrade            # Upgrade distribusi# Instalasi paketapt install nginx           # Install nginxapt install nginx curl vim  # Install beberapa paketapt install -y nginx        # Install tanpa konfirmasiapt install ./paket.deb     # Install dari file lokal# Menghapus paketapt remove nginx            # Hapus nginx (konfigurasi tetap)apt purge nginx             # Hapus nginx + konfigurasiapt autoremove              # Hapus paket yang tidak terpakaiapt clean                   # Hapus cache paketapt autoclean               # Hapus cache paket yang sudah lama# Informasi paketapt search nginx            # Cari paketapt show nginx              # Info detail paketapt list --installed        # Daftar paket yang terinstalapt list --upgradable       # Daftar paket yang bisa diupgradeapt depends nginx           # Dependensi nginx# ─────────────────────────────────────────────────────────────# DPKG - Low Level Package Manager# ─────────────────────────────────────────────────────────────dpkg -i paket.deb           # Install dari file .debdpkg -r nginx               # Hapus paketdpkg -P nginx               # Purge paket (hapus + konfigurasi)dpkg -l                     # List semua paket yang terinstaldpkg -l nginx               # Info paket nginxdpkg -L nginx               # File yang diinstal oleh nginxdpkg -S /usr/bin/ls         # Paket mana yang memiliki file inidpkg --configure -a         # Konfigurasi ulang semua paket# ─────────────────────────────────────────────────────────────# REPOSITORY# ─────────────────────────────────────────────────────────────# Tambah repositoryadd-apt-repository ppa:nama/ppa         # Tambah PPA (Ubuntu)add-apt-repository universe             # Tambah repo universe# Konfigurasi repositorycat /etc/apt/sources.list               # File repository utamals /etc/apt/sources.list.d/             # Direktori repository tambahan# Format sources.list:# deb http://archive.ubuntu.com/ubuntu jammy main restricted# │   │                                │      └── komponen# │   │                                └── codename# │   └── URL repository# └── tipe (deb=binary, deb-src=source)
+# ─────────────────────────────────────────────────────────────
+# APT - Perintah Modern (Direkomendasikan)
+# ─────────────────────────────────────────────────────────────
+
+# Update repository
+apt update                  # Update daftar paket dari repository
+
+# Upgrade paket
+apt upgrade                 # Upgrade semua paket
+apt full-upgrade            # Upgrade termasuk menghapus paket lama
+apt dist-upgrade            # Upgrade distribusi
+
+# Instalasi paket
+apt install nginx           # Install nginx
+apt install nginx curl vim  # Install beberapa paket
+apt install -y nginx        # Install tanpa konfirmasi
+apt install ./paket.deb     # Install dari file lokal
+
+# Menghapus paket
+apt remove nginx            # Hapus nginx (konfigurasi tetap)
+apt purge nginx             # Hapus nginx + konfigurasi
+apt autoremove              # Hapus paket yang tidak terpakai
+apt clean                   # Hapus cache paket
+apt autoclean               # Hapus cache paket yang sudah lama
+
+# Informasi paket
+apt search nginx            # Cari paket
+apt show nginx              # Info detail paket
+apt list --installed        # Daftar paket yang terinstal
+apt list --upgradable       # Daftar paket yang bisa diupgrade
+apt depends nginx           # Dependensi nginx
+
+# ─────────────────────────────────────────────────────────────
+# DPKG - Low Level Package Manager
+# ─────────────────────────────────────────────────────────────
+
+dpkg -i paket.deb           # Install dari file .deb
+dpkg -r nginx               # Hapus paket
+dpkg -P nginx               # Purge paket (hapus + konfigurasi)
+dpkg -l                     # List semua paket yang terinstal
+dpkg -l nginx               # Info paket nginx
+dpkg -L nginx               # File yang diinstal oleh nginx
+dpkg -S /usr/bin/ls         # Paket mana yang memiliki file ini
+dpkg --configure -a         # Konfigurasi ulang semua paket
+
+# ─────────────────────────────────────────────────────────────
+# REPOSITORY
+# ─────────────────────────────────────────────────────────────
+
+# Tambah repository
+add-apt-repository ppa:nama/ppa         # Tambah PPA (Ubuntu)
+add-apt-repository universe             # Tambah repo universe
+
+# Konfigurasi repository
+cat /etc/apt/sources.list               # File repository utama
+ls /etc/apt/sources.list.d/             # Direktori repository tambahan
+
+# Format sources.list:
+# deb http://archive.ubuntu.com/ubuntu jammy main restricted
+# │   │                                │      └── komponen
+# │   │                                └── codename
+# │   └── URL repository
+# └── tipe (deb=binary, deb-src=source)
 ```
 
 ### 11.3 DNF/YUM - Red Hat/CentOS/Fedora
 
 ```bash
-# ─────────────────────────────────────────────────────────────# DNF (Dandified Yum) - Pengganti YUM# ─────────────────────────────────────────────────────────────# Update & upgradednf check-update            # Cek update yang tersediadnf update                  # Update semua paketdnf upgrade                 # Sama dengan update# Instalasidnf install nginx           # Install nginxdnf install -y nginx        # Install tanpa konfirmasidnf localinstall paket.rpm  # Install dari file RPM lokaldnf groupinstall "Development Tools"  # Install grup paket# Menghapusdnf remove nginx            # Hapus paketdnf autoremove              # Hapus dependensi yang tidak terpakaidnf clean all               # Hapus semua cache# Informasidnf search nginx            # Cari paketdnf info nginx              # Info paketdnf list installed          # Daftar terinstaldnf list available          # Paket yang tersediadnf provides /usr/bin/vim   # Paket apa yang menyediakan file ini# Repositorydnf repolist                # Daftar repository aktifdnf config-manager --add-repo URL   # Tambah repositorydnf config-manager --enable repo    # Aktifkan repositorydnf config-manager --disable repo   # Nonaktifkan repository# ─────────────────────────────────────────────────────────────# RPM - Red Hat Package Manager (Low Level)# ─────────────────────────────────────────────────────────────rpm -ivh paket.rpm          # Install paket (-i install, -v verbose, -h progress)rpm -Uvh paket.rpm          # Upgrade paketrpm -e paket                # Erase (hapus) paketrpm -q paket                # Query paketrpm -qa                     # Query semua paketrpm -ql nginx               # List file yang diinstal nginxrpm -qf /usr/bin/vim        # Paket yang memiliki filerpm -qi nginx               # Info paket nginxrpm --verify nginx          # Verifikasi integritas paket
+# ─────────────────────────────────────────────────────────────
+# DNF (Dandified Yum) - Pengganti YUM
+# ─────────────────────────────────────────────────────────────
+
+# Update & upgrade
+dnf check-update            # Cek update yang tersedia
+dnf update                  # Update semua paket
+dnf upgrade                 # Sama dengan update
+
+# Instalasi
+dnf install nginx           # Install nginx
+dnf install -y nginx        # Install tanpa konfirmasi
+dnf localinstall paket.rpm  # Install dari file RPM lokal
+dnf groupinstall "Development Tools"  # Install grup paket
+
+# Menghapus
+dnf remove nginx            # Hapus paket
+dnf autoremove              # Hapus dependensi yang tidak terpakai
+dnf clean all               # Hapus semua cache
+
+# Informasi
+dnf search nginx            # Cari paket
+dnf info nginx              # Info paket
+dnf list installed          # Daftar terinstal
+dnf list available          # Paket yang tersedia
+dnf provides /usr/bin/vim   # Paket apa yang menyediakan file ini
+
+# Repository
+dnf repolist                # Daftar repository aktif
+dnf config-manager --add-repo URL   # Tambah repository
+dnf config-manager --enable repo    # Aktifkan repository
+dnf config-manager --disable repo   # Nonaktifkan repository
+
+# ─────────────────────────────────────────────────────────────
+# RPM - Red Hat Package Manager (Low Level)
+# ─────────────────────────────────────────────────────────────
+
+rpm -ivh paket.rpm          # Install paket (-i install, -v verbose, -h progress)
+rpm -Uvh paket.rpm          # Upgrade paket
+rpm -e paket                # Erase (hapus) paket
+rpm -q paket                # Query paket
+rpm -qa                     # Query semua paket
+rpm -ql nginx               # List file yang diinstal nginx
+rpm -qf /usr/bin/vim        # Paket yang memiliki file
+rpm -qi nginx               # Info paket nginx
+rpm --verify nginx          # Verifikasi integritas paket
 ```
 
 ### 11.4 Pacman - Arch Linux
 
 ```bash
-# ─────────────────────────────────────────────────────────────# PACMAN - Arch Linux Package Manager# ─────────────────────────────────────────────────────────────# Updatepacman -Sy                  # Sync databasepacman -Syu                 # Update sistem penuh# Instalasipacman -S nginx             # Install nginxpacman -S nginx curl vim    # Install beberapa paketpacman -U paket.pkg.tar.zst # Install dari file lokal# Menghapuspacman -R nginx             # Hapus paketpacman -Rs nginx            # Hapus + dependensi tidak terpakaipacman -Rns nginx           # Hapus + deps + konfigurasi# Pencarianpacman -Ss nginx            # Cari di repositorypacman -Qs nginx            # Cari di paket terinstalpacman -Si nginx            # Info paket dari repositorypacman -Qi nginx            # Info paket yang terinstalpacman -Ql nginx            # File yang diinstal# Maintenancepacman -Sc                  # Hapus cache paket lamapacman -Scc                 # Hapus semua cachepacman -Qdt                 # Orphan packages
+# ─────────────────────────────────────────────────────────────
+# PACMAN - Arch Linux Package Manager
+# ─────────────────────────────────────────────────────────────
+
+# Update
+pacman -Sy                  # Sync database
+pacman -Syu                 # Update sistem penuh
+
+# Instalasi
+pacman -S nginx             # Install nginx
+pacman -S nginx curl vim    # Install beberapa paket
+pacman -U paket.pkg.tar.zst # Install dari file lokal
+
+# Menghapus
+pacman -R nginx             # Hapus paket
+pacman -Rs nginx            # Hapus + dependensi tidak terpakai
+pacman -Rns nginx           # Hapus + deps + konfigurasi
+
+# Pencarian
+pacman -Ss nginx            # Cari di repository
+pacman -Qs nginx            # Cari di paket terinstal
+pacman -Si nginx            # Info paket dari repository
+pacman -Qi nginx            # Info paket yang terinstal
+pacman -Ql nginx            # File yang diinstal
+
+# Maintenance
+pacman -Sc                  # Hapus cache paket lama
+pacman -Scc                 # Hapus semua cache
+pacman -Qdt                 # Orphan packages
 ```
 
 ### 11.5 Snap & Flatpak
 
 ```bash
-# ─────────────────────────────────────────────────────────────# SNAP# ─────────────────────────────────────────────────────────────snap find vscode            # Cari aplikasisnap install vscode         # Install VS Codesnap install --classic vscode   # Install dengan classic confinementsnap remove vscode          # Hapussnap list                   # Daftar snap terinstalsnap refresh                # Update semua snapsnap refresh vscode         # Update snap tertentusnap info vscode            # Info snap# ─────────────────────────────────────────────────────────────# FLATPAK# ─────────────────────────────────────────────────────────────flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepoflatpak install flathub org.gimp.GIMP   # Install GIMPflatpak run org.gimp.GIMP               # Jalankanflatpak uninstall org.gimp.GIMP         # Hapusflatpak list                            # Daftar terinstalflatpak update                          # Update semuaflatpak search gimp                     # Cari aplikasi
+# ─────────────────────────────────────────────────────────────
+# SNAP
+# ─────────────────────────────────────────────────────────────
+
+snap find vscode            # Cari aplikasi
+snap install vscode         # Install VS Code
+snap install --classic vscode   # Install dengan classic confinement
+snap remove vscode          # Hapus
+snap list                   # Daftar snap terinstal
+snap refresh                # Update semua snap
+snap refresh vscode         # Update snap tertentu
+snap info vscode            # Info snap
+
+# ─────────────────────────────────────────────────────────────
+# FLATPAK
+# ─────────────────────────────────────────────────────────────
+
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub org.gimp.GIMP   # Install GIMP
+flatpak run org.gimp.GIMP               # Jalankan
+flatpak uninstall org.gimp.GIMP         # Hapus
+flatpak list                            # Daftar terinstal
+flatpak update                          # Update semua
+flatpak search gimp                     # Cari aplikasi
 ```
 
 ***
@@ -1383,37 +1541,236 @@ SISTEM PAKET LINUX:
 ### 12.1 Melihat Informasi Disk
 
 ```bash
-# ─────────────────────────────────────────────────────────────# INFORMASI DISK# ─────────────────────────────────────────────────────────────df                          # Disk space filesystemdf -h                       # Human-readabledf -H                       # Human-readable (1000 bukan 1024)df -T                       # Tampilkan tipe filesystemdf /home                    # Hanya partisi /homedu                          # Disk usage direktoridu -h direktori/            # Human-readabledu -sh direktori/           # Summary (total saja)du -sh *                    # Ukuran semua item di direktori inidu -h --max-depth=1 /var    # Kedalaman 1 levellsblk                       # List block deviceslsblk -f                    # Dengan info filesystemlsblk -a                    # Termasuk disk kosongfdisk -l                    # Detail partisi (butuh root)blkid                       # UUID dan tipe filesystemparted -l                   # Detail partisi dengan parted# ─────────────────────────────────────────────────────────────# PERANGKAT DISK DI LINUX# ─────────────────────────────────────────────────────────────# /dev/sda    - SATA/SCSI disk pertama# /dev/sdb    - SATA/SCSI disk kedua# /dev/sda1   - Partisi pertama dari disk pertama# /dev/sda2   - Partisi kedua dari disk pertama# /dev/nvme0n1  - NVMe disk pertama# /dev/nvme0n1p1 - Partisi pertama NVMe# /dev/vda    - Virtual disk (KVM/QEMU)# /dev/hda    - IDE disk (lama)# /dev/mmcblk0  - MMC/SD Card
+# ─────────────────────────────────────────────────────────────
+# INFORMASI DISK
+# ─────────────────────────────────────────────────────────────
+
+df                          # Disk space filesystem
+df -h                       # Human-readable
+df -H                       # Human-readable (1000 bukan 1024)
+df -T                       # Tampilkan tipe filesystem
+df /home                    # Hanya partisi /home
+
+du                          # Disk usage direktori
+du -h direktori/            # Human-readable
+du -sh direktori/           # Summary (total saja)
+du -sh *                    # Ukuran semua item di direktori ini
+du -h --max-depth=1 /var    # Kedalaman 1 level
+
+lsblk                       # List block devices
+lsblk -f                    # Dengan info filesystem
+lsblk -a                    # Termasuk disk kosong
+fdisk -l                    # Detail partisi (butuh root)
+blkid                       # UUID dan tipe filesystem
+parted -l                   # Detail partisi dengan parted
+
+# ─────────────────────────────────────────────────────────────
+# PERANGKAT DISK DI LINUX
+# ─────────────────────────────────────────────────────────────
+
+# /dev/sda    - SATA/SCSI disk pertama
+# /dev/sdb    - SATA/SCSI disk kedua
+# /dev/sda1   - Partisi pertama dari disk pertama
+# /dev/sda2   - Partisi kedua dari disk pertama
+# /dev/nvme0n1  - NVMe disk pertama
+# /dev/nvme0n1p1 - Partisi pertama NVMe
+# /dev/vda    - Virtual disk (KVM/QEMU)
+# /dev/hda    - IDE disk (lama)
+# /dev/mmcblk0  - MMC/SD Card
 ```
 
 ### 12.2 Partisi Disk
 
 ```bash
-# ─────────────────────────────────────────────────────────────# FDISK - Partisi MBR (hingga 2TB)# ─────────────────────────────────────────────────────────────fdisk /dev/sdb              # Mulai partisi disk sdb# Perintah dalam fdisk:# m = menu help# p = print partition table# n = new partition# d = delete partition# t = change partition type# w = write & exit# q = quit tanpa save# ─────────────────────────────────────────────────────────────# GDISK - Partisi GPT (>2TB, UEFI)# ─────────────────────────────────────────────────────────────gdisk /dev/sdb              # Partisi dengan GPT# ─────────────────────────────────────────────────────────────# PARTED - Universal Partition Tool# ─────────────────────────────────────────────────────────────parted /dev/sdb             # Mulai partedparted /dev/sdb print       # Tampilkan tabel partisiparted /dev/sdb mklabel gpt # Buat tabel partisi GPTparted /dev/sdb mklabel msdos # Buat tabel partisi MBRparted /dev/sdb mkpart primary ext4 1MiB 10GiB  # Buat partisiparted /dev/sdb rm 1        # Hapus partisi 1
+# ─────────────────────────────────────────────────────────────
+# FDISK - Partisi MBR (hingga 2TB)
+# ─────────────────────────────────────────────────────────────
+
+fdisk /dev/sdb              # Mulai partisi disk sdb
+
+# Perintah dalam fdisk:
+# m = menu help
+# p = print partition table
+# n = new partition
+# d = delete partition
+# t = change partition type
+# w = write & exit
+# q = quit tanpa save
+
+# ─────────────────────────────────────────────────────────────
+# GDISK - Partisi GPT (>2TB, UEFI)
+# ─────────────────────────────────────────────────────────────
+
+gdisk /dev/sdb              # Partisi dengan GPT
+
+# ─────────────────────────────────────────────────────────────
+# PARTED - Universal Partition Tool
+# ─────────────────────────────────────────────────────────────
+
+parted /dev/sdb             # Mulai parted
+parted /dev/sdb print       # Tampilkan tabel partisi
+parted /dev/sdb mklabel gpt # Buat tabel partisi GPT
+parted /dev/sdb mklabel msdos # Buat tabel partisi MBR
+parted /dev/sdb mkpart primary ext4 1MiB 10GiB  # Buat partisi
+parted /dev/sdb rm 1        # Hapus partisi 1
 ```
 
 ### 12.3 Format Filesystem
 
 ```bash
-# ─────────────────────────────────────────────────────────────# MKFS - Make Filesystem# ─────────────────────────────────────────────────────────────mkfs.ext4 /dev/sdb1         # Format ext4mkfs.ext3 /dev/sdb1         # Format ext3mkfs.xfs /dev/sdb1          # Format XFSmkfs.btrfs /dev/sdb1        # Format Btrfsmkfs.vfat /dev/sdb1         # Format FAT32mkfs.ntfs /dev/sdb1         # Format NTFSmkfs -t ext4 /dev/sdb1      # Format dengan tipe# Opsi untuk ext4mkfs.ext4 -L "NamaLabel" /dev/sdb1     # Dengan labelmkfs.ext4 -m 1 /dev/sdb1              # Reserved blocks 1% (default 5%)mkfs.ext4 -j /dev/sdb1                # Dengan journaling# ─────────────────────────────────────────────────────────────# FSCK - Filesystem Check & Repair# ─────────────────────────────────────────────────────────────fsck /dev/sdb1              # Check filesystem (harus di-unmount dulu)fsck -y /dev/sdb1           # Auto-yes untuk semua perbaikanfsck -n /dev/sdb1           # Dry run (tidak memperbaiki)e2fsck /dev/sdb1            # Check ext2/3/4e2fsck -f /dev/sdb1         # Force checkxfs_repair /dev/sdb1        # Repair XFS
+# ─────────────────────────────────────────────────────────────
+# MKFS - Make Filesystem
+# ─────────────────────────────────────────────────────────────
+
+mkfs.ext4 /dev/sdb1         # Format ext4
+mkfs.ext3 /dev/sdb1         # Format ext3
+mkfs.xfs /dev/sdb1          # Format XFS
+mkfs.btrfs /dev/sdb1        # Format Btrfs
+mkfs.vfat /dev/sdb1         # Format FAT32
+mkfs.ntfs /dev/sdb1         # Format NTFS
+mkfs -t ext4 /dev/sdb1      # Format dengan tipe
+
+# Opsi untuk ext4
+mkfs.ext4 -L "NamaLabel" /dev/sdb1     # Dengan label
+mkfs.ext4 -m 1 /dev/sdb1              # Reserved blocks 1% (default 5%)
+mkfs.ext4 -j /dev/sdb1                # Dengan journaling
+
+# ─────────────────────────────────────────────────────────────
+# FSCK - Filesystem Check & Repair
+# ─────────────────────────────────────────────────────────────
+
+fsck /dev/sdb1              # Check filesystem (harus di-unmount dulu)
+fsck -y /dev/sdb1           # Auto-yes untuk semua perbaikan
+fsck -n /dev/sdb1           # Dry run (tidak memperbaiki)
+e2fsck /dev/sdb1            # Check ext2/3/4
+e2fsck -f /dev/sdb1         # Force check
+xfs_repair /dev/sdb1        # Repair XFS
 ```
 
 ### 12.4 Mount & Unmount
 
 ```bash
-# ─────────────────────────────────────────────────────────────# MOUNT & UNMOUNT# ─────────────────────────────────────────────────────────────mount /dev/sdb1 /mnt/data           # Mount partisimount -t ext4 /dev/sdb1 /mnt/data  # Mount dengan tipe eksplisitmount -o ro /dev/sdb1 /mnt/data    # Mount read-onlymount -o remount,rw /mnt/data      # Remount sebagai read-writemount -a                            # Mount semua yang ada di /etc/fstabmount                               # Tampilkan semua yang ter-mountumount /mnt/data            # Unmount (cara 1)umount /dev/sdb1            # Unmount (cara 2)umount -f /mnt/data         # Force unmountumount -l /mnt/data         # Lazy unmount (nanti saat tidak dipakai)# Mount ISOmount -o loop image.iso /mnt/iso    # Mount file ISO# ─────────────────────────────────────────────────────────────# /etc/fstab - Auto Mount saat Boot# ─────────────────────────────────────────────────────────────# Format:# <device>  <mount point>  <type>  <options>  <dump>  <pass># Contoh /etc/fstab:UUID=abc123 /              ext4    defaults        0  1UUID=def456 /home          ext4    defaults        0  2UUID=ghi789 none           swap    sw              0  0/dev/sdb1   /mnt/data      ext4    defaults        0  2tmpfs       /tmp           tmpfs   defaults,noatime 0 0# Opsi mount:# defaults  = rw,suid,dev,exec,auto,nouser,async# ro        = read-only# rw        = read-write# noexec    = tidak boleh eksekusi# nosuid    = abaikan setuid bit# noatime   = tidak update atime (lebih cepat)# auto      = mount otomatis saat boot# nofail    = tidak error jika gagal mount
+# ─────────────────────────────────────────────────────────────
+# MOUNT & UNMOUNT
+# ─────────────────────────────────────────────────────────────
+
+mount /dev/sdb1 /mnt/data           # Mount partisi
+mount -t ext4 /dev/sdb1 /mnt/data  # Mount dengan tipe eksplisit
+mount -o ro /dev/sdb1 /mnt/data    # Mount read-only
+mount -o remount,rw /mnt/data      # Remount sebagai read-write
+mount -a                            # Mount semua yang ada di /etc/fstab
+mount                               # Tampilkan semua yang ter-mount
+
+umount /mnt/data            # Unmount (cara 1)
+umount /dev/sdb1            # Unmount (cara 2)
+umount -f /mnt/data         # Force unmount
+umount -l /mnt/data         # Lazy unmount (nanti saat tidak dipakai)
+
+# Mount ISO
+mount -o loop image.iso /mnt/iso    # Mount file ISO
+
+# ─────────────────────────────────────────────────────────────
+# /etc/fstab - Auto Mount saat Boot
+# ─────────────────────────────────────────────────────────────
+
+# Format:
+# <device>  <mount point>  <type>  <options>  <dump>  <pass>
+
+# Contoh /etc/fstab:
+UUID=abc123 /              ext4    defaults        0  1
+UUID=def456 /home          ext4    defaults        0  2
+UUID=ghi789 none           swap    sw              0  0
+/dev/sdb1   /mnt/data      ext4    defaults        0  2
+tmpfs       /tmp           tmpfs   defaults,noatime 0 0
+
+# Opsi mount:
+# defaults  = rw,suid,dev,exec,auto,nouser,async
+# ro        = read-only
+# rw        = read-write
+# noexec    = tidak boleh eksekusi
+# nosuid    = abaikan setuid bit
+# noatime   = tidak update atime (lebih cepat)
+# auto      = mount otomatis saat boot
+# nofail    = tidak error jika gagal mount
 ```
 
 ### 12.5 LVM (Logical Volume Manager)
 
 ```bash
-# ─────────────────────────────────────────────────────────────# LVM - Flexible Disk Management# ─────────────────────────────────────────────────────────────# KONSEP LVM:# Physical Volume (PV) → Volume Group (VG) → Logical Volume (LV)# Disk/Partisi → Pool Storage → Partisi Virtual Fleksibel# PHYSICAL VOLUMEpvcreate /dev/sdb1 /dev/sdc1    # Buat PVpvdisplay                        # Tampilkan info PVpvs                              # Ringkasan PVpvremove /dev/sdb1              # Hapus PV# VOLUME GROUPvgcreate vg_data /dev/sdb1 /dev/sdc1  # Buat VGvgdisplay                              # Info VGvgs                                    # Ringkasan VGvgextend vg_data /dev/sdd1            # Tambah disk ke VGvgreduce vg_data /dev/sdd1            # Hapus disk dari VGvgremove vg_data                       # Hapus VG# LOGICAL VOLUMElvcreate -L 10G -n lv_home vg_data    # Buat LV 10GBlvcreate -l 100%FREE -n lv_data vg_d  # Gunakan semua ruang kosonglvdisplay                              # Info LVlvs                                    # Ringkasan LVlvextend -L +5G /dev/vg_data/lv_home  # Tambah 5GB ke LVlvreduce -L -2G /dev/vg_data/lv_home  # Kurangi 2GB dari LVlvremove /dev/vg_data/lv_home         # Hapus LV# Resize filesystem setelah extend LVresize2fs /dev/vg_data/lv_home        # Untuk ext4xfs_growfs /mount/point               # Untuk XFS# SNAPSHOT LVMlvcreate -s -L 5G -n snap_home /dev/vg_data/lv_home  # Buat snapshotlvconvert --merge /dev/vg_data/snap_home              # Restore snapshot
+# ─────────────────────────────────────────────────────────────
+# LVM - Flexible Disk Management
+# ─────────────────────────────────────────────────────────────
+
+# KONSEP LVM:
+# Physical Volume (PV) → Volume Group (VG) → Logical Volume (LV)
+# Disk/Partisi → Pool Storage → Partisi Virtual Fleksibel
+
+# PHYSICAL VOLUME
+pvcreate /dev/sdb1 /dev/sdc1    # Buat PV
+pvdisplay                        # Tampilkan info PV
+pvs                              # Ringkasan PV
+pvremove /dev/sdb1              # Hapus PV
+
+# VOLUME GROUP
+vgcreate vg_data /dev/sdb1 /dev/sdc1  # Buat VG
+vgdisplay                              # Info VG
+vgs                                    # Ringkasan VG
+vgextend vg_data /dev/sdd1            # Tambah disk ke VG
+vgreduce vg_data /dev/sdd1            # Hapus disk dari VG
+vgremove vg_data                       # Hapus VG
+
+# LOGICAL VOLUME
+lvcreate -L 10G -n lv_home vg_data    # Buat LV 10GB
+lvcreate -l 100%FREE -n lv_data vg_d  # Gunakan semua ruang kosong
+lvdisplay                              # Info LV
+lvs                                    # Ringkasan LV
+lvextend -L +5G /dev/vg_data/lv_home  # Tambah 5GB ke LV
+lvreduce -L -2G /dev/vg_data/lv_home  # Kurangi 2GB dari LV
+lvremove /dev/vg_data/lv_home         # Hapus LV
+
+# Resize filesystem setelah extend LV
+resize2fs /dev/vg_data/lv_home        # Untuk ext4
+xfs_growfs /mount/point               # Untuk XFS
+
+# SNAPSHOT LVM
+lvcreate -s -L 5G -n snap_home /dev/vg_data/lv_home  # Buat snapshot
+lvconvert --merge /dev/vg_data/snap_home              # Restore snapshot
 ```
 
 ### 12.6 RAID
 
 ```bash
-# ─────────────────────────────────────────────────────────────# MDADM - Software RAID# ─────────────────────────────────────────────────────────────# RAID Levels:# RAID 0 - Striping (performa, tanpa redundansi)# RAID 1 - Mirroring (redundansi, butuh 2x ruang)# RAID 5 - Striping + Parity (minimal 3 disk)# RAID 6 - Striping + Double Parity (minimal 4 disk)# RAID 10 - Kombinasi RAID 1+0 (minimal 4 disk)# Install mdadmapt install mdadm# Buat RAID 1mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc# Buat RAID 5mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd# Cek status RAIDcat /proc/mdstatmdadm --detail /dev/md0# Format dan mount RAIDmkfs.ext4 /dev/md0mount /dev/md0 /mnt/raid# Simpan konfigurasi RAIDmdadm --detail --scan >> /etc/mdadm/mdadm.confupdate-initramfs -u
+# ─────────────────────────────────────────────────────────────
+# MDADM - Software RAID
+# ─────────────────────────────────────────────────────────────
+
+# RAID Levels:
+# RAID 0 - Striping (performa, tanpa redundansi)
+# RAID 1 - Mirroring (redundansi, butuh 2x ruang)
+# RAID 5 - Striping + Parity (minimal 3 disk)
+# RAID 6 - Striping + Double Parity (minimal 4 disk)
+# RAID 10 - Kombinasi RAID 1+0 (minimal 4 disk)
+
+# Install mdadm
+apt install mdadm
+
+# Buat RAID 1
+mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+
+# Buat RAID 5
+mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
+
+# Cek status RAID
+cat /proc/mdstat
+mdadm --detail /dev/md0
+
+# Format dan mount RAID
+mkfs.ext4 /dev/md0
+mount /dev/md0 /mnt/raid
+
+# Simpan konfigurasi RAID
+mdadm --detail --scan >> /etc/mdadm/mdadm.conf
+update-initramfs -u
 ```
 
 ***
@@ -1423,19 +1780,235 @@ SISTEM PAKET LINUX:
 ### 13.1 Konfigurasi Jaringan
 
 ```bash
-# ─────────────────────────────────────────────────────────────# INFORMASI JARINGAN# ─────────────────────────────────────────────────────────────ip addr                     # Tampilkan interface & IP (modern)ip addr show eth0           # Info interface eth0ip link                     # Status interfaceip route                    # Tabel routingip route show               # Sama dengan ip routeifconfig                    # Cara lama (deprecated)ifconfig eth0               # Info interface eth0hostname                    # Nama hosthostname -I                 # Semua alamat IPhostname -f                 # Fully Qualified Domain Name (FQDN)cat /etc/hosts              # File hosts lokalcat /etc/resolv.conf        # Konfigurasi DNScat /etc/network/interfaces # Konfigurasi jaringan (Debian)nmcli                       # NetworkManager CLI# ─────────────────────────────────────────────────────────────# KONFIGURASI IP# ─────────────────────────────────────────────────────────────# Menggunakan ip command (sementara - hilang saat reboot)ip addr add 192.168.1.100/24 dev eth0    # Tambah IPip addr del 192.168.1.100/24 dev eth0   # Hapus IPip link set eth0 up                       # Aktifkan interfaceip link set eth0 down                     # Nonaktifkan interfaceip route add default via 192.168.1.1     # Tambah default gatewayip route add 10.0.0.0/8 via 192.168.1.1 # Tambah rute spesifikip route del default                      # Hapus default gateway# Menggunakan NetworkManager (Ubuntu modern)nmcli device status                       # Status devicenmcli connection show                     # Daftar koneksinmcli connection up "Wired Connection 1"  # Aktifkan koneksinmcli connection down "Wired Connection 1" # Nonaktifkan koneksinmcli connection modify eth0 ipv4.addresses "192.168.1.100/24"nmcli connection modify eth0 ipv4.gateway "192.168.1.1"nmcli connection modify eth0 ipv4.dns "8.8.8.8,8.8.4.4"nmcli connection modify eth0 ipv4.method manual  # Static IPnmcli connection reload# Konfigurasi statis Ubuntu (Netplan - /etc/netplan/*.yaml)cat /etc/netplan/00-installer-config.yaml# Contoh konfigurasi Netplan:# network:#   version: 2#   ethernets:#     eth0:#       dhcp4: no#       addresses:#         - 192.168.1.100/24#       gateway4: 192.168.1.1#       nameservers:#         addresses: [8.8.8.8, 8.8.4.4]netplan apply               # Terapkan konfigurasi Netplannetplan try                 # Test konfigurasi (rollback otomatis)
+# ─────────────────────────────────────────────────────────────
+# INFORMASI JARINGAN
+# ─────────────────────────────────────────────────────────────
+
+ip addr                     # Tampilkan interface & IP (modern)
+ip addr show eth0           # Info interface eth0
+ip link                     # Status interface
+ip route                    # Tabel routing
+ip route show               # Sama dengan ip route
+ifconfig                    # Cara lama (deprecated)
+ifconfig eth0               # Info interface eth0
+hostname                    # Nama host
+hostname -I                 # Semua alamat IP
+hostname -f                 # Fully Qualified Domain Name (FQDN)
+cat /etc/hosts              # File hosts lokal
+cat /etc/resolv.conf        # Konfigurasi DNS
+cat /etc/network/interfaces # Konfigurasi jaringan (Debian)
+nmcli                       # NetworkManager CLI
+
+# ─────────────────────────────────────────────────────────────
+# KONFIGURASI IP
+# ─────────────────────────────────────────────────────────────
+
+# Menggunakan ip command (sementara - hilang saat reboot)
+ip addr add 192.168.1.100/24 dev eth0    # Tambah IP
+ip addr del 192.168.1.100/24 dev eth0   # Hapus IP
+ip link set eth0 up                       # Aktifkan interface
+ip link set eth0 down                     # Nonaktifkan interface
+ip route add default via 192.168.1.1     # Tambah default gateway
+ip route add 10.0.0.0/8 via 192.168.1.1 # Tambah rute spesifik
+ip route del default                      # Hapus default gateway
+
+# Menggunakan NetworkManager (Ubuntu modern)
+nmcli device status                       # Status device
+nmcli connection show                     # Daftar koneksi
+nmcli connection up "Wired Connection 1"  # Aktifkan koneksi
+nmcli connection down "Wired Connection 1" # Nonaktifkan koneksi
+nmcli connection modify eth0 ipv4.addresses "192.168.1.100/24"
+nmcli connection modify eth0 ipv4.gateway "192.168.1.1"
+nmcli connection modify eth0 ipv4.dns "8.8.8.8,8.8.4.4"
+nmcli connection modify eth0 ipv4.method manual  # Static IP
+nmcli connection reload
+
+# Konfigurasi statis Ubuntu (Netplan - /etc/netplan/*.yaml)
+cat /etc/netplan/00-installer-config.yaml
+
+# Contoh konfigurasi Netplan:
+# network:
+#   version: 2
+#   ethernets:
+#     eth0:
+#       dhcp4: no
+#       addresses:
+#         - 192.168.1.100/24
+#       gateway4: 192.168.1.1
+#       nameservers:
+#         addresses: [8.8.8.8, 8.8.4.4]
+
+netplan apply               # Terapkan konfigurasi Netplan
+netplan try                 # Test konfigurasi (rollback otomatis)
 ```
 
 ### 13.2 Perintah Diagnostik Jaringan
 
 ```bash
-# ─────────────────────────────────────────────────────────────# PING, TRACEROUTE, DNS# ─────────────────────────────────────────────────────────────ping google.com             # Test konektivitasping -c 4 google.com        # Ping 4 kali sajaping -i 0.5 google.com      # Interval 0.5 detikping6 google.com            # Ping IPv6ping -s 1400 google.com     # Ukuran paket 1400 bytestraceroute google.com       # Trace jalur ke tujuantraceroute -n google.com    # Tanpa resolusi namamtr google.com              # Kombinasi ping + traceroute (interaktif)nslookup google.com         # Query DNSnslookup -type=MX gmail.com # Query record MXdig google.com              # Query DNS detaildig google.com A            # Query record A (IPv4)dig google.com MX           # Query record MXdig google.com @8.8.8.8    # Query menggunakan DNS tertentudig -x 8.8.8.8              # Reverse DNS lookuphost google.com             # Query DNS sederhana# ─────────────────────────────────────────────────────────────# PORT & KONEKSI# ─────────────────────────────────────────────────────────────netstat -tuln               # Port yang sedang listennetstat -tulpn              # Dengan nama prosesnetstat -an                 # Semua koneksiss -tuln                    # Modern pengganti netstatss -tulpn                   # Dengan prosesss -s                       # Statistik socketlsof -i                     # Semua koneksi jaringanlsof -i :80                 # Koneksi pada port 80lsof -i tcp                 # Koneksi TCP# ─────────────────────────────────────────────────────────────# CURL & WGET# ─────────────────────────────────────────────────────────────curl URL                            # Ambil konten URLcurl -o file.html URL               # Simpan ke filecurl -O https://example.com/file    # Download dengan nama aslicurl -L URL                         # Ikuti redirectcurl -I URL                         # Hanya header HTTPcurl -v URL                         # Verbose (debug)curl -s URL                         # Silent modecurl -X POST -d "data" URL          # POST requestcurl -H "Content-Type: application/json" -d '{"key":"val"}' URLcurl -u user:pass URL               # Basic authenticationcurl --proxy proxy:port URL         # Gunakan proxywget URL                            # Download filewget -O namafile URL                # Download dengan nama tertentuwget -c URL                         # Resume downloadwget -r URL                         # Download rekursifwget -q URL                         # Quiet modewget --limit-rate=1M URL            # Batasi kecepatan 1 MB/swget -b URL                         # Download di background# ─────────────────────────────────────────────────────────────# SSH - Secure Shell# ─────────────────────────────────────────────────────────────ssh user@host                       # Koneksi SSHssh -p 2222 user@host              # Port customssh -i ~/.ssh/private_key user@host # Gunakan private keyssh -L 8080:localhost:80 user@host  # Local port forwardingssh -R 8080:localhost:80 user@host  # Remote port forwardingssh -D 1080 user@host              # Dynamic SOCKS proxyssh -X user@host                    # X11 forwarding# Manajemen SSH Keyssh-keygen                          # Generate key pairssh-keygen -t rsa -b 4096          # RSA 4096-bitssh-keygen -t ed25519              # ED25519 (direkomendasikan)ssh-copy-id user@host              # Copy public key ke servercat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys  # Manual copy key# SCP - Secure Copyscp file.txt user@host:/path/      # Upload filescp user@host:/path/file.txt .     # Download filescp -r direktori/ user@host:/path/ # Upload direktoriscp -P 2222 file user@host:/path/  # Port custom# RSYNC - Remote Syncrsync -av source/ user@host:dest/  # Sync direktori ke remotersync -av user@host:source/ dest/  # Sync dari remotersync -avz source/ user@host:dest/ # Dengan kompresirsync -av --delete source/ dest/   # Mirror (hapus file tidak ada)rsync -av --progress source/ dest/ # Tampilkan progressrsync -av -e "ssh -p 2222" source/ user@host:dest/  # Custom SSH port
+# ─────────────────────────────────────────────────────────────
+# PING, TRACEROUTE, DNS
+# ─────────────────────────────────────────────────────────────
+
+ping google.com             # Test konektivitas
+ping -c 4 google.com        # Ping 4 kali saja
+ping -i 0.5 google.com      # Interval 0.5 detik
+ping6 google.com            # Ping IPv6
+ping -s 1400 google.com     # Ukuran paket 1400 bytes
+traceroute google.com       # Trace jalur ke tujuan
+traceroute -n google.com    # Tanpa resolusi nama
+mtr google.com              # Kombinasi ping + traceroute (interaktif)
+nslookup google.com         # Query DNS
+nslookup -type=MX gmail.com # Query record MX
+dig google.com              # Query DNS detail
+dig google.com A            # Query record A (IPv4)
+dig google.com MX           # Query record MX
+dig google.com @8.8.8.8    # Query menggunakan DNS tertentu
+dig -x 8.8.8.8              # Reverse DNS lookup
+host google.com             # Query DNS sederhana
+
+# ─────────────────────────────────────────────────────────────
+# PORT & KONEKSI
+# ─────────────────────────────────────────────────────────────
+
+netstat -tuln               # Port yang sedang listen
+netstat -tulpn              # Dengan nama proses
+netstat -an                 # Semua koneksi
+ss -tuln                    # Modern pengganti netstat
+ss -tulpn                   # Dengan proses
+ss -s                       # Statistik socket
+lsof -i                     # Semua koneksi jaringan
+lsof -i :80                 # Koneksi pada port 80
+lsof -i tcp                 # Koneksi TCP
+
+# ─────────────────────────────────────────────────────────────
+# CURL & WGET
+# ─────────────────────────────────────────────────────────────
+
+curl URL                            # Ambil konten URL
+curl -o file.html URL               # Simpan ke file
+curl -O https://example.com/file    # Download dengan nama asli
+curl -L URL                         # Ikuti redirect
+curl -I URL                         # Hanya header HTTP
+curl -v URL                         # Verbose (debug)
+curl -s URL                         # Silent mode
+curl -X POST -d "data" URL          # POST request
+curl -H "Content-Type: application/json" -d '{"key":"val"}' URL
+curl -u user:pass URL               # Basic authentication
+curl --proxy proxy:port URL         # Gunakan proxy
+
+wget URL                            # Download file
+wget -O namafile URL                # Download dengan nama tertentu
+wget -c URL                         # Resume download
+wget -r URL                         # Download rekursif
+wget -q URL                         # Quiet mode
+wget --limit-rate=1M URL            # Batasi kecepatan 1 MB/s
+wget -b URL                         # Download di background
+
+# ─────────────────────────────────────────────────────────────
+# SSH - Secure Shell
+# ─────────────────────────────────────────────────────────────
+
+ssh user@host                       # Koneksi SSH
+ssh -p 2222 user@host              # Port custom
+ssh -i ~/.ssh/private_key user@host # Gunakan private key
+ssh -L 8080:localhost:80 user@host  # Local port forwarding
+ssh -R 8080:localhost:80 user@host  # Remote port forwarding
+ssh -D 1080 user@host              # Dynamic SOCKS proxy
+ssh -X user@host                    # X11 forwarding
+
+# Manajemen SSH Key
+ssh-keygen                          # Generate key pair
+ssh-keygen -t rsa -b 4096          # RSA 4096-bit
+ssh-keygen -t ed25519              # ED25519 (direkomendasikan)
+ssh-copy-id user@host              # Copy public key ke server
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys  # Manual copy key
+
+# SCP - Secure Copy
+scp file.txt user@host:/path/      # Upload file
+scp user@host:/path/file.txt .     # Download file
+scp -r direktori/ user@host:/path/ # Upload direktori
+scp -P 2222 file user@host:/path/  # Port custom
+
+# RSYNC - Remote Sync
+rsync -av source/ user@host:dest/  # Sync direktori ke remote
+rsync -av user@host:source/ dest/  # Sync dari remote
+rsync -avz source/ user@host:dest/ # Dengan kompresi
+rsync -av --delete source/ dest/   # Mirror (hapus file tidak ada)
+rsync -av --progress source/ dest/ # Tampilkan progress
+rsync -av -e "ssh -p 2222" source/ user@host:dest/  # Custom SSH port
 ```
 
 ### 13.3 Firewall
 
 ```bash
-# ─────────────────────────────────────────────────────────────# UFW (Uncomplicated Firewall) - Ubuntu# ─────────────────────────────────────────────────────────────ufw status                  # Status firewallufw status verbose          # Status detailufw enable                  # Aktifkan firewallufw disable                 # Nonaktifkan firewallufw reset                   # Reset ke default# Rules dasarufw allow ssh               # Izinkan SSH (port 22)ufw allow 80                # Izinkan port 80 (HTTP)ufw allow 443               # Izinkan port 443 (HTTPS)ufw allow 80/tcp            # Izinkan port 80 TCPufw allow from 192.168.1.0/24   # Izinkan dari subnetufw deny 23                 # Blokir port 23 (telnet)ufw delete allow 80         # Hapus ruleufw default deny incoming   # Default deny masukufw default allow outgoing  # Default allow keluar# Numbered rulesufw status numbered         # Tampilkan dengan nomorufw delete 2               # Hapus rule nomor 2# Limit (rate limiting)ufw limit ssh               # Batasi koneksi SSH# ─────────────────────────────────────────────────────────────# IPTABLES - Advanced Firewall# ─────────────────────────────────────────────────────────────# Melihat rulesiptables -L                         # List rulesiptables -L -n -v                   # Verbose dengan angkaiptables -L INPUT -n -v             # Hanya chain INPUT# Struktur iptables:# Tables: filter, nat, mangle, raw# Chains: INPUT, OUTPUT, FORWARD (filter), PREROUTING, POSTROUTING (nat)# Rules: kondisi + action (ACCEPT, DROP, REJECT, LOG)# Rules dasariptables -A INPUT -p tcp --dport 22 -j ACCEPT      # Allow SSHiptables -A INPUT -p tcp --dport 80 -j ACCEPT      # Allow HTTPiptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPTiptables -A INPUT -j DROP                           # Drop sisanyaiptables -A INPUT -i lo -j ACCEPT                  # Allow loopback# Hapus rulesiptables -D INPUT -p tcp --dport 80 -j ACCEPT      # Hapus ruleiptables -F                                         # Flush semua rulesiptables -F INPUT                                   # Flush chain INPUT# Simpan dan load rulesiptables-save > /etc/iptables/rules.v4             # Simpaniptables-restore < /etc/iptables/rules.v4          # Load# ─────────────────────────────────────────────────────────────# NFTABLES - Modern Firewall (pengganti iptables)# ─────────────────────────────────────────────────────────────nft list tables             # List tabelnft list ruleset            # List semua rulesnft add table inet filter   # Buat tabelnft add chain inet filter input { type filter hook input priority 0 \; }nft add rule inet filter input tcp dport 22 acceptnft list ruleset > /etc/nftables.conf   # Simpan konfigurasi
+# ─────────────────────────────────────────────────────────────
+# UFW (Uncomplicated Firewall) - Ubuntu
+# ─────────────────────────────────────────────────────────────
+
+ufw status                  # Status firewall
+ufw status verbose          # Status detail
+ufw enable                  # Aktifkan firewall
+ufw disable                 # Nonaktifkan firewall
+ufw reset                   # Reset ke default
+
+# Rules dasar
+ufw allow ssh               # Izinkan SSH (port 22)
+ufw allow 80                # Izinkan port 80 (HTTP)
+ufw allow 443               # Izinkan port 443 (HTTPS)
+ufw allow 80/tcp            # Izinkan port 80 TCP
+ufw allow from 192.168.1.0/24   # Izinkan dari subnet
+ufw deny 23                 # Blokir port 23 (telnet)
+ufw delete allow 80         # Hapus rule
+ufw default deny incoming   # Default deny masuk
+ufw default allow outgoing  # Default allow keluar
+
+# Numbered rules
+ufw status numbered         # Tampilkan dengan nomor
+ufw delete 2               # Hapus rule nomor 2
+
+# Limit (rate limiting)
+ufw limit ssh               # Batasi koneksi SSH
+
+# ─────────────────────────────────────────────────────────────
+# IPTABLES - Advanced Firewall
+# ─────────────────────────────────────────────────────────────
+
+# Melihat rules
+iptables -L                         # List rules
+iptables -L -n -v                   # Verbose dengan angka
+iptables -L INPUT -n -v             # Hanya chain INPUT
+
+# Struktur iptables:
+# Tables: filter, nat, mangle, raw
+# Chains: INPUT, OUTPUT, FORWARD (filter), PREROUTING, POSTROUTING (nat)
+# Rules: kondisi + action (ACCEPT, DROP, REJECT, LOG)
+
+# Rules dasar
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT      # Allow SSH
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT      # Allow HTTP
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -j DROP                           # Drop sisanya
+iptables -A INPUT -i lo -j ACCEPT                  # Allow loopback
+
+# Hapus rules
+iptables -D INPUT -p tcp --dport 80 -j ACCEPT      # Hapus rule
+iptables -F                                         # Flush semua rules
+iptables -F INPUT                                   # Flush chain INPUT
+
+# Simpan dan load rules
+iptables-save > /etc/iptables/rules.v4             # Simpan
+iptables-restore < /etc/iptables/rules.v4          # Load
+
+# ─────────────────────────────────────────────────────────────
+# NFTABLES - Modern Firewall (pengganti iptables)
+# ─────────────────────────────────────────────────────────────
+
+nft list tables             # List tabel
+nft list ruleset            # List semua rules
+nft add table inet filter   # Buat tabel
+nft add chain inet filter input { type filter hook input priority 0 \; }
+nft add rule inet filter input tcp dport 22 accept
+nft list ruleset > /etc/nftables.conf   # Simpan konfigurasi
 ```
 
 ***
