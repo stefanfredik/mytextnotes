@@ -3065,19 +3065,303 @@ tar xvf node_exporter-*.tar.gz
 ### 18.1 KVM (Kernel-based Virtual Machine)
 
 ```bash
-# ─────────────────────────────────────────────────────────────# KVM - Virtualisasi Hardware# ─────────────────────────────────────────────────────────────# Cek dukungan virtualisasiegrep -c '(vmx|svm)' /proc/cpuinfo     # >0 = didukungkvm-ok                                  # Cek KVM support# Install KVMapt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager# Tambah user ke grup libvirtusermod -aG libvirt $USERusermod -aG kvm $USER# Manajemen VM dengan virshvirsh list                      # List VM yang berjalanvirsh list --all                # Semua VMvirsh start vm-name             # Mulai VMvirsh shutdown vm-name          # Shutdown VM gracefulvirsh destroy vm-name           # Force stop VMvirsh reboot vm-name            # Reboot VMvirsh suspend vm-name           # Suspend VMvirsh resume vm-name            # Resume VMvirsh snapshot-create-as vm snap1 "Deskripsi"  # Buat snapshotvirsh snapshot-list vm          # List snapshotvirsh snapshot-revert vm snap1  # Revert ke snapshotvirsh dominfo vm-name           # Info VMvirsh dumpxml vm-name           # Konfigurasi XML VM# Buat VM baruvirt-install \    --name ubuntu-vm \    --ram 2048 \    --vcpus 2 \    --disk path=/var/lib/libvirt/images/ubuntu.qcow2,size=20 \    --cdrom /path/to/ubuntu.iso \    --network bridge=virbr0 \    --graphics vnc \    --os-variant ubuntu22.04
+# ─────────────────────────────────────────────────────────────
+# KVM - Virtualisasi Hardware
+# ─────────────────────────────────────────────────────────────
+
+# Cek dukungan virtualisasi
+egrep -c '(vmx|svm)' /proc/cpuinfo     # >0 = didukung
+kvm-ok                                  # Cek KVM support
+
+# Install KVM
+apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager
+
+# Tambah user ke grup libvirt
+usermod -aG libvirt $USER
+usermod -aG kvm $USER
+
+# Manajemen VM dengan virsh
+virsh list                      # List VM yang berjalan
+virsh list --all                # Semua VM
+virsh start vm-name             # Mulai VM
+virsh shutdown vm-name          # Shutdown VM graceful
+virsh destroy vm-name           # Force stop VM
+virsh reboot vm-name            # Reboot VM
+virsh suspend vm-name           # Suspend VM
+virsh resume vm-name            # Resume VM
+virsh snapshot-create-as vm snap1 "Deskripsi"  # Buat snapshot
+virsh snapshot-list vm          # List snapshot
+virsh snapshot-revert vm snap1  # Revert ke snapshot
+virsh dominfo vm-name           # Info VM
+virsh dumpxml vm-name           # Konfigurasi XML VM
+
+# Buat VM baru
+virt-install \
+    --name ubuntu-vm \
+    --ram 2048 \
+    --vcpus 2 \
+    --disk path=/var/lib/libvirt/images/ubuntu.qcow2,size=20 \
+    --cdrom /path/to/ubuntu.iso \
+    --network bridge=virbr0 \
+    --graphics vnc \
+    --os-variant ubuntu22.04
 ```
 
 ### 18.2 Docker
 
 ```bash
-# ─────────────────────────────────────────────────────────────# DOCKER - Container Platform# ─────────────────────────────────────────────────────────────# Install Dockercurl -fsSL https://get.docker.com | bashusermod -aG docker $USER        # Tambah user ke grup docker# ─────────────────────────────────────────────────────────────# IMAGE MANAGEMENT# ─────────────────────────────────────────────────────────────docker images                   # List imagesdocker pull nginx               # Download image nginxdocker pull nginx:1.25          # Download versi spesifikdocker push myimage             # Upload image ke registrydocker build -t myapp:1.0 .    # Build image dari Dockerfiledocker rmi nginx                # Hapus imagedocker image prune              # Hapus image yang tidak terpakai# ─────────────────────────────────────────────────────────────# CONTAINER MANAGEMENT# ─────────────────────────────────────────────────────────────docker run nginx                            # Jalankan containerdocker run -d nginx                         # Background modedocker run -d -p 80:80 nginx               # Dengan port mappingdocker run -d -p 80:80 --name webserver nginx  # Dengan namadocker run -it ubuntu bash                  # Interactive modedocker run -d -v /host/path:/container/path nginx  # Volume mountdocker run -e ENV_VAR=nilai nginx          # Environment variabledocker run --rm nginx                       # Auto-remove saat stopdocker run --network mynet nginx           # Custom networkdocker ps                       # Container yang berjalandocker ps -a                    # Semua containerdocker stop webserver           # Stop containerdocker start webserver          # Start containerdocker restart webserver        # Restart containerdocker rm webserver             # Hapus container (harus stop dulu)docker rm -f webserver          # Force hapusdocker exec -it webserver bash  # Masuk ke containerdocker logs webserver           # Log containerdocker logs -f webserver        # Follow logdocker inspect webserver        # Detail containerdocker stats                    # Statistik resource# ─────────────────────────────────────────────────────────────# DOCKER NETWORK# ─────────────────────────────────────────────────────────────docker network ls                           # List networkdocker network create mynet                 # Buat networkdocker network create --driver bridge mynet # Bridge networkdocker network rm mynet                     # Hapus networkdocker network inspect mynet               # Detail networkdocker network connect mynet webserver     # Hubungkan container ke networkdocker network disconnect mynet webserver  # Putuskan koneksi# ─────────────────────────────────────────────────────────────# DOCKER VOLUME# ─────────────────────────────────────────────────────────────docker volume ls                # List volumedocker volume create myvolume   # Buat volumedocker volume rm myvolume       # Hapus volumedocker volume inspect myvolume  # Detail volumedocker volume prune             # Hapus volume yang tidak terpakai# ─────────────────────────────────────────────────────────────# DOCKERFILE# ─────────────────────────────────────────────────────────────# Contoh Dockerfile:cat > Dockerfile << 'EOF'# Base imageFROM ubuntu:22.04# MetadataLABEL maintainer="admin@example.com"LABEL version="1.0"# Environment variablesENV APP_HOME=/appENV NODE_ENV=production# Install dependenciesRUN apt-get update && apt-get install -y \    nodejs \    npm \    && rm -rf /var/lib/apt/lists/*# Set working directoryWORKDIR $APP_HOME# Copy fileCOPY package*.json ./RUN npm installCOPY . .# Expose portEXPOSE 3000# Health checkHEALTHCHECK --interval=30s --timeout=3s \    CMD curl -f http://localhost:3000/health || exit 1# Default commandCMD ["node", "server.js"]EOF# Build dan rundocker build -t myapp:1.0 .docker run -d -p 3000:3000 myapp:1.0# ─────────────────────────────────────────────────────────────# DOCKER COMPOSE# ─────────────────────────────────────────────────────────────# Contoh docker-compose.yml:cat > docker-compose.yml << 'EOF'version: '3.8'services:  web:    image: nginx:alpine    ports:      - "80:80"    volumes:      - ./html:/usr/share/nginx/html    depends_on:      - app    networks:      - frontend  app:    build: .    environment:      - DB_HOST=database      - DB_NAME=mydb    networks:      - frontend      - backend    restart: unless-stopped  database:    image: postgres:15    environment:      POSTGRES_DB: mydb      POSTGRES_USER: user      POSTGRES_PASSWORD: password    volumes:      - pgdata:/var/lib/postgresql/data    networks:      - backendnetworks:  frontend:  backend:volumes:  pgdata:EOF# Perintah Docker Composedocker compose up -d            # Jalankan semua servicedocker compose down             # Hentikan dan hapusdocker compose ps               # Status servicedocker compose logs             # Log semua servicedocker compose logs -f web      # Follow log service webdocker compose restart web      # Restart service webdocker compose build            # Build ulang imagedocker compose exec web bash    # Masuk ke containerdocker compose pull             # Update semua image
+# ─────────────────────────────────────────────────────────────
+# DOCKER - Container Platform
+# ─────────────────────────────────────────────────────────────
+
+# Install Docker
+curl -fsSL https://get.docker.com | bash
+usermod -aG docker $USER        # Tambah user ke grup docker
+
+# ─────────────────────────────────────────────────────────────
+# IMAGE MANAGEMENT
+# ─────────────────────────────────────────────────────────────
+
+docker images                   # List images
+docker pull nginx               # Download image nginx
+docker pull nginx:1.25          # Download versi spesifik
+docker push myimage             # Upload image ke registry
+docker build -t myapp:1.0 .    # Build image dari Dockerfile
+docker rmi nginx                # Hapus image
+docker image prune              # Hapus image yang tidak terpakai
+
+# ─────────────────────────────────────────────────────────────
+# CONTAINER MANAGEMENT
+# ─────────────────────────────────────────────────────────────
+
+docker run nginx                            # Jalankan container
+docker run -d nginx                         # Background mode
+docker run -d -p 80:80 nginx               # Dengan port mapping
+docker run -d -p 80:80 --name webserver nginx  # Dengan nama
+docker run -it ubuntu bash                  # Interactive mode
+docker run -d -v /host/path:/container/path nginx  # Volume mount
+docker run -e ENV_VAR=nilai nginx          # Environment variable
+docker run --rm nginx                       # Auto-remove saat stop
+docker run --network mynet nginx           # Custom network
+
+docker ps                       # Container yang berjalan
+docker ps -a                    # Semua container
+docker stop webserver           # Stop container
+docker start webserver          # Start container
+docker restart webserver        # Restart container
+docker rm webserver             # Hapus container (harus stop dulu)
+docker rm -f webserver          # Force hapus
+docker exec -it webserver bash  # Masuk ke container
+docker logs webserver           # Log container
+docker logs -f webserver        # Follow log
+docker inspect webserver        # Detail container
+docker stats                    # Statistik resource
+
+# ─────────────────────────────────────────────────────────────
+# DOCKER NETWORK
+# ─────────────────────────────────────────────────────────────
+
+docker network ls                           # List network
+docker network create mynet                 # Buat network
+docker network create --driver bridge mynet # Bridge network
+docker network rm mynet                     # Hapus network
+docker network inspect mynet               # Detail network
+docker network connect mynet webserver     # Hubungkan container ke network
+docker network disconnect mynet webserver  # Putuskan koneksi
+
+# ─────────────────────────────────────────────────────────────
+# DOCKER VOLUME
+# ─────────────────────────────────────────────────────────────
+
+docker volume ls                # List volume
+docker volume create myvolume   # Buat volume
+docker volume rm myvolume       # Hapus volume
+docker volume inspect myvolume  # Detail volume
+docker volume prune             # Hapus volume yang tidak terpakai
+
+# ─────────────────────────────────────────────────────────────
+# DOCKERFILE
+# ─────────────────────────────────────────────────────────────
+
+# Contoh Dockerfile:
+cat > Dockerfile << 'EOF'
+# Base image
+FROM ubuntu:22.04
+
+# Metadata
+LABEL maintainer="admin@example.com"
+LABEL version="1.0"
+
+# Environment variables
+ENV APP_HOME=/app
+ENV NODE_ENV=production
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR $APP_HOME
+
+# Copy file
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD curl -f http://localhost:3000/health || exit 1
+
+# Default command
+CMD ["node", "server.js"]
+EOF
+
+# Build dan run
+docker build -t myapp:1.0 .
+docker run -d -p 3000:3000 myapp:1.0
+
+# ─────────────────────────────────────────────────────────────
+# DOCKER COMPOSE
+# ─────────────────────────────────────────────────────────────
+
+# Contoh docker-compose.yml:
+cat > docker-compose.yml << 'EOF'
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - app
+    networks:
+      - frontend
+
+  app:
+    build: .
+    environment:
+      - DB_HOST=database
+      - DB_NAME=mydb
+    networks:
+      - frontend
+      - backend
+    restart: unless-stopped
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  pgdata:
+EOF
+
+# Perintah Docker Compose
+docker compose up -d            # Jalankan semua service
+docker compose down             # Hentikan dan hapus
+docker compose ps               # Status service
+docker compose logs             # Log semua service
+docker compose logs -f web      # Follow log service web
+docker compose restart web      # Restart service web
+docker compose build            # Build ulang image
+docker compose exec web bash    # Masuk ke container
+docker compose pull             # Update semua image
 ```
 
 ### 18.3 Kubernetes (Pengenalan)
 
 ```bash
-# ─────────────────────────────────────────────────────────────# KUBERNETES - Container Orchestration# ─────────────────────────────────────────────────────────────# Install kubectlcurl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"chmod +x kubectlmv kubectl /usr/local/bin/# Install minikube (untuk development)curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64install minikube-linux-amd64 /usr/local/bin/minikubeminikube start# Perintah kubectl dasarkubectl get nodes               # List nodeskubectl get pods                # List podskubectl get pods -A             # Semua namespacekubectl get services            # List serviceskubectl get deployments         # List deploymentskubectl get namespaces          # List namespacekubectl apply -f deployment.yaml    # Deploy dari filekubectl delete -f deployment.yaml   # Hapus dari filekubectl describe pod nama-pod       # Detail podkubectl logs nama-pod               # Log podkubectl exec -it nama-pod -- bash   # Masuk ke podkubectl scale deployment myapp --replicas=3  # Scalekubectl rollout status deployment myapp      # Status rolloutkubectl rollout undo deployment myapp        # Rollback# Contoh deployment.yamlcat > deployment.yaml << 'EOF'apiVersion: apps/v1kind: Deploymentmetadata:  name: myapp  labels:    app: myappspec:  replicas: 3  selector:    matchLabels:      app: myapp  template:    metadata:      labels:        app: myapp    spec:      containers:      - name: myapp        image: myapp:1.0        ports:        - containerPort: 3000        resources:          requests:            memory: "64Mi"            cpu: "250m"          limits:            memory: "128Mi"            cpu: "500m"---apiVersion: v1kind: Servicemetadata:  name: myapp-servicespec:  selector:    app: myapp  ports:  - port: 80    targetPort: 3000  type: LoadBalancerEOF
+# ─────────────────────────────────────────────────────────────
+# KUBERNETES - Container Orchestration
+# ─────────────────────────────────────────────────────────────
+
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+mv kubectl /usr/local/bin/
+
+# Install minikube (untuk development)
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+install minikube-linux-amd64 /usr/local/bin/minikube
+minikube start
+
+# Perintah kubectl dasar
+kubectl get nodes               # List nodes
+kubectl get pods                # List pods
+kubectl get pods -A             # Semua namespace
+kubectl get services            # List services
+kubectl get deployments         # List deployments
+kubectl get namespaces          # List namespace
+kubectl apply -f deployment.yaml    # Deploy dari file
+kubectl delete -f deployment.yaml   # Hapus dari file
+kubectl describe pod nama-pod       # Detail pod
+kubectl logs nama-pod               # Log pod
+kubectl exec -it nama-pod -- bash   # Masuk ke pod
+kubectl scale deployment myapp --replicas=3  # Scale
+kubectl rollout status deployment myapp      # Status rollout
+kubectl rollout undo deployment myapp        # Rollback
+
+# Contoh deployment.yaml
+cat > deployment.yaml << 'EOF'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:1.0
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  selector:
+    app: myapp
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: LoadBalancer
+EOF
 ```
 
 ***
