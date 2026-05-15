@@ -2639,25 +2639,250 @@ journalctl -o short-iso             # Dengan timestamp ISO
 ### 16.1 Hardening Sistem
 
 ```bash
-# ─────────────────────────────────────────────────────────────# HARDENING DASAR# ─────────────────────────────────────────────────────────────# 1. Update sistem secara rutinapt update && apt upgrade -y# 2. Disable root SSH login# Edit /etc/ssh/sshd_config:# PermitRootLogin no# PasswordAuthentication no  (gunakan key saja)# Protocol 2# MaxAuthTries 3# AllowUsers alice bob# 3. Konfigurasi SSH yang amanvim /etc/ssh/sshd_config# Konfigurasi rekomendasi:# Port 2222                      # Ubah port default# PermitRootLogin no             # Disable root login# MaxAuthTries 3                 # Maksimal 3 percobaan# PubkeyAuthentication yes       # Gunakan public key# PasswordAuthentication no      # Disable password auth# X11Forwarding no               # Disable X11# AllowUsers alice bob           # Hanya user tertentusystemctl restart sshd# 4. Konfigurasi firewallufw default deny incomingufw default allow outgoingufw allow 2222/tcp      # SSH (port yang diubah)ufw allow 80/tcp        # HTTPufw allow 443/tcp       # HTTPSufw enable# 5. Fail2ban - Proteksi Brute Forceapt install fail2bancat > /etc/fail2ban/jail.local << 'EOF'[DEFAULT]bantime = 3600findtime = 600maxretry = 3[sshd]enabled = trueport = 2222logpath = /var/log/auth.logEOFsystemctl enable fail2bansystemctl start fail2banfail2ban-client status              # Status fail2banfail2ban-client status sshd        # Status jail SSHfail2ban-client set sshd unbanip IP  # Unban IP# 6. Disable layanan yang tidak perlusystemctl list-units --type=service --state=activesystemctl disable --now telnet      # Matikan telnetsystemctl disable --now rsh         # Matikan rsh# 7. Set password policy# Edit /etc/security/pwquality.conf:# minlen = 12# minclass = 3# maxrepeat = 3# 8. Limit akses sudpkg-statoverride --update --add root sudo 4750 /bin/su# 9. Audit dengan Lynisapt install lynislynis audit system              # Scan keamanan sistem
+# ─────────────────────────────────────────────────────────────
+# HARDENING DASAR
+# ─────────────────────────────────────────────────────────────
+
+# 1. Update sistem secara rutin
+apt update && apt upgrade -y
+
+# 2. Disable root SSH login
+# Edit /etc/ssh/sshd_config:
+# PermitRootLogin no
+# PasswordAuthentication no  (gunakan key saja)
+# Protocol 2
+# MaxAuthTries 3
+# AllowUsers alice bob
+
+# 3. Konfigurasi SSH yang aman
+vim /etc/ssh/sshd_config
+
+# Konfigurasi rekomendasi:
+# Port 2222                      # Ubah port default
+# PermitRootLogin no             # Disable root login
+# MaxAuthTries 3                 # Maksimal 3 percobaan
+# PubkeyAuthentication yes       # Gunakan public key
+# PasswordAuthentication no      # Disable password auth
+# X11Forwarding no               # Disable X11
+# AllowUsers alice bob           # Hanya user tertentu
+
+systemctl restart sshd
+
+# 4. Konfigurasi firewall
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow 2222/tcp      # SSH (port yang diubah)
+ufw allow 80/tcp        # HTTP
+ufw allow 443/tcp       # HTTPS
+ufw enable
+
+# 5. Fail2ban - Proteksi Brute Force
+apt install fail2ban
+
+cat > /etc/fail2ban/jail.local << 'EOF'
+[DEFAULT]
+bantime = 3600
+findtime = 600
+maxretry = 3
+
+[sshd]
+enabled = true
+port = 2222
+logpath = /var/log/auth.log
+EOF
+
+systemctl enable fail2ban
+systemctl start fail2ban
+fail2ban-client status              # Status fail2ban
+fail2ban-client status sshd        # Status jail SSH
+fail2ban-client set sshd unbanip IP  # Unban IP
+
+# 6. Disable layanan yang tidak perlu
+systemctl list-units --type=service --state=active
+systemctl disable --now telnet      # Matikan telnet
+systemctl disable --now rsh         # Matikan rsh
+
+# 7. Set password policy
+# Edit /etc/security/pwquality.conf:
+# minlen = 12
+# minclass = 3
+# maxrepeat = 3
+
+# 8. Limit akses su
+dpkg-statoverride --update --add root sudo 4750 /bin/su
+
+# 9. Audit dengan Lynis
+apt install lynis
+lynis audit system              # Scan keamanan sistem
 ```
 
 ### 16.2 SELinux & AppArmor
 
 ```bash
-# ─────────────────────────────────────────────────────────────# APPARMOR (Ubuntu/Debian)# ─────────────────────────────────────────────────────────────apparmor_status                     # Status AppArmoraa-status                           # Sama dengan apparmor_statusaa-enforce /etc/apparmor.d/usr.bin.firefox  # Set ke enforce modeaa-complain /etc/apparmor.d/usr.bin.firefox # Set ke complain modeaa-disable /etc/apparmor.d/usr.bin.firefox  # Disable profil# ─────────────────────────────────────────────────────────────# SELINUX (Red Hat/CentOS)# ─────────────────────────────────────────────────────────────getenforce                          # Cek mode SELinuxsetenforce 0                        # Set ke Permissive (sementara)setenforce 1                        # Set ke Enforcing (sementara)# Edit /etc/selinux/config untuk permanen:# SELINUX=enforcing    # atau permissive atau disabledsestatus                            # Status SELinux detaills -Z file.txt                      # Lihat SELinux context fileps auxZ                             # Lihat SELinux context proseschcon -t httpd_sys_content_t file   # Ubah contextrestorecon -rv /var/www/            # Restore context defaultaudit2why < /var/log/audit/audit.log  # Analisis deny messagesaudit2allow -M mypol < /var/log/audit/audit.log  # Buat policy
+# ─────────────────────────────────────────────────────────────
+# APPARMOR (Ubuntu/Debian)
+# ─────────────────────────────────────────────────────────────
+
+apparmor_status                     # Status AppArmor
+aa-status                           # Sama dengan apparmor_status
+aa-enforce /etc/apparmor.d/usr.bin.firefox  # Set ke enforce mode
+aa-complain /etc/apparmor.d/usr.bin.firefox # Set ke complain mode
+aa-disable /etc/apparmor.d/usr.bin.firefox  # Disable profil
+
+# ─────────────────────────────────────────────────────────────
+# SELINUX (Red Hat/CentOS)
+# ─────────────────────────────────────────────────────────────
+
+getenforce                          # Cek mode SELinux
+setenforce 0                        # Set ke Permissive (sementara)
+setenforce 1                        # Set ke Enforcing (sementara)
+
+# Edit /etc/selinux/config untuk permanen:
+# SELINUX=enforcing    # atau permissive atau disabled
+
+sestatus                            # Status SELinux detail
+ls -Z file.txt                      # Lihat SELinux context file
+ps auxZ                             # Lihat SELinux context proses
+chcon -t httpd_sys_content_t file   # Ubah context
+restorecon -rv /var/www/            # Restore context default
+audit2why < /var/log/audit/audit.log  # Analisis deny messages
+audit2allow -M mypol < /var/log/audit/audit.log  # Buat policy
 ```
 
 ### 16.3 Enkripsi
 
 ```bash
-# ─────────────────────────────────────────────────────────────# GPG - GNU Privacy Guard# ─────────────────────────────────────────────────────────────# Generate key pairgpg --gen-keygpg --full-gen-key              # Opsi lebih lengkap# Manajemen keygpg --list-keys                 # List semua keygpg --list-secret-keys          # List private keysgpg --export -a "nama@email"    # Export public keygpg --import pubkey.asc         # Import public keygpg --delete-key email          # Hapus public key# Enkripsi & Dekripsigpg -e -r "recipient@email" file.txt    # Enkripsi untuk recipientgpg -d file.txt.gpg                     # Dekripsigpg -e -s file.txt                      # Enkripsi + sign# Signinggpg -s file.txt                         # Sign filegpg --verify file.txt.gpg               # Verify signaturegpg --clearsign file.txt                # Clear-text signature# ─────────────────────────────────────────────────────────────# LUKS - Full Disk Encryption# ─────────────────────────────────────────────────────────────# Install cryptsetupapt install cryptsetup# Setup LUKS pada partisicryptsetup luksFormat /dev/sdb1         # Format dengan LUKScryptsetup open /dev/sdb1 namasaya     # Buka (decrypt)mkfs.ext4 /dev/mapper/namasaya          # Format filesystemmount /dev/mapper/namasaya /mnt/secure  # Mountcryptsetup close namasaya              # Tutup (encrypt kembali)# Info LUKScryptsetup luksDump /dev/sdb1          # Info LUKS headercryptsetup luksAddKey /dev/sdb1        # Tambah passphrasecryptsetup luksRemoveKey /dev/sdb1     # Hapus passphrase# ─────────────────────────────────────────────────────────────# OPENSSL# ─────────────────────────────────────────────────────────────# Generate self-signed certificateopenssl req -x509 -nodes -days 365 -newkey rsa:2048 \    -keyout server.key -out server.crt# Generate CSR (Certificate Signing Request)openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr# Enkripsi fileopenssl enc -aes-256-cbc -salt -in file.txt -out file.enc -k passwordopenssl enc -d -aes-256-cbc -in file.enc -out file.txt -k password# Hash fileopenssl dgst -sha256 file.txt          # SHA256 hashmd5sum file.txt                        # MD5 hashsha256sum file.txt                     # SHA256 hashsha512sum file.txt                     # SHA512 hash
+# ─────────────────────────────────────────────────────────────
+# GPG - GNU Privacy Guard
+# ─────────────────────────────────────────────────────────────
+
+# Generate key pair
+gpg --gen-key
+gpg --full-gen-key              # Opsi lebih lengkap
+
+# Manajemen key
+gpg --list-keys                 # List semua key
+gpg --list-secret-keys          # List private keys
+gpg --export -a "nama@email"    # Export public key
+gpg --import pubkey.asc         # Import public key
+gpg --delete-key email          # Hapus public key
+
+# Enkripsi & Dekripsi
+gpg -e -r "recipient@email" file.txt    # Enkripsi untuk recipient
+gpg -d file.txt.gpg                     # Dekripsi
+gpg -e -s file.txt                      # Enkripsi + sign
+
+# Signing
+gpg -s file.txt                         # Sign file
+gpg --verify file.txt.gpg               # Verify signature
+gpg --clearsign file.txt                # Clear-text signature
+
+# ─────────────────────────────────────────────────────────────
+# LUKS - Full Disk Encryption
+# ─────────────────────────────────────────────────────────────
+
+# Install cryptsetup
+apt install cryptsetup
+
+# Setup LUKS pada partisi
+cryptsetup luksFormat /dev/sdb1         # Format dengan LUKS
+cryptsetup open /dev/sdb1 namasaya     # Buka (decrypt)
+mkfs.ext4 /dev/mapper/namasaya          # Format filesystem
+mount /dev/mapper/namasaya /mnt/secure  # Mount
+cryptsetup close namasaya              # Tutup (encrypt kembali)
+
+# Info LUKS
+cryptsetup luksDump /dev/sdb1          # Info LUKS header
+cryptsetup luksAddKey /dev/sdb1        # Tambah passphrase
+cryptsetup luksRemoveKey /dev/sdb1     # Hapus passphrase
+
+# ─────────────────────────────────────────────────────────────
+# OPENSSL
+# ─────────────────────────────────────────────────────────────
+
+# Generate self-signed certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout server.key -out server.crt
+
+# Generate CSR (Certificate Signing Request)
+openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
+
+# Enkripsi file
+openssl enc -aes-256-cbc -salt -in file.txt -out file.enc -k password
+openssl enc -d -aes-256-cbc -in file.enc -out file.txt -k password
+
+# Hash file
+openssl dgst -sha256 file.txt          # SHA256 hash
+md5sum file.txt                        # MD5 hash
+sha256sum file.txt                     # SHA256 hash
+sha512sum file.txt                     # SHA512 hash
 ```
 
 ### 16.4 Audit & Monitoring Keamanan
 
 ```bash
-# ─────────────────────────────────────────────────────────────# AUDITD - Linux Audit System# ─────────────────────────────────────────────────────────────apt install auditdsystemctl enable auditdsystemctl start auditd# Tambah aturan auditauditctl -a always,exit -F arch=b64 -S open -k file_open   # Monitor file openauditctl -w /etc/passwd -p wa -k passwd_changes            # Monitor /etc/passwdauditctl -w /etc/sudoers -p rwa -k sudoers                 # Monitor sudoersauditctl -l                                                 # List rules saat ini# Baca log auditausearch -k file_open               # Cari log berdasarkan keyausearch -ui 1000                   # Log dari UID 1000ausearch -x /bin/su                 # Log dari program suaureport                            # Laporan auditaureport --login                    # Laporan loginaureport --failed                   # Laporan yang gagalaureport --summary                  # Ringkasan# Konfigurasi permanen (/etc/audit/rules.d/audit.rules)cat > /etc/audit/rules.d/audit.rules << 'EOF'# Delete all rules-D# Buffer size-b 8192# Monitor authentication-w /var/log/auth.log -p wa -k auth_log# Monitor important config files-w /etc/passwd -p wa -k passwd-w /etc/shadow -p wa -k shadow-w /etc/sudoers -p wa -k sudoers-w /etc/ssh/sshd_config -p wa -k sshd_config# Monitor privileged commands-a always,exit -F path=/usr/bin/sudo -F perm=x -k sudo_commandsEOF# ─────────────────────────────────────────────────────────────# AIDE - Advanced Intrusion Detection Environment# ─────────────────────────────────────────────────────────────apt install aideaide --init                         # Inisialisasi databasecp /var/lib/aide/aide.db.new /var/lib/aide/aide.db  # Aktifkan DBaide --check                        # Cek perubahan fileaide --update                       # Update database# ─────────────────────────────────────────────────────────────# RKHUNTER & CHKROOTKIT# ─────────────────────────────────────────────────────────────apt install rkhunter chkrootkitrkhunter --update                   # Update databaserkhunter --check                    # Scan rootkitchkrootkit                          # Cek rootkit
+# ─────────────────────────────────────────────────────────────
+# AUDITD - Linux Audit System
+# ─────────────────────────────────────────────────────────────
+
+apt install auditd
+systemctl enable auditd
+systemctl start auditd
+
+# Tambah aturan audit
+auditctl -a always,exit -F arch=b64 -S open -k file_open   # Monitor file open
+auditctl -w /etc/passwd -p wa -k passwd_changes            # Monitor /etc/passwd
+auditctl -w /etc/sudoers -p rwa -k sudoers                 # Monitor sudoers
+auditctl -l                                                 # List rules saat ini
+
+# Baca log audit
+ausearch -k file_open               # Cari log berdasarkan key
+ausearch -ui 1000                   # Log dari UID 1000
+ausearch -x /bin/su                 # Log dari program su
+aureport                            # Laporan audit
+aureport --login                    # Laporan login
+aureport --failed                   # Laporan yang gagal
+aureport --summary                  # Ringkasan
+
+# Konfigurasi permanen (/etc/audit/rules.d/audit.rules)
+cat > /etc/audit/rules.d/audit.rules << 'EOF'
+# Delete all rules
+-D
+
+# Buffer size
+-b 8192
+
+# Monitor authentication
+-w /var/log/auth.log -p wa -k auth_log
+
+# Monitor important config files
+-w /etc/passwd -p wa -k passwd
+-w /etc/shadow -p wa -k shadow
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/ssh/sshd_config -p wa -k sshd_config
+
+# Monitor privileged commands
+-a always,exit -F path=/usr/bin/sudo -F perm=x -k sudo_commands
+EOF
+
+# ─────────────────────────────────────────────────────────────
+# AIDE - Advanced Intrusion Detection Environment
+# ─────────────────────────────────────────────────────────────
+
+apt install aide
+aide --init                         # Inisialisasi database
+cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db  # Aktifkan DB
+aide --check                        # Cek perubahan file
+aide --update                       # Update database
+
+# ─────────────────────────────────────────────────────────────
+# RKHUNTER & CHKROOTKIT
+# ─────────────────────────────────────────────────────────────
+
+apt install rkhunter chkrootkit
+rkhunter --update                   # Update database
+rkhunter --check                    # Scan rootkit
+chkrootkit                          # Cek rootkit
 ```
 
 ***
