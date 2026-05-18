@@ -5,6 +5,7 @@
   * [Codex](ai/codex.md)
   * [Pengembangan Software Menggunakan AI](ai/pengembangan-software-menggunakan-ai.md)
   * [OpenClaw Agent](ai/openclaw-agent.md)
+  * [Hermes Agent](ai/hermes-agent.md)
 * [Dashboard](<README (1).md>)
 * [Module Comprehensive](module-comprehensive/README.md)
   * [Bahasa Inggris](module-comprehensive/bahasa-inggris.md)
