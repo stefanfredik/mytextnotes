@@ -33,6 +33,7 @@
   * [Page 3](linux/page-3-1.md)
 * [Windows](windows/README.md)
   * [Windows Server 2025](windows/windows-server-2025.md)
+  * [Windows Terminal](windows/windows-terminal.md)
 * [SSH](ssh/README.md)
   * [Pendahuluan](ssh/pendahuluan.md)
 * [Mikrotik](mikrotik/README.md)
