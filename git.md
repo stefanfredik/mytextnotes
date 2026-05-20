@@ -10,34 +10,34 @@ Berikut adalah dua cara yang umum digunakan. Anda bisa memilih salah satu melalu
 
 Jalankan perintah ini:
 
-```
-bashgit pull origin main
+```bash
+git pull origin main
 ```
 
 _(Jika muncul layar teks/editor yang meminta Anda memasukkan pesan commit untuk merge, Anda bisa langsung menyimpannya. Jika terbuka dengan `nano` tekan `Ctrl+O`, `Enter`, lalu `Ctrl+X`. Jika terbuka di `vim`, ketik `:wq` lalu `Enter`)_
 
 Setelah pull berhasil, silakan push kembali:
 
-```
-bashgit push origin main
+```bash
+git push origin main
 ```
 
 **Cara 2: Menggunakan Git Pull Rebase (History akan lebih rapi)** Daripada membuat merge commit, cara ini akan menaruh commit-commit yang baru saja Anda buat di atas perubahan terbaru dari remote.
 
-```
-bashgit pull --rebase origin main
+```bash
+git pull --rebase origin main
 ```
 
 Setelah rebase selesai:
 
-```
-bashgit push origin main
+```bash
+git push origin main
 ```
 
 **Catatan (Hanya jika Anda benar-benar yakin perubahan di remote tidak penting):** Jika Anda **sangat yakin** bahwa perubahan di GitLab tersebut tidak penting / boleh ditimpa seutuhnya oleh kode lokal Anda saat ini, Anda bisa memaksa push (namun ini berbahaya dan bisa menghilangkan kerjaan orang lain). Perintahnya:
 
-```
-bashgit push origin main --force
+```bash
+git push origin main --force
 ```
 
 Namun, hindari cara ketiga ini kecuali Anda betul-betul yakin. Cobalah Cara 1 atau Cara 2 terlebih dahulu.
