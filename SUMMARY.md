@@ -127,3 +127,5 @@
   * [Page 1](gsm/page-1.md)
 * [GIT](git.md)
 * [Prompt](prompt.md)
+* [SRS](srs/README.md)
+  * [Kamus Bahasa Indonesia - Manggarai](srs/kamus-bahasa-indonesia-manggarai.md)
