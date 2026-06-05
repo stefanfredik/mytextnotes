@@ -1,3 +1,7 @@
+---
+icon: brain-circuit
+---
+
 # Mindset Programmer
 
 Tentu, mari kita bahas secara detail mindset (pola pikir) yang krusial bagi seorang programmer dan bagaimana menerapkannya dalam kehidupan sehari-hari. Mindset ini bukan hanya tentang kemampuan teknis, tetapi juga tentang cara berpikir, mendekati masalah, dan terus berkembang.

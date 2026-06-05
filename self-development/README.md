@@ -1,3 +1,7 @@
+---
+icon: arrow-up-right-dots
+---
+
 # Self Development
 
 ## Bias Berpikir
@@ -10,19 +14,19 @@ Berikut beberapa jenis bias berpikir yang umum:
 
 1. **Bias Konfirmasi (Confirmation Bias)**\
    Kecenderungan untuk mencari atau hanya memperhatikan informasi yang mendukung keyakinan atau pandangan kita, sambil mengabaikan informasi yang bertentangan.\
-   &#xNAN;_&#x43;ontoh_: Seseorang yang percaya bahwa kopi buruk untuk kesehatan hanya mencari artikel yang mendukung pandangan tersebut dan mengabaikan penelitian yang menunjukkan manfaat kopi.
+   \&#xNAN;_Contoh_: Seseorang yang percaya bahwa kopi buruk untuk kesehatan hanya mencari artikel yang mendukung pandangan tersebut dan mengabaikan penelitian yang menunjukkan manfaat kopi.
 2. **Bias Ketersediaan (Availability Heuristic)**\
    Kecenderungan untuk menilai kemungkinan suatu kejadian berdasarkan seberapa mudah kita mengingat contoh serupa.\
-   &#xNAN;_&#x43;ontoh_: Seseorang yang baru saja melihat berita tentang kecelakaan pesawat mungkin menjadi takut terbang, meskipun kecelakaan pesawat sangat jarang terjadi.
+   \&#xNAN;_Contoh_: Seseorang yang baru saja melihat berita tentang kecelakaan pesawat mungkin menjadi takut terbang, meskipun kecelakaan pesawat sangat jarang terjadi.
 3. **Bias Kekinian (Recency Bias)**\
    Kecenderungan untuk memberikan bobot lebih pada informasi terbaru dibandingkan informasi yang sudah lama.\
-   &#xNAN;_&#x43;ontoh_: Seorang investor mungkin hanya mempertimbangkan tren pasar terbaru, bukan data historis jangka panjang.
+   \&#xNAN;_Contoh_: Seorang investor mungkin hanya mempertimbangkan tren pasar terbaru, bukan data historis jangka panjang.
 4. **Bias Kelompok (Groupthink)**\
    Kecenderungan untuk mengikuti pandangan kelompok tanpa mengkritisi, demi menjaga harmoni kelompok.\
-   &#xNAN;_&#x43;ontoh_: Dalam rapat tim, seseorang setuju dengan keputusan mayoritas meskipun memiliki pendapat berbeda.
+   \&#xNAN;_Contoh_: Dalam rapat tim, seseorang setuju dengan keputusan mayoritas meskipun memiliki pendapat berbeda.
 5. **Bias Efek Halo (Halo Effect)**\
    Penilaian kita terhadap seseorang atau sesuatu dipengaruhi oleh kesan pertama atau satu sifat tertentu.\
-   &#xNAN;_&#x43;ontoh_: Menganggap seseorang yang berpakaian rapi pasti lebih kompeten daripada yang berpakaian biasa.
+   \&#xNAN;_Contoh_: Menganggap seseorang yang berpakaian rapi pasti lebih kompeten daripada yang berpakaian biasa.
 
 #### Mengapa Bias Berpikir Terjadi?
 
@@ -36,4 +40,3 @@ Bias berpikir terjadi karena otak manusia dirancang untuk efisiensi dalam mengam
 * Melibatkan orang lain dalam pengambilan keputusan untuk mendapatkan perspektif yang lebih beragam.
 
 Bias berpikir adalah hal yang wajar dalam kehidupan sehari-hari, tetapi memahami keberadaannya dapat membantu kita membuat keputusan yang lebih baik dan lebih rasional.
-

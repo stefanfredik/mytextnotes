@@ -41,17 +41,17 @@ Seorang Senior Developer sejati adalah seseorang yang:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    SENIOR DEVELOPER                      │
+│                    SENIOR DEVELOPER                     |
 │                                                         │
-│  🧠 DEPTH          🌐 BREADTH         👥 IMPACT         │
-│  ─────────        ──────────         ──────────        │
+│  🧠 DEPTH          🌐 BREADTH         👥 IMPACT        │
+│  ─────────        ──────────         ──────────         │
 │  Kedalaman        Pengetahuan        Dampak pada        │
 │  dalam satu       lintas domain      tim & bisnis       │
 │  atau lebih       teknologi                             │
 │  domain                                                 │
 │                                                         │
-│  ⚙️ EXECUTION      🏗️ DESIGN          🎯 JUDGMENT       │
-│  ─────────        ──────────         ──────────        │
+│  ⚙️ EXECUTION      🏗️ DESIGN          🎯 JUDGMENT      │
+│  ─────────        ──────────         ──────────         │
 │  Kualitas         Kemampuan          Keputusan          │
 │  implementasi     merancang          yang tepat         │
 │                   sistem             di saat tepat      │

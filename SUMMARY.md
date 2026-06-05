@@ -119,6 +119,7 @@
 * [Self Development](self-development/README.md)
   * [Mindset Programmer](self-development/mindset-programmer.md)
   * [Senior Developer Mindset](self-development/senior-developer-mindset.md)
+  * [Prinsip Dasar Seorang Software Engineer](self-development/prinsip-dasar-seorang-software-engineer.md)
 * [Virtual Manager](virtual-manager/README.md)
   * [Proxmox](virtual-manager/proxmox.md)
 * [Hardware](hardware/README.md)
