@@ -1,0 +1,3 @@
+## 2024-10-23 - Markdown Repository Performance
+**Learning:** The repository is exclusively a GitBook-based Markdown documentation site without any application source code, build scripts, or execution context. Standard frontend/backend performance optimizations are not applicable here.
+**Action:** Acknowledge when a repository structure does not support application-level optimizations and abort the optimization process without creating unnecessary PRs.
