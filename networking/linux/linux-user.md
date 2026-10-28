@@ -1,0 +1,67 @@
+# Linux User
+
+## User Management
+
+### Create User
+
+```bash
+sudo adduser [nama user]
+```
+
+Selanjutnya akan muncul promp password dan informasi name dan lainya. Silahkan diisi sesuai dengan kriteria user yang akan dibuat.
+
+### Mengubah status user menjadi sudo user
+
+User yang baru dibuat defaultnya tidak dapat mengakses root permission. Untuk bisa mengakses root mode maka diperlukan untuk menbah user tersebut ke dalam group user sudo dengan perintah berikut : &#x20;
+
+```bash
+sudo usermod -aG sudo [nama user]
+```
+
+Setelah menambahkan user ke group sudo, user tersebut telah mendapatkan akses ke root permissions. Ini berarti mereka dapat menjalankan perintah dengan hak akses root menggunakan `sudo` di depan perintah yang ingin dijalankan.
+
+### Modifikasi User
+
+Untuk melakukan modifikasi pada pengguna, kita dapat menggunakan perintah `usermod` yang memungkinkan kita untuk mengubah berbagai atribut pengguna. Berikut adalah contoh untuk mengganti nama pengguna:
+
+```bash
+sudo usermod -l newusername oldusername
+```
+
+Perintah di atas mengganti nama pengguna dari `oldusername` ke `newusername`. Pastikan untuk mengganti parameter sesuai dengan kebutuhan.
+
+Selain itu, untuk mengubah direktori home dari pengguna, Anda dapat menggunakan perintah berikut:
+
+```bash
+sudo usermod -d /path/to/new/home -m username
+```
+
+Parameter `-m` memastikan bahwa konten dari direktori home lama dipindahkan ke lokasi yang baru.
+
+### Delete User
+
+Untuk menghapus pengguna dari sistem, Anda dapat menggunakan perintah `deluser` atau `userdel`. Berikut adalah cara penggunaannya dengan `userdel`:
+
+```bash
+sudo userdel -r username
+```
+
+Parameter `-r` akan menghapus direktori home dan file spool pengguna. Gunakan dengan hati-hati agar tidak menghapus data yang penting secara tidak sengaja.
+
+### Melihat Seluruh User dalam Linux
+
+```bash
+cut -d: -f1 /etc/passwd
+```
+
+
+
+### Bypass Sudo Password&#x20;
+
+Bypass via visudo (Untuk Eksekusi Otomatis AI Agent)\
+Jika skrip tersebut memang sengaja Anda buat agar nantinya bisa dijalankan secara otonom oleh AI Agent Antigravity, agen tersebut akan selalu gagal jika masih dihadang prompt sudo. Solusinya adalah membebaskan user Anda dari kewajiban input password:
+
+Buka terminal standar, lalu ketik: `sudo visudo`
+
+Tambahkan konfigurasi ini di bagian paling bawah file (ganti user\_anda dengan username Linux/Mac yang Anda gunakan):\
+`user_anda ALL=(ALL) NOPASSWD: ALL`

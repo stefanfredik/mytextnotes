@@ -1,0 +1,6 @@
+---
+icon: rectangle-terminal
+---
+
+# Script
+

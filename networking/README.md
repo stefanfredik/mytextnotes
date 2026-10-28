@@ -1,6 +1,6 @@
 ---
-icon: server
+icon: brain
 ---
 
-# Networking
+# AI
 
