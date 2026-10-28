@@ -1,0 +1,11 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: Kopi Flores Docs
+  structure:
+    - type: space
+      key: space-1
+      title: Kopi Flores Notes
+      path: networking
+      default: true
+      content:
+        directory: ./networking
